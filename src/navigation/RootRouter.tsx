@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import LoaderScreen from "../Screens/Loader/LoaderScreen";
 
 const HomeScreen = React.lazy(
     () => import("../Screens/home/HomeScreen")
@@ -19,14 +20,14 @@ const RootRouter = () => {
             <Route
                 path="/"
                 element={
-                    <React.Suspense fallback={<>Yo soy Kevind</>}> 
+                    <React.Suspense fallback={<LoaderScreen/>}> 
                         <HomeScreen />
                     </React.Suspense>
                 }
             />
             <Route path="promotion-detail"
                 element={
-                    <React.Suspense fallback={<></>}>
+                    <React.Suspense fallback={<LoaderScreen/>}>
                         <PromotionDetailScreen />
                     </React.Suspense>
                 }

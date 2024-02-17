@@ -1,6 +1,12 @@
+import AnnouncementBar from "../../components/announcementBar/AnnouncementBar";
+import Nav from "../../components/nav/Nav";
+
 const HomeScreen = () => {
     return (
-        <h1>Home</h1>
+        <>
+            <AnnouncementBar/>
+            <Nav/>
+        </>
     );
 }
 
