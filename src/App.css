@@ -36,3 +36,32 @@
     transform: rotate(360deg);
   }
 }
+
+@font-face {
+  font-family: 'HudsonNYSerif';
+  src: url('../public/fonts/Hudson\ NY\ Serif.otf') format('truetype');
+}
+@font-face {
+  font-family: 'weblysleekuil';
+  src: url('../public/fonts/weblysleekuil.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'weblysleekuili';
+  src: url('../public/fonts/weblysleekuili.otf') format('truetype');
+}
+@font-face {
+  font-family: 'weblysleekuisb';
+  src: url('../public/fonts/weblysleekuisb.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'weblysleekuisbi';
+  src: url('../public/fonts/weblysleekuisbi.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'weblysleekuisl';
+  src: url('../public/fonts/weblysleekuisl.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'weblysleekuisli';
+  src: url('../public/fonts/weblysleekuisli.ttf') format('truetype');
+}

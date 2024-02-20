@@ -1,5 +1,6 @@
-import AnnouncementBar from "../announcementBar/AnnouncementBar";
-import Nav from "../nav/Nav";
+import AnnouncementBar from "./components/announcementBar/AnnouncementBar";
+import Nav from "./components/nav/Nav";
+
 
 const HeaderScreen = () => (
     <>

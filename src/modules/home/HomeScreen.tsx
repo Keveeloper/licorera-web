@@ -1,4 +1,4 @@
-import HeaderScreen from "../header/HeaderScreen";
+import HeaderScreen from "../shared/header/HeaderScreen";
 
 const HomeScreen = () => {
     return (

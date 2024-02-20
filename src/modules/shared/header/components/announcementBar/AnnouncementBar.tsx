@@ -1,5 +1,6 @@
 import { Box } from "@mui/material"
-import { paletteColors } from "../../paletteColors/paletteColors";
+import { paletteColors } from "../../../../../paletteColors/paletteColors";
+
 
 const displayFlex = {
     display: 'flex',

@@ -1,13 +1,14 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import LoaderScreen from "../components/Loader/LoaderScreen";
+import LoaderScreen from "../modules/shared/Loader/LoaderScreen";
+
 
 const HomeScreen = React.lazy(
-    () => import("../components/home/HomeScreen")
+    () => import("../modules/home/HomeScreen")
 );
 
 const PromotionDetailScreen = React.lazy(
-    () => import("../Screens/promotion/PromotionDetailScreen")
+    () => import("../modules/promotionDetail/PromotionDetailScreen")
 );
 
 const RootRouter = () => {
