@@ -1,6 +1,12 @@
 import { Box } from "@mui/material"
 import { paletteColors } from "../../paletteColors/paletteColors";
 
+const displayFlex = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+}
+
 const AnnouncementBar = () => {
 
     return (
@@ -10,18 +16,19 @@ const AnnouncementBar = () => {
     );
 }
 
+// const getStylesNav = (scrollPosition: number, screenWidth: number, maxVerticalMobileScreen: number) => ({
+
+// });
 const styles = {
     announcementContainer: {
         width: '100vw',
-        height: '30px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        height: '50px',
+        ...displayFlex,
         backgroundColor: paletteColors.gold,
         'p': {
             fontSize: '14px',
             fontWeight: 600,
-            color: paletteColors.white
+            color: paletteColors.white,
         }
     }
 }

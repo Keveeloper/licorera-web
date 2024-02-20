@@ -28,7 +28,7 @@ const Nav = () => {
 const styles = {
     navContainer: {
         width: '100vw',
-        height: '120px',
+        height: '200px',
         display: 'flex',
         borderBottom: 'solid 1px',
         // backgroundColor: 'blue',

@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import LoaderScreen from "../Screens/Loader/LoaderScreen";
+import LoaderScreen from "../components/Loader/LoaderScreen";
 
 const HomeScreen = React.lazy(
-    () => import("../Screens/home/HomeScreen")
+    () => import("../components/home/HomeScreen")
 );
 
 const PromotionDetailScreen = React.lazy(
@@ -13,10 +13,6 @@ const PromotionDetailScreen = React.lazy(
 const RootRouter = () => {
     return(
         <Routes>
-            <Route 
-                path="*" 
-                element={<h1>Not found</h1>} 
-            />
             <Route
                 path="/"
                 element={
@@ -31,6 +27,10 @@ const RootRouter = () => {
                         <PromotionDetailScreen />
                     </React.Suspense>
                 }
+            />
+            <Route 
+                path="*" 
+                element={<h1>Not found</h1>} 
             />
         </Routes>
     );
