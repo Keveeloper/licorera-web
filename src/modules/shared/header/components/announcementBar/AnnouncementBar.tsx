@@ -1,18 +1,15 @@
 import { Box } from "@mui/material"
 import { paletteColors } from "../../../../../paletteColors/paletteColors";
+import { AnnouncementType } from "./types";
+import { displayFlex } from "../../../../shared/recursiveStyles/RecursiveStyles"
 
+const AnnouncementBar = (props: AnnouncementType) => {
 
-const displayFlex = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-}
-
-const AnnouncementBar = () => {
+    const { text } = props;
 
     return (
         <Box sx={styles.announcementContainer}>
-            <p>Envío gratis por compras superiores a $ 50.000</p>
+            {text}
         </Box>
     );
 }
@@ -23,7 +20,7 @@ const AnnouncementBar = () => {
 const styles = {
     announcementContainer: {
         width: '100vw',
-        height: '50px',
+        height: '40px',
         ...displayFlex,
         backgroundColor: paletteColors.gold,
         'p': {

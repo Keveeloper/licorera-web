@@ -1,6 +1,8 @@
+import HeaderScreen from "../shared/header/HeaderScreen"
+
 const PromotionDetailScreen = () => {
     return (
-        <h1>Promotion detail</h1>
+        <HeaderScreen/>
     );
 }
 

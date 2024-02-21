@@ -22,7 +22,15 @@ const RootRouter = () => {
                     </React.Suspense>
                 }
             />
-            <Route path="promotion-detail"
+            <Route
+                path="/home"
+                element={
+                    <React.Suspense fallback={<LoaderScreen/>}> 
+                        <HomeScreen />
+                    </React.Suspense>
+                }
+            />
+            <Route path="/promotion-detail"
                 element={
                     <React.Suspense fallback={<LoaderScreen/>}>
                         <PromotionDetailScreen />

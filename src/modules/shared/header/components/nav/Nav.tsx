@@ -1,10 +1,10 @@
 import { Box, TextField } from "@mui/material";
 
-const Nav = () => {
+const Nav = ({Children}: any) => {
 
     return(
         <Box sx={styles.navContainer}>
-            <figure>
+            {/* <figure>
                 <img src="/images/logo-3jjj.png" width={80} alt="" />
             </figure>
             <Box sx={styles.navContainer.searchContainer}>
@@ -20,7 +20,8 @@ const Nav = () => {
             </Box>
             <Box sx={styles.navContainer.menuContainer}>
 
-            </Box>
+            </Box> */}
+            {Children}
         </Box>
     );
 }
@@ -28,7 +29,7 @@ const Nav = () => {
 const styles = {
     navContainer: {
         width: '100vw',
-        height: '200px',
+        height: '120px',
         display: 'flex',
         borderBottom: 'solid 1px',
         // backgroundColor: 'blue',

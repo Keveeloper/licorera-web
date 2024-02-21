@@ -1,4 +1,5 @@
 export const paletteColors = {
     gold: '#99791C',
-    white: '#FFFFFF'
+    white: '#FFFFFF',
+    black: '#000000'
 }
