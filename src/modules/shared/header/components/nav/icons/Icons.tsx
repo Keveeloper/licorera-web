@@ -19,7 +19,7 @@ const styles = {
         height: '100%',
         ...displaySpaceAround,
         'img': {
-            width: '15%'
+            width: '17%'
         },
         'img:hover': {
             cursor: 'pointer'

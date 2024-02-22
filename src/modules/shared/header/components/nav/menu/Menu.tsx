@@ -1,15 +1,22 @@
 import { Box } from "@mui/system";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { displayFlexEnd } from "../../../../recursiveStyles/RecursiveStyles";
 import { paletteColors } from "../../../../../../paletteColors/paletteColors";
+import { useState } from "react";
 
 const Menu = () => {
 
+    const location = useLocation();
+    const { pathname } = location;
+    const menuSelected = pathname === '/' ? 'Inicio' : pathname === '/promotion-detail' ? 'Tienda' : 'Canjes';
+
+    const [clicked, setClicked] = useState<string>(menuSelected);
+
     return(
         <Box sx={styles.menuContainer}>
-            <Link to={'/'}>Inicio</Link>
-            <Link to={'/promotion-detail'}>Tienda</Link>
-            <Link to={'/promotion-detail'}>Canjes</Link>
+            <Link style={clicked === 'Inicio' ? styles.menuContainer.clicked : {}} to={'/'}>Inicio</Link>
+            <Link style={clicked === 'Tienda' ? styles.menuContainer.clicked : {}} to={'/promotion-detail'}>Tienda</Link>
+            <Link style={clicked === 'Cajes' ? styles.menuContainer.clicked : {}} to={'/promotion-detail'}>Canjes</Link>
         </Box>
     );
 
@@ -28,7 +35,10 @@ const styles = {
             fontWeight: 600,
             textDecoration: 'none'
         },
-        'a:hover, a:focus': {
+        'a:hover': {
+            borderBottom: `3px solid ${paletteColors.gold}`,
+        },
+        clicked: {
             borderBottom: `3px solid ${paletteColors.gold}`,
         }
     }
