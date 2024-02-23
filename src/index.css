@@ -17,3 +17,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* This class delete backgroundColor when hover in MenuButton JOY UI component */
+.css-1ugmjvm-JoyIconButton-root:hover{
+  background-color: inherit !important;
+}
