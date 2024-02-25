@@ -19,6 +19,6 @@ code {
 }
 
 /* This class delete backgroundColor when hover in MenuButton JOY UI component */
-.css-1ugmjvm-JoyIconButton-root:hover{
-  background-color: inherit !important;
+.MuiIconButton-root:hover{
+  background-color: transparent !important;
 }

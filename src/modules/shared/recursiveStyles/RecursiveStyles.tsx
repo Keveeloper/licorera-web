@@ -4,6 +4,13 @@ export const displayFlex = {
     alignItems: 'center'
 }
 
+export const displayFlexColumn = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+}
+
 export const displayFlexEnd = {
     display: 'flex',
     justifyContent: 'flex-end',
