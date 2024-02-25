@@ -34,7 +34,6 @@ const Icons = () => {
                     <MenuItem sx={styles.iconsContainer.menu.menuitem}>Logout</MenuItem>
                 </Menu>
             </Dropdown>
-            {/* <img src="/icons/web-shopping-cart-icon.png" alt="" /> */}
             <Badge sx={styles.iconsContainer.badge} badgeContent={12}>
                 <img style={{width: '100%'}} src="/icons/web-shopping-cart-icon.png" alt="" />
             </Badge>

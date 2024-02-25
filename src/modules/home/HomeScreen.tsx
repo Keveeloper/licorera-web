@@ -1,8 +1,12 @@
+import FooterScreen from "../shared/footer/FooterScreen";
 import HeaderScreen from "../shared/header/HeaderScreen";
 
 const HomeScreen = () => {
     return (
-        <HeaderScreen/>
+        <>
+            <HeaderScreen/>
+            <FooterScreen/>
+        </>
     );
 }
 
