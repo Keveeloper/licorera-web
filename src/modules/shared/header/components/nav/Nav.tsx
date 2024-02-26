@@ -4,23 +4,6 @@ const Nav = ({Children}: any) => {
 
     return(
         <Box sx={styles.navContainer}>
-            {/* <figure>
-                <img src="/images/logo-3jjj.png" width={80} alt="" />
-            </figure>
-            <Box sx={styles.navContainer.searchContainer}>
-                <p style={styles.navContainer.searchContainer.text}>
-                    ¿ QUE QUIERES TOMAR HOY ?
-                </p>
-                <TextField
-                    size="small"
-                    sx={styles.navContainer.searchContainer.search}
-                    // id="demo-helper-text-aligned"
-                    label="Old parr, Whisky, Cervezas"
-                />
-            </Box>
-            <Box sx={styles.navContainer.menuContainer}>
-
-            </Box> */}
             {Children}
         </Box>
     );
@@ -28,7 +11,7 @@ const Nav = ({Children}: any) => {
 
 const styles = {
     navContainer: {
-        width: '100vw',
+        width: '100%',
         height: '120px',
         display: 'flex',
         borderBottom: 'solid 1px',
