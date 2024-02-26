@@ -15,6 +15,13 @@ export const displayFlexEnd = {
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center'
+
+}
+export const displayFlexColumnEnd = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
 }
 
 export const displaySpaceAround = {

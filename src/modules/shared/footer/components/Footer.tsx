@@ -13,6 +13,7 @@ const styles = {
     footerContainer: {
         with: '100vw',
         height: '350px',
+        borderTop: 'solid 1px',
     }
 }
 
