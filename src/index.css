@@ -22,3 +22,17 @@ code {
 .MuiIconButton-root:hover{
   background-color: transparent !important;
 }
+
+/* This change pagination bullets when active of swiper */
+.swiper-pagination-bullet-active {
+  background-color: black !important;
+}
+
+.swiper-button-next, .swiper-button-prev {
+  color: black !important;
+  font-weight: 600;
+}
+
+.css-1aquho2-MuiTabs-indicator{
+  background-color: #99791C !important;
+}
