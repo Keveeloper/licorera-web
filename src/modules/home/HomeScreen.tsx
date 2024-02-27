@@ -17,6 +17,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { paletteColors } from "../../paletteColors/paletteColors";
+import SwiperComponent from "../shared/swiperComponent/SwiperComponent";
 
 const HomeScreen = () => {
 
@@ -39,82 +40,17 @@ const HomeScreen = () => {
                 </TabList>
                 {/* </Box> */}
                 <TabPanel sx={{height: '700px'}} value="1">
-                    <Swiper style={{ height: '100%'}}
-                        modules={[Navigation, Pagination]}
-                        navigation={{
-                            enabled: true
-                        }}
-                        pagination={{
-                            clickable: true,
-                        }}
-                        spaceBetween={50}
+                    <SwiperComponent 
+                        modules={['Navigation', 'Pagination']}
                         slidesPerView={1}
-                        onSlideChange={() => console.log('slide change')}
-                        onSwiper={(swiper: any) => console.log(swiper)}
-                    >
-                        <SwiperSlide style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src="/images/slide_01.png" alt="" />
-                        </SwiperSlide>
-                        <SwiperSlide style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src="/images/slide_02.png" alt="" />
-                        </SwiperSlide>
-                        <SwiperSlide style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src="/images/slide_03.png" alt="" />
-                        </SwiperSlide>
-                        ...
-                    </Swiper>
+                        images={['slide_01.png', 'slide_02.png', 'slide_03.png']}
+                    />
                 </TabPanel>
                 <TabPanel sx={{height: '700px'}} value="2">
-                <Swiper style={{ height: '100%'}}
-                        modules={[Navigation, Pagination]}
-                        navigation={{
-                            enabled: true
-                        }}
-                        pagination={{
-                            clickable: true,
-                        }}
-                        spaceBetween={50}
-                        slidesPerView={1}
-                        onSlideChange={() => console.log('slide change')}
-                        onSwiper={(swiper: any) => console.log(swiper)}
-                    >
-                        <SwiperSlide style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src="/images/slide_02.png" alt="" />
-                        </SwiperSlide>
-                        <SwiperSlide style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src="/images/slide_01.png" alt="" />
-                        </SwiperSlide>
-                        <SwiperSlide style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src="/images/slide_03.png" alt="" />
-                        </SwiperSlide>
-                        ...
-                    </Swiper>
+                    
                 </TabPanel>
                 <TabPanel sx={{height: '700px'}} value="3">
-                <Swiper style={{ height: '100%'}}
-                        modules={[Navigation, Pagination]}
-                        navigation={{
-                            enabled: true
-                        }}
-                        pagination={{
-                            clickable: true,
-                        }}
-                        spaceBetween={50}
-                        slidesPerView={1}
-                        onSlideChange={() => console.log('slide change')}
-                        onSwiper={(swiper: any) => console.log(swiper)}
-                    >
-                        <SwiperSlide style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src="/images/slide_03.png" alt="" />
-                        </SwiperSlide>
-                        <SwiperSlide style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src="/images/slide_02.png" alt="" />
-                        </SwiperSlide>
-                        <SwiperSlide style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src="/images/slide_01.png" alt="" />
-                        </SwiperSlide>
-                        ...
-                    </Swiper>
+                    
                 </TabPanel>
             </TabContext>
                 
