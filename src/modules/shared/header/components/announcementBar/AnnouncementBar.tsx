@@ -19,7 +19,7 @@ const AnnouncementBar = (props: AnnouncementType) => {
 // });
 const styles = {
     announcementContainer: {
-        width: '100vw',
+        width: '100%',
         height: '40px',
         ...displayFlex,
         backgroundColor: paletteColors.gold,
