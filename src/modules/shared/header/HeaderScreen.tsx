@@ -9,14 +9,12 @@ import SearchBar from "./components/nav/search/SearchBar";
 const HeaderScreen = () => (
     <>
         <AnnouncementBar text={'Envío gratis por compras superiores a $ 50.000'}/>
-        <Nav Children= {
-            <>
-                <Logo/>
-                <SearchBar/>
-                <Menu/>
-                <Icons/>
-            </>
-        }/>
+        <Nav>
+            <Logo/>
+            <SearchBar/>
+            <Menu/>
+            <Icons/>
+        </Nav>
     </>
 )
 

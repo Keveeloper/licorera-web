@@ -1,37 +1,43 @@
-import { useState } from "react";
+import TabPanel from "@mui/lab/TabPanel";
 import FooterScreen from "../shared/footer/FooterScreen";
 import HeaderScreen from "../shared/header/HeaderScreen";
-import { paletteColors } from "../../paletteColors/paletteColors";
-import SwiperComponent from "../shared/swiperComponent/SwiperComponent";
 import TabComponent from "../shared/tabComponent/TabComponent";
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-
-// Material ui imports
-import { Box } from "@mui/material";
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import SwiperComponent from "../shared/swiperComponent/SwiperComponent";
 
 const HomeScreen = () => {
-
-    const [value, setValue] = useState('1');
-
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        setValue(newValue);
-    };
 
     return (
         <>
             <HeaderScreen/>
             <TabComponent
-                handleChange={handleChange}
-                value={value}
-                setValue={setValue}
-            />
+                tabsArray={['PROMOCIONES', 'DESTACADOS', 'PRODUCTOS NUEVOS']}
+            >
+                <TabPanel sx={{height: '700px'}} value="1">
+                    <SwiperComponent 
+                        modules={['Navigation', 'Pagination']}
+                        slidesPerView={1}
+                        images={['slide_01.png', 'slide_02.png', 'slide_03.png']}
+                    />
+                </TabPanel>
+                <TabPanel sx={{height: '700px'}} value="2">
+                    <SwiperComponent 
+                        modules={['Navigation', 'Pagination']}
+                        slidesPerView={1}
+                        images={['slide_02.png', 'slide_02.png', 'slide_03.png']}
+                    />
+                </TabPanel>
+                <TabPanel sx={{height: '700px'}} value="3">
+                    <SwiperComponent 
+                        modules={['Navigation', 'Pagination']}
+                        slidesPerView={1}
+                        images={['slide_03.png', 'slide_02.png', 'slide_03.png']}
+                    />
+                </TabPanel>
+            </TabComponent>
             <FooterScreen/>
         </>
     );

@@ -1,10 +1,15 @@
 import { Box } from "@mui/material";
 import { displayFlexColumn } from "../../../recursiveStyles/RecursiveStyles";
+import { ReactNode } from "react";
 
-const FooterBottom = ({Children}: any) => {
+interface footerBottomInterface {
+    children: ReactNode;
+}
+
+const FooterBottom = ({children}: footerBottomInterface) => {
     return(
         <Box sx={styles.footerBottomContainer}>
-            {Children}
+            {children}
         </Box>
     );
 }

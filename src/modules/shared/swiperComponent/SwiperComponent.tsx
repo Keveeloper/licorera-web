@@ -34,6 +34,7 @@ const SwiperComponent = (props: swiperType) => {
             pagination={{
                 clickable: true,
             }}
+            loop={true}
             spaceBetween={10}
             slidesPerView={slidesPerView}
             onSlideChange={() => console.log('slide change')}

@@ -10,20 +10,16 @@ import PaymentFooter from "./components/payments/PaymentFooter";
 const FooterScreen = () => {
     return(
         <>
-            <Footer Children={
-                <>
-                    <FooterTop Children={
-                        <>
-                            <LicoreraInfo/>
-                            <Info/>
-                            <AppInfo/>
-                        </>
-                    }/>
-                    <FooterBottom Children={
-                        <PaymentFooter/>
-                    }/>
-                </>
-            }/>
+            <Footer>
+                <FooterTop>
+                    <LicoreraInfo/>
+                    <Info/>
+                    <AppInfo/>
+                </FooterTop>
+                <FooterBottom>
+                    <PaymentFooter/>
+                </FooterBottom>
+            </Footer>
             <AnnouncementBar text={'Todos los derechos reservados © 2018 Licorera Tres Jotas.'}/>
         </>
     );
