@@ -15,6 +15,7 @@ export const initialState: PersonalInfoState = {
     email: "",
     phone: "",
     token: "",
+    isWelcome: false
   },
 };
 
@@ -27,6 +28,12 @@ export const personalInfoSlice = createSlice({
       action: PayloadAction<ResponsePersonalInfo>
     ) => {
       status.data = { ...status.data, ...action.payload };
+    },
+    setIsWelcome: (
+      state: PersonalInfoState,
+      action: PayloadAction<any>
+    ) => {
+      state.data.isWelcome = action.payload;
     },
     clearState: () => {
       // Clearing redux state and localForage happens in store.ts.

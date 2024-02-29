@@ -15,4 +15,5 @@ export interface ResponsePersonalInfo {
     phone?: string;
     email?: string;
     token?:string;
+    isWelcome?:boolean
 }

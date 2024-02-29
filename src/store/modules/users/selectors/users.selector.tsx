@@ -14,3 +14,8 @@ export const selectAllPersonalInfo = createSelector(
   (personalInfo) => personalInfo.data
 );
 
+export const selectIsWelcome = createSelector(
+  getPersonalInfoState,
+  (personalInfo) => personalInfo.data.isWelcome
+);
+
