@@ -21,7 +21,7 @@ const style = {
   borderRadius: "20px",
 };
 
-const styleButton = {
+const styleButtonChecked = {
   width: "100%",
   height: "43px",
   background: "#99791C",
@@ -32,6 +32,21 @@ const styleButton = {
   fontSize: "17px",
   marginTop: "20px",
 };
+
+const styleButton = {
+    width: "100%",
+    height: "43px",
+    background: "#D1D1D1",
+    color: "#FFFFFF",
+    borderRadius: "5px",
+    border: "none",
+    fontFamily: "HudsonNYSerif",
+    fontSize: "17px",
+    marginTop: "20px",
+  };
+
+
+
 
 const styleCheckBox = {
   marginTop: "20px",
@@ -45,6 +60,7 @@ const WelcomeScreen = () => {
   const [checked, setChecked] = useState(false);
   const [errorFields, setErrorFields] = useState(false);
   const [errorcheckBox, setErrorcheckBox] = useState(false);
+  const [isButtonActive, setIsButtonActive] = useState(false)
 
   const dispatch = useDispatch();
   
@@ -93,6 +109,18 @@ const WelcomeScreen = () => {
   };
 
   const onCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { day, month, year } = getValues();
+    if (!validateDate(day, month, year)) {
+        setErrorFields(true);
+        return;
+    } else {
+        setErrorFields(false);
+        if(!checked){
+            setIsButtonActive(true)
+        }else{
+            setIsButtonActive(false)
+        }
+    }
     setChecked(event.target.checked);
   };
 
@@ -272,7 +300,7 @@ const WelcomeScreen = () => {
 
                 
 
-              <ButtonComponent style={styleButton}>
+              <ButtonComponent style={!isButtonActive ? styleButton : styleButtonChecked} disabled={!isButtonActive} >
                 <Typography
                   style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}
                 >
