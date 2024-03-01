@@ -43,10 +43,7 @@ const styleButton = {
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
-  };
-
-
-
+};
 
 const styleCheckBox = {
   marginTop: "20px",
@@ -182,7 +179,7 @@ const WelcomeScreen = () => {
             <img src="/images/logo-300.png" alt="" width={300} />
           </Grid>
           <Grid item xs={6}>
-            {/* <form onSubmit={handleSubmit(() => onSubmit)}> */}
+          
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -298,8 +295,6 @@ const WelcomeScreen = () => {
                     </Grid>
                 )}
 
-                
-
               <ButtonComponent style={!isButtonActive ? styleButton : styleButtonChecked} disabled={!isButtonActive} >
                 <Typography
                   style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}
@@ -317,7 +312,7 @@ const WelcomeScreen = () => {
                 El exceso de alcohol es perjudicial para la salud.
               </Typography>
             </Box>
-            {/* </form> */}
+
           </Grid>
         </Grid>
       </ModalComponent>
