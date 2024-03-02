@@ -1,15 +1,10 @@
-import { reducer } from "../../store";
-import { LoadingStatus } from "../../tools";
+import { BaseResponse } from "../../tools/baseResponse";
 
-export type RootState = ReturnType<typeof reducer>;
-
-export interface PromotionState {
-    data: Promotion[] ;
-    error: string | null | undefined;
-    loadingStatus: LoadingStatus;
+export interface ResponsePromotions extends BaseResponse {
+    data: Promotion[];
 }
 
-export interface Promotion {
+interface Promotion {
     id: number;
     name: string;
     image: string;
@@ -25,4 +20,5 @@ export interface Promotion {
     price: number;
     description: string;
     diageo: number;
-  }
+}
+  

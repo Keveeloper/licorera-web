@@ -37,8 +37,8 @@ const SwiperComponent = (props: swiperType) => {
             loop={true}
             spaceBetween={10}
             slidesPerView={slidesPerView}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper: any) => console.log(swiper)}
+            // onSlideChange={() => console.log('slide change')}
+            // onSwiper={(swiper: any) => console.log(swiper)}
         >
             {images.map((img, index) => {
                 return(

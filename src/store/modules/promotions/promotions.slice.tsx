@@ -1,17 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { PromotionState, Promotion } from "./types";
-import { getPromotions } from "./actions/promotion.actions";
+import { getPromotions } from "../../../service/modules/promotions/promotions"; 
 import * as reducers from "./reducers/promotion.reducers";
+import { getPromotionsThunk } from "./actions/promotion.actions";
 
 export const PROMOTION_FEATURE_KEY = "promotions";
 
 export const initialState: PromotionState = {
   loadingStatus: "loading",
   error: null,
-  data: {
-  
-  },
+  data: [],
 };
 
 export const promotionSlice = createSlice({
@@ -28,14 +27,14 @@ export const promotionSlice = createSlice({
       // Clearing redux state and localForage happens in store.ts.
     },
     clearPersonalInfo: (status: PromotionState) => {
-      status.data = {};
+      status.data = [];
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getPromotions.pending, reducers.promotionPending)
-      .addCase(getPromotions.fulfilled, reducers.promotionFulfilled)
-      .addCase(getPromotions.rejected, reducers.promotionRejected);
+      .addCase(getPromotionsThunk.pending, reducers.promotionPending)
+      .addCase(getPromotionsThunk.fulfilled, reducers.promotionFulfilled)
+      .addCase(getPromotionsThunk.rejected, reducers.promotionRejected);
   },
 });
 
