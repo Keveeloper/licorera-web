@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import { PersonalInfoState } from '../../../types';
+import { PersonalInfoState } from '../types';
 
 export const userLoginInfoPending = (state: PersonalInfoState) => {
   state.loadingStatus = 'loading';

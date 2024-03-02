@@ -8,7 +8,10 @@ import React from "react";
 import TextMaskCustom, { typeYear } from "../shared/helper/textMaskCustom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { personalInfoActions, personalInfoSlice } from "../../store/modules/users/users.slice";
+import { personalInfoActions } from "../../store/modules/users/users.slice";
+import { userLogin } from "../../store/modules/users/actions/users.actions";
+import { LoginRequest } from "../../service/modules/users/types";
+import { useAppDispatch } from "../../store/store";
 
 const style = {
   position: "absolute" as "absolute",
@@ -60,6 +63,8 @@ const WelcomeScreen = () => {
   const [isButtonActive, setIsButtonActive] = useState(false)
 
   const dispatch = useDispatch();
+  // TODO PENDING TO REMOVE
+  // const dispatchApp = useAppDispatch();
   
   const [values, setValues] = React.useState({
     textmask: "",
@@ -156,6 +161,15 @@ const WelcomeScreen = () => {
         return setErrorcheckBox(true);
 
     dispatch(personalInfoActions.setIsWelcome(true));
+    
+    // TODO PENDING TO REMOVE
+    // const request:LoginRequest = {
+    //     data:{
+    //       email:"asdasd",
+    //       password:"asd"
+    //     }
+    // }
+    // await dispatchApp(userLogin(request)).unwrap()
   };
 
   return (
