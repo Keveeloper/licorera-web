@@ -7,14 +7,31 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import SwiperComponent from "../shared/swiperComponent/SwiperComponent";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "../../store/store";
 
 const HomeScreen = () => {
+
+    const dispatch = useAppDispatch();
+    const [value, setValue] = useState('1');
+
+    // useEffect(() => {
+    //     // ...
+    //     dispatch()
+    // }, []);
+
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        setValue(newValue);
+    };
 
     return (
         <>
             <HeaderScreen/>
             <TabComponent
                 tabsArray={['PROMOCIONES', 'DESTACADOS', 'PRODUCTOS NUEVOS']}
+                value={value}
+                setValue={setValue}
+                handleChange={handleChange}
             >
                 <TabPanel sx={{height: '700px'}} value="1">
                     <SwiperComponent 

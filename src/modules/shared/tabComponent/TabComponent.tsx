@@ -4,16 +4,10 @@ import TabList from '@mui/lab/TabList';
 import { tabType } from './types/types';
 import { useState } from 'react';
 
-const TabComponent: React.FC<tabType> = ({tabsArray, children}) => {
+const TabComponent: React.FC<tabType> = (props) => {
 
-    // const { tabsArray, Children } = props;
+    const { tabsArray, children, handleChange, value} = props;
 
-    const [value, setValue] = useState('1');
-    const [isHome, setisHome] = useState(false);
-
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        setValue(newValue);
-    };
 
     return(
         <TabContext value={value}>
