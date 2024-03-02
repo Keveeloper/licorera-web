@@ -13,9 +13,11 @@ import {
   PERSONAL_INFO_FEATURE_KEY,
   personalInfoReducer,
 } from "./modules/users/users.slice";
+import { PROMOTION_FEATURE_KEY, promotionReducer } from "./modules/promotions";
 
 export const reducer = combineReducers({
   [PERSONAL_INFO_FEATURE_KEY]: personalInfoReducer,
+  [PROMOTION_FEATURE_KEY]: promotionReducer,
 });
 
 const KEY_PERSIST_CONFIG = "root";

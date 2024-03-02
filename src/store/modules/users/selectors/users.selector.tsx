@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { PersonalInfoState, RootState } from '../../../types';
+import { PersonalInfoState, RootState } from '../types';
 import { PERSONAL_INFO_FEATURE_KEY } from '../users.slice';
 
 /*
@@ -12,5 +12,10 @@ export const getPersonalInfoState = (rootState: RootState): PersonalInfoState =>
 export const selectAllPersonalInfo = createSelector(
   getPersonalInfoState,
   (personalInfo) => personalInfo.data
+);
+
+export const selectIsWelcome = createSelector(
+  getPersonalInfoState,
+  (personalInfo) => personalInfo.data.isWelcome
 );
 

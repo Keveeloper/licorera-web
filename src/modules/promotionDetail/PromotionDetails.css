@@ -1,0 +1,38 @@
+.iconContainer{
+    display: inline-flex;;
+    justify-content: center;
+    align-items: center;
+    width: 50px; /* Ajusta esto según tus necesidades */
+    height: 50px; /* Ajusta esto según tus necesidades */
+    border-radius: 50%; 
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background: #fdbd00;
+    margin-top: 15px;
+}
+
+.icono {
+    display: inline-block;
+    text-align: center;
+}
+
+#icono-mas {
+    font-size: 60px;
+    margin: -15px 0 0 -40px;
+    width: 0px;
+}
+
+  
+#icono-menos {
+    font-size: 60px;
+    margin: -15px 0 0 -25px;
+    width: 0px;
+}
+
+.normalText{
+    font-family: 'weblysleekuil';
+    font-weight: 600;
+    color: #000000;
+    font-size: 125%;
+}

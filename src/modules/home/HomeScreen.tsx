@@ -13,7 +13,9 @@ import { useAppDispatch } from "../../store/store";
 const HomeScreen = () => {
 
     const dispatch = useAppDispatch();
-    const [value, setValue] = useState('1');
+    
+    const [value, setValue] = useState("1");
+
 
     // useEffect(() => {
     //     // ...

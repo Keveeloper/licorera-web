@@ -2,7 +2,7 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import { tabType } from './types/types';
-import { useState } from 'react';
+// import { useState } from 'react';
 
 const TabComponent: React.FC<tabType> = (props) => {
 
