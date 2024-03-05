@@ -11,7 +11,7 @@ export const promotionFulfilled = (
   state: PromotionState,
   action: PayloadAction<any>
 ) => {
-  state.data = action.payload.response;
+  state.state = action.payload.response;
   state.loadingStatus = 'loaded';
 };
 
