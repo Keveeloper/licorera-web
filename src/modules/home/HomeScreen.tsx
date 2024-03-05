@@ -21,35 +21,14 @@ const HomeScreen = () => {
     const promotionsData = useSelector((state: RootState) => state.promotions.data); // Accede al estado de Redux
 
     const [value, setValue] = useState("1");
-    const [promotionImages, setPromotionImages] = useState<ResponsePromotions | undefined>();
-    const [images, setImages] = useState<string[]>([]);
+    const [promotions, setPromotions] = useState<ApiResponse<ResponsePromotions>>();
 
 
     useEffect(() => {        
         dispatch(getPromotionsThunk());
-      }, [dispatch]);
-    
-      useEffect(() => {
-        console.log('Promotions.data.image: ', promotionImages?.data[0].image);
+        console.log('Promotions data: ', promotionsData);
         
-        if (promotionsData) {
-          // Crea un objeto ResponsePromotions a partir del array de promociones
-          const response: ResponsePromotions = {
-            success: true,
-            message: '',
-            data: promotionsData
-          };
-          setPromotionImages(response);
-          const arrayImages: string[] = [];
-          if (promotionImages?.data) {
-              for (let index = 0; index < promotionImages?.data?.length; index++) {
-                arrayImages.push(promotionImages?.data[index].image);
-              }
-              setImages(arrayImages);
-          }
-
-        }
-      }, [promotionsData]);
+    }, []);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -60,7 +39,6 @@ const HomeScreen = () => {
             <HeaderScreen/>
             <TabComponent
                 tabsArray={['PROMOCIONES', 'DESTACADOS', 'PRODUCTOS NUEVOS']}
-                // tabsArray={}
                 value={value}
                 setValue={setValue}
                 handleChange={handleChange}
@@ -69,8 +47,7 @@ const HomeScreen = () => {
                     <SwiperComponent 
                         modules={['Navigation', 'Pagination']}
                         slidesPerView={1}
-                        // images={['slide_01.png', 'slide_02.png', 'slide_03.png']}
-                        images={images}
+                        images={['slide_01.png', 'slide_02.png', 'slide_03.png']}
                     />
                 </TabPanel>
                 <TabPanel sx={{height: '700px'}} value="2">

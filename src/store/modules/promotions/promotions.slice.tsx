@@ -10,7 +10,7 @@ export const PROMOTION_FEATURE_KEY = "promotions";
 export const initialState: PromotionState = {
   loadingStatus: "loading",
   error: null,
-  data: [],
+  data: [] as Promotion[],
 };
 
 export const promotionSlice = createSlice({
