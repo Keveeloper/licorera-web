@@ -9,17 +9,12 @@ import "swiper/css/pagination";
 import SwiperComponent from "../shared/swiperComponent/SwiperComponent";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../store/store";
-import { ResponsePromotions } from "../../service/modules/promotions/types";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/types";
-import { ApiResponse } from "../../service/tools/types";
-import { userLogin } from "../../store/modules/users/actions/users.actions";
 import { getPromotionsThunk } from "../../store/modules/promotions/actions/promotion.actions";
 import {
   selectAllPromotion,
-  selectFirstImage,
 } from "../../store/modules/promotions";
-import { Data, PromotionState } from "../../store/modules/promotions/types";
+import { Data } from "../../store/modules/promotions/types";
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
@@ -65,7 +60,6 @@ const HomeScreen = () => {
           <SwiperComponent
             modules={["Navigation", "Pagination"]}
             slidesPerView={1}
-            // images={['slide_01.png', 'slide_02.png', 'slide_03.png']}
             images={images}
           />
         </TabPanel>
