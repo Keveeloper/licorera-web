@@ -13,9 +13,12 @@ import {
   PERSONAL_INFO_FEATURE_KEY,
   personalInfoReducer,
 } from "./modules/users/users.slice";
+import { STORE_FEATURE_KEY, storeReducer } from "./modules/store/store.slice";
 
 export const reducer = combineReducers({
   [PERSONAL_INFO_FEATURE_KEY]: personalInfoReducer,
+
+  [STORE_FEATURE_KEY]: storeReducer,
 });
 
 const KEY_PERSIST_CONFIG = "root";
