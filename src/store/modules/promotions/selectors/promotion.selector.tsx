@@ -11,7 +11,12 @@ export const getPromotionState = (rootState: RootState): PromotionState =>
 
 export const selectAllPromotion = createSelector(
   getPromotionState,
-  (promotion) => promotion.data
+  (promotion) => promotion.state.data
+);
+
+export const selectFirstImage = createSelector(
+  getPromotionState,
+  (promotion) => promotion.state.data[0].image
 );
 
 

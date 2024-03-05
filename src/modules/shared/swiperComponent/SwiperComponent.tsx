@@ -43,7 +43,7 @@ const SwiperComponent = (props: swiperType) => {
             {images.map((img, index) => {
                 return(
                     <SwiperSlide key={index} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                            <img height={'90%'} src={`/images/${img}`} alt="" />
+                            <img height={'90%'} src={`${img}`} alt="" />
                     </SwiperSlide>
                 )
             })}

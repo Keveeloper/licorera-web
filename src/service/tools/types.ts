@@ -10,7 +10,7 @@ export type ApiResponse<
   status?: number;
   statusCode?: number | null;
   errorMessage?: string | null;
-  response?: T;
+  response?: any;
   error?: AxiosError;
   articule?: any;
   data?: any;

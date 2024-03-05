@@ -10,24 +10,22 @@ export const PROMOTION_FEATURE_KEY = "promotions";
 export const initialState: PromotionState = {
   loadingStatus: "loading",
   error: null,
-  data: [] as Promotion[],
+  state: {
+    data:[],
+    success:false,
+    message:''
+  },
 };
 
 export const promotionSlice = createSlice({
   name: PROMOTION_FEATURE_KEY,
   initialState,
   reducers: {
-    setPersonalInfo: (
-      status: PromotionState,
-      action: PayloadAction<Promotion>
-    ) => {
-      status.data = { ...status.data, ...action.payload };
-    },
     clearState: () => {
       // Clearing redux state and localForage happens in store.ts.
     },
     clearPersonalInfo: (status: PromotionState) => {
-      status.data = [];
+      status.state.data = [];
     },
   },
   extraReducers: (builder) => {

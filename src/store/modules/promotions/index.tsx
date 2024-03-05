@@ -3,4 +3,4 @@ export {
   PROMOTION_FEATURE_KEY,
   promotionActions,
 } from "./promotions.slice";
-export { selectAllPromotion } from "./selectors/promotion.selector";
+export { selectAllPromotion, selectFirstImage } from "./selectors/promotion.selector";
