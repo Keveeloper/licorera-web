@@ -13,6 +13,7 @@ export const promotionFulfilled = (
 ) => {
   state.state = action.payload.response;
   state.loadingStatus = 'loaded';
+  // state.loadingStatus = 'loading';
 };
 
 export const promotionRejected = (

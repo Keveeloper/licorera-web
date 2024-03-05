@@ -15,10 +15,19 @@ import {
   selectAllPromotion,
 } from "../../store/modules/promotions";
 import { Data } from "../../store/modules/promotions/types";
+import { selectLoading } from "../../store/modules/promotions/selectors/promotion.selector";
+import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
+
+// Material UI
+import Skeleton from '@mui/material/Skeleton';
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
   const promotionsDataredux = useSelector(selectAllPromotion);
+  const loadingStatus = useSelector(selectLoading);
+
+  console.log('Loading status: ', loadingStatus);
+  
 
   const [value, setValue] = useState("1");
   const [promotionsData, setPromotionsData] = useState<Data | undefined>();
@@ -48,6 +57,7 @@ const HomeScreen = () => {
 
   return (
     <>
+
       <HeaderScreen />
       <TabComponent
         tabsArray={["PROMOCIONES", "DESTACADOS", "PRODUCTOS NUEVOS"]}
@@ -56,11 +66,15 @@ const HomeScreen = () => {
         setValue={setValue}
         handleChange={handleChange}
       >
-        <TabPanel sx={{ height: "700px" }} value="1">
+        <TabPanel sx={{padding: '0', height: '700px' }} value="1">
+            {/* {loadingStatus === 'loading' && (
+                <Skeleton variant="rectangular" width={210} height={118} />
+            )} */}
           <SwiperComponent
             modules={["Navigation", "Pagination"]}
             slidesPerView={1}
             images={images}
+            loadingStatus={loadingStatus}
           />
         </TabPanel>
         <TabPanel sx={{ height: "700px" }} value="2">
@@ -68,6 +82,7 @@ const HomeScreen = () => {
             modules={["Navigation", "Pagination"]}
             slidesPerView={1}
             images={["slide_02.png", "slide_02.png", "slide_03.png"]}
+            loadingStatus={loadingStatus}
           />
         </TabPanel>
         <TabPanel sx={{ height: "700px" }} value="3">
@@ -75,6 +90,7 @@ const HomeScreen = () => {
             modules={["Navigation", "Pagination"]}
             slidesPerView={1}
             images={["slide_03.png", "slide_02.png", "slide_03.png"]}
+            loadingStatus={loadingStatus}
           />
         </TabPanel>
       </TabComponent>
