@@ -1,10 +1,9 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import { PersonalInfoState } from '../../../types';
+import { PersonalInfoState } from '../types';
 
 export const categoriesPending = (state: PersonalInfoState) => {
   state.loadingStatus = 'loading';
-  state.data.token = '';
   state.error = undefined;
 };
 
@@ -12,7 +11,7 @@ export const categoriesFulfilled = (
   state: PersonalInfoState,
   action: PayloadAction<any>
 ) => {
-  state.data = action.payload.response;
+  state.categories = action.payload.response;
   state.loadingStatus = 'loaded';
 };
 

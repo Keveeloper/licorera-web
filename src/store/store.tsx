@@ -14,10 +14,11 @@ import {
   personalInfoReducer,
 } from "./modules/users/users.slice";
 import { STORE_FEATURE_KEY, storeReducer } from "./modules/store/store.slice";
+import { PROMOTION_FEATURE_KEY, promotionReducer } from "./modules/promotions/promotions.slice";
 
 export const reducer = combineReducers({
   [PERSONAL_INFO_FEATURE_KEY]: personalInfoReducer,
-  
+  [PROMOTION_FEATURE_KEY]:promotionReducer,
   [STORE_FEATURE_KEY]: storeReducer,
 });
 

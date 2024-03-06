@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { PersonalInfoState, ResponsePersonalInfo } from "../../types";
+
 import { Categories, CategoriesById } from "./actions/store.actions";
 import * as reducers from "./reducers/store.reducers";
+import { PersonalInfoState } from "./types";
 
 export const STORE_FEATURE_KEY = "store";
 
 export const initialState: PersonalInfoState = {
   loadingStatus: "loading",
   error: null,
+  categories:{},
   data: {
     firstName: "",
     lastName: "",
