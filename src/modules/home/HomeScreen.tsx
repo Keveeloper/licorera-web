@@ -66,14 +66,13 @@ const HomeScreen = () => {
         setValue={setValue}
         handleChange={handleChange}
       >
-        <TabPanel sx={{padding: '0', height: '700px' }} value="1">
+        <TabPanel sx={{padding: '0', height: '600px' }} value="1">
             {/* {loadingStatus === 'loading' && (
                 <Skeleton variant="rectangular" width={210} height={118} />
             )} */}
           <SwiperComponent
             modules={["Navigation", "Pagination"]}
             slidesPerView={1}
-            images={images}
             loadingStatus={loadingStatus}
           />
         </TabPanel>
@@ -81,7 +80,6 @@ const HomeScreen = () => {
           <SwiperComponent
             modules={["Navigation", "Pagination"]}
             slidesPerView={1}
-            images={["slide_02.png", "slide_02.png", "slide_03.png"]}
             loadingStatus={loadingStatus}
           />
         </TabPanel>
@@ -89,7 +87,6 @@ const HomeScreen = () => {
           <SwiperComponent
             modules={["Navigation", "Pagination"]}
             slidesPerView={1}
-            images={["slide_03.png", "slide_02.png", "slide_03.png"]}
             loadingStatus={loadingStatus}
           />
         </TabPanel>

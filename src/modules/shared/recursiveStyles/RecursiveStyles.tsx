@@ -29,3 +29,9 @@ export const displaySpaceAround = {
     justifyContent: 'space-around',
     alignItems: 'center'
 }
+
+export const displaySpaceBetween = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+}

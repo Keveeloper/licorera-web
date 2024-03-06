@@ -119,7 +119,8 @@ const ContainerStore = () => {
             style={{
               borderRadius: "20px",
               maxHeight: "300px",
-              width:"100%"
+              width:"100%",
+              objectFit: 'cover'
             }}
           />
         </Grid>

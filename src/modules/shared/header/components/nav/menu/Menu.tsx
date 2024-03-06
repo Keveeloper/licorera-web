@@ -8,15 +8,15 @@ const Menu = () => {
 
     const location = useLocation();
     const { pathname } = location;
-    const menuSelected = pathname === '/' ? 'Inicio' : pathname === '/promotion-detail' ? 'Tienda' : 'Canjes';
+    const menuSelected = pathname === '/' ? 'Inicio' : pathname === '/store' ? 'Tienda' : 'Canjes';
 
     const [clicked, setClicked] = useState<string>(menuSelected);
 
     return(
         <Box sx={styles.menuContainer}>
             <Link style={clicked === 'Inicio' ? styles.menuContainer.clicked : {}} to={'/'}>Inicio</Link>
-            <Link style={clicked === 'Tienda' ? styles.menuContainer.clicked : {}} to={'/promotion-detail'}>Tienda</Link>
-            <Link style={clicked === 'Cajes' ? styles.menuContainer.clicked : {}} to={'/promotion-detail'}>Canjes</Link>
+            <Link style={clicked === 'Tienda' ? styles.menuContainer.clicked : {}} to={'/store'}>Tienda</Link>
+            <Link style={clicked === 'Canjes' ? styles.menuContainer.clicked : {}} to={'/promotion-detail'}>Canjes</Link>
         </Box>
     );
 

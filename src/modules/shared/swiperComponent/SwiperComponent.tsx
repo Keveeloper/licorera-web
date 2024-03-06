@@ -3,16 +3,22 @@ import { Swiper, SwiperSlide} from 'swiper/react';
 import { swiperType } from './types/types';
 import { useEffect } from 'react';
 import { Navigation, Pagination } from 'swiper/modules';
+import { displayFlex, displaySpaceBetween } from '../recursiveStyles/RecursiveStyles';
 
 // Material UI
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectAllPromotion } from '../../../store/modules/promotions';
+import { Promotion } from '../../../store/modules/promotions/types';
+import StringDateFormat from '../hooks/stringDateFormat/StringDateFormat';
 
 const modulesArray: any = [];
 
 const SwiperComponent = (props: swiperType) => { 
     
-    const { modules, slidesPerView, images, loadingStatus } = props;
+    const { modules, slidesPerView, loadingStatus } = props;
+    const promotionsDataredux = useSelector(selectAllPromotion); 
     
     useEffect(() => {
         modules.forEach(module => {
@@ -30,57 +36,93 @@ const SwiperComponent = (props: swiperType) => {
     }, [modules]);
 
     return(
-        <>
-            {/* {loadingStatus === 'loading' && (
-                <Box sx={{margin: '0 auto 0 auto', width: '1000px', height: '90%'}}>
-                    <Skeleton sx={{marginTop: '30px', marginBottom: '10px'}} variant="rectangular" width={'100%'} height={'60%'} />
-                    <Skeleton sx={{marginBottom: '10px'}} variant="rectangular" width={'30%'} height={'10%'} />
-                    <Skeleton sx={{marginBottom: '10px'}} variant="rectangular" width={'90%'} height={'20%'} />
-                    <Skeleton sx={{marginBottom: '10px'}} variant="rectangular" width={'10%'} height={'10%'} />
-                    
-                </Box>
-            )} */}
-            <Swiper style={{ height: '100%'}}
-                modules={modulesArray}
-                navigation={{
-                    enabled: true
-                }}
-                pagination={{
-                    clickable: true,
-                }}
-                loop={true}
-                spaceBetween={10}
-                slidesPerView={slidesPerView}
-                // onSlideChange={() => console.log('slide change')}
-                // onSwiper={(swiper: any) => console.log(swiper)}
-            >
-                {images.map((img, index) => {
-                    return(
-                        <SwiperSlide key={index} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                                {loadingStatus === 'loading' ? 
-                                    <Skeleton sx={{width: '100%', maxWidth: '1000px', borderRadius: '20px'}} variant="rectangular" height={'90%'} />
-                                :
-                                    <Box sx={{position: 'relative', height: '90%', borderRadius: '20px', display: 'inline-block', overflow: 'hidden'}}>
-                                        <img height={'100%'} src={`${img}`} alt="" />
-                                        <Box sx={{position: 'absolute', padding: '20px', width: '100%' , bottom: 0, border: '1px solid black', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px', backgroundColor: 'white',}}>
-                                            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                                                <h1>BUCHANANS MASTER</h1>
-                                                <h2>$ 149.000</h2>
-                                            </Box>
-                                            <p style={{marginBottom: '30px'}}>Resultado de la creación del Master Blender Keith Law, quien seleccionó las mejores maltas de Escocia en su punto más alto de maduración. Vivamos 
-                                                grandes momentos y no te pierdas la grandeza de un Buchanan's Master. con este descuento. Aquí va toda la descripción de la promoción.</p>
-                                            <p>Válido hasta: Agosto 23, 2023</p>
+        <Swiper style={styles.swiper}
+            modules={modulesArray}
+            navigation={{
+                enabled: true
+            }}
+            pagination={{
+                clickable: true,
+            }}
+            loop={true}
+            spaceBetween={10}
+            slidesPerView={slidesPerView}
+            // onSlideChange={() => console.log('slide change')}
+            // onSwiper={(swiper: any) => console.log(swiper)}
+        >
+            {promotionsDataredux.map((item: Promotion, index) => {
+                const format = StringDateFormat(item.end_date)
+                return(
+                    <SwiperSlide key={index} style={styles.swiper.swiperSlide}>
+                            {loadingStatus === 'loading' ? 
+                                <Skeleton sx={styles.swiper.swiperSlide.skeleton} variant="rectangular" height={'90%'} />
+                            :
+                                <Box sx={styles.swiper.swiperSlide.promotionContainer}>
+                                    {/* <img height={'100%'} src={`${img}`} alt="" /> */}
+                                    <img style={styles.swiper.swiperSlide.promotionContainer.image} src={`${item.image}`} alt="" />
+                                    <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer}>
+                                        <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header}>
+                                            <h1 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>{item.name}</h1>
+                                            <h2 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>$ {item.price}</h2>
                                         </Box>
+                                        <p style={{marginBottom: '30px'}}>{item.description}</p>
+                                        <p>Válido hasta: {format}</p>
                                     </Box>
-                                }
-                        </SwiperSlide>
-                        
-                    )
-                })}
-            </Swiper>
-        </>
+                                </Box>
+                            }
+                    </SwiperSlide>
+                )
+            })}
+        </Swiper>
     );
 
+}
+
+const styles = {
+    swiper: {
+        height: '100%',
+        swiperSlide: {
+            ...displayFlex,
+            cursor: 'pointer',
+            skeleton: {
+                width: '100%', 
+                maxWidth: '1000px', 
+                borderRadius: '20px'
+            },
+            promotionContainer: {
+                position: 'relative', 
+                height: '90%', 
+                borderRadius: '20px', 
+                display: 'inline-block', 
+                overflow: 'hidden',
+                image: {
+                    height: '100%'
+                },
+                descriptionContainer: {
+                    position: 'absolute', 
+                    padding: '20px', 
+                    width: '100%' , 
+                    bottom: 0, 
+                    border: '1px solid black', 
+                    borderBottomLeftRadius: '20px', 
+                    borderBottomRightRadius: '20px', 
+                    backgroundColor: 'white',
+                    header: {
+                        marginBottom: '10px',
+                        ...displaySpaceBetween,
+                        title: {
+                            fontFamily: 'Hudson NY Serif',
+                            fontWeight: 600
+                        },
+                        price: {
+                            fontFamily: 'Hudson NY Serif',
+                            fontWeight: 600
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 export default SwiperComponent;
