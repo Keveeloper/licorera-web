@@ -60,9 +60,21 @@ const SwiperComponent = (props: swiperType) => {
                                 {loadingStatus === 'loading' ? 
                                     <Skeleton sx={{width: '100%', maxWidth: '1000px', borderRadius: '20px'}} variant="rectangular" height={'90%'} />
                                 :
-                                    <img style={{borderRadius: '20px'}} height={'90%'} src={`${img}`} alt="" />
+                                    <Box sx={{position: 'relative', height: '90%', borderRadius: '20px', display: 'inline-block', overflow: 'hidden'}}>
+                                        <img height={'100%'} src={`${img}`} alt="" />
+                                        <Box sx={{position: 'absolute', padding: '20px', width: '100%' , bottom: 0, border: '1px solid black', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px', backgroundColor: 'white',}}>
+                                            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                                <h1>BUCHANANS MASTER</h1>
+                                                <h2>$ 149.000</h2>
+                                            </Box>
+                                            <p style={{marginBottom: '30px'}}>Resultado de la creación del Master Blender Keith Law, quien seleccionó las mejores maltas de Escocia en su punto más alto de maduración. Vivamos 
+                                                grandes momentos y no te pierdas la grandeza de un Buchanan's Master. con este descuento. Aquí va toda la descripción de la promoción.</p>
+                                            <p>Válido hasta: Agosto 23, 2023</p>
+                                        </Box>
+                                    </Box>
                                 }
                         </SwiperSlide>
+                        
                     )
                 })}
             </Swiper>
