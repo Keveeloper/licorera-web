@@ -11,6 +11,11 @@ const PromotionDetailScreen = React.lazy(
     () => import("../modules/promotionDetail/PromotionDetailScreen")
 );
 
+const StoreScreen = React.lazy(
+    () => import("../modules/store/store.screen")
+);
+
+
 const RootRouter = () => {
     return(
         <Routes>
@@ -37,6 +42,14 @@ const RootRouter = () => {
                     </React.Suspense>
                 }
             />
+            <Route path="/store"
+                element={
+                    <React.Suspense fallback={<LoaderScreen/>}>
+                        <StoreScreen />
+                    </React.Suspense>
+                }
+            />
+            
             <Route 
                 path="*" 
                 element={<h1>Not found</h1>} 

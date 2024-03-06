@@ -21,10 +21,10 @@ const persistor = persistStore(store);
 root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <React.StrictMode>
+      {/* <React.StrictMode> */}
           <App/>
           {/* <RouterProvider router={router} /> */}
-      </React.StrictMode>
+      {/* </React.StrictMode> */}
     </PersistGate>
   </Provider>
 );
