@@ -17,7 +17,7 @@ import { STORE_FEATURE_KEY, storeReducer } from "./modules/store/store.slice";
 
 export const reducer = combineReducers({
   [PERSONAL_INFO_FEATURE_KEY]: personalInfoReducer,
-
+  
   [STORE_FEATURE_KEY]: storeReducer,
 });
 

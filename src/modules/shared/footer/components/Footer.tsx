@@ -1,9 +1,14 @@
 import { Box } from "@mui/material";
+import { ReactNode } from "react";
 
-const Footer = ({Children}: any) => {
+interface footerInterface {
+    children: ReactNode;
+}
+
+const Footer: React.FC<footerInterface> = ({children}) => {
     return(
         <Box sx={styles.footerContainer}>
-            {Children}
+            {children}
         </Box>
     );
 

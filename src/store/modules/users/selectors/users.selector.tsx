@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { PersonalInfoState, RootState } from '../../../types';
+import { PersonalInfoState, RootState } from '../types';
 import { PERSONAL_INFO_FEATURE_KEY } from '../users.slice';
 
 /*

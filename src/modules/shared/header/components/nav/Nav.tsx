@@ -1,10 +1,15 @@
 import { Box, TextField } from "@mui/material";
+import { ReactNode } from "react";
 
-const Nav = ({Children}: any) => {
+interface navInterface {
+    children: ReactNode;
+}
+
+const Nav: React.FC<navInterface> = ({children}) => {
 
     return(
         <Box sx={styles.navContainer}>
-            {Children}
+            {children}
         </Box>
     );
 }
