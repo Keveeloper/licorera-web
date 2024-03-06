@@ -1,0 +1,27 @@
+.inputCustom{
+    font-family: weblysleekuil;
+    font-size: 16px;
+    font-weight: 300;
+    color: #000000;
+    width:100%;
+}
+
+.inputCustom input{
+    background: white;
+}
+.inputCustom label{
+    font-family: weblysleekuil;
+    font-weight: 300;
+    margin-top: 5px;
+    color: #BBBBBB;
+}
+
+.circleImg{
+    border: 1px solid #BBBBBB;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

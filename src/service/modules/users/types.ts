@@ -7,11 +7,8 @@ export type ResponseAuth = {
 };
 
 export type LoginRequest = {
-    data: login;
-};
-
-type login={
     email:string,
     password:string
-}
+};
+
   

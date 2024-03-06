@@ -65,3 +65,7 @@
   font-family: 'weblysleekuisli';
   src: url('../public/fonts/weblysleekuisli.ttf') format('truetype');
 }
+
+.css-batk84-MuiInputBase-root-MuiFilledInput-root::after{
+  border-bottom: 2px solid #000000 !important;
+}

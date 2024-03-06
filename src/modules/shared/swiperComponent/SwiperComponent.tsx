@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { selectAllPromotion } from '../../../store/modules/promotions';
 import { Promotion } from '../../../store/modules/promotions/types';
 import StringDateFormat from '../hooks/stringDateFormat/StringDateFormat';
+import UseStringDateFormat from '../hooks/stringDateFormat/UseStringDateFormat';
 
 const modulesArray: any = [];
 
@@ -19,7 +20,8 @@ const SwiperComponent = (props: swiperType) => {
     
     const { modules, slidesPerView, loadingStatus } = props;
     const promotionsDataredux = useSelector(selectAllPromotion); 
-    
+    const formattedDates = promotionsDataredux.map(item => UseStringDateFormat(item.end_date));
+
     useEffect(() => {
         modules.forEach(module => {
             switch (module) {
@@ -51,7 +53,8 @@ const SwiperComponent = (props: swiperType) => {
             // onSwiper={(swiper: any) => console.log(swiper)}
         >
             {promotionsDataredux.map((item: Promotion, index) => {
-                const format = StringDateFormat(item.end_date)
+                // const formattedDate = UseStringDateFormat(item.end_date);
+                // const format = StringDateFormat(item.end_date)
                 return(
                     <SwiperSlide key={index} style={styles.swiper.swiperSlide}>
                             {loadingStatus === 'loading' ? 
@@ -66,7 +69,7 @@ const SwiperComponent = (props: swiperType) => {
                                             <h2 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>$ {item.price}</h2>
                                         </Box>
                                         <p style={{marginBottom: '30px'}}>{item.description}</p>
-                                        <p>Válido hasta: {format}</p>
+                                        <p>Válido hasta: {formattedDates[index]}</p>
                                     </Box>
                                 </Box>
                             }

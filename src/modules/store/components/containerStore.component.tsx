@@ -1,16 +1,15 @@
-import {
-  FormControl,
-  Grid,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { FormControl, Grid, MenuItem, Select, Stack, Typography } from "@mui/material";
+import { Pagination as MyPagination } from '@mui/material';
 import React from "react";
 import CardComponent from "../../shared/card/card.component";
 import { useAppDispatch } from "../../../store/store";
-import { Categories, CategoriesById } from "../../../store/modules/store/actions/store.actions";
+import {
+  Categories,
+  CategoriesById,
+} from "../../../store/modules/store/actions/store.actions";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
+import "./containerStore.css"
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -20,6 +19,8 @@ const ContainerStore = () => {
   const [categories, setCategories] = React.useState<any>([]);
   const [categorySelected, setCategorySelected] = React.useState<any>({});
   const [products, setProducts] = React.useState<any>([]);
+  const [page, setPage] = React.useState(1);
+  const [totalPage, setTotalPage] = React.useState(1);
   const dispatch = useAppDispatch();
 
   const searchOptions = [
@@ -34,63 +35,93 @@ const ContainerStore = () => {
     setSearch(event.target.value);
   };
 
-  const handleCategory = async (id:number) =>{
-    const categoriesById = await dispatch(CategoriesById({id, page:1})).unwrap();
-    setProducts(categoriesById.response.data.data)
-    const categoryfilter = categories.filter((category:any)=>{
-      return category.id === id
-    })
-    setCategorySelected(categoryfilter[0])
-    console.log(categorySelected);
+  const handleChangePagination = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+    handleCategory(categorySelected.id, value);
+  };
+
+  const handleCategory = async (id: number, page:number) => {
+    const categoriesById = await dispatch(
+      CategoriesById({ id, page })
+    )
+    .unwrap()
+    setTotalPage(categoriesById.response.data.last_page)
+    setProducts(categoriesById.response.data.data);
+    filterCategory(id)
+  };
+
+  const filterCategory = (id:number) =>{
     
+    if(categories.length > 0){
+      const categoryfilter = categories.filter((category: any) => {
+        return category.id === id;
+      });
+      setCategorySelected(categoryfilter[0]);
+    }
   }
 
-  React.useEffect(() =>{
-    async function getCategories(){
+  React.useEffect(() => {
+    async function getCategories() {
       const categories = await dispatch(Categories()).unwrap();
-      console.log(categories.response.data);
-      setCategories(categories.response.data)
-      setCategorySelected(categories.response.data[0])
-
-      const categoriesById = await dispatch(CategoriesById({id:1, page:1})).unwrap();
-      console.log(categoriesById.response.data);
-      setProducts(categoriesById.response.data.data)
+      setCategories(categories.response.data);
+      setCategorySelected(categories.response.data[0]);
+      handleCategory(1,1)
     }
-    getCategories()
-  },[])
+    getCategories();
+  }, []);
 
   return (
-    <>  
+    <>
       <Grid
         container
         spacing={2}
         style={{
-          padding: '30px 5%'
+          padding: "30px 5%",
         }}
       >
-        <Grid item xs={12} style={{textAlign:'center'}}>
-          <Typography style={storeStyles.category}>EXPLORA NUESTRAS CATEGORIAS</Typography>
+        {/* CATEGORY SECTION */}
+        <Grid item xs={12} style={{ textAlign: "center" }}>
+          <Typography style={storeStyles.category}>
+            EXPLORA NUESTRAS CATEGORIAS
+          </Typography>
         </Grid>
-        <Grid item xs={12} style={{padding:'30px 0'}}>
-          <Swiper style={{ height:'100%', width:'100%'}}
-              modules={[Navigation, Pagination]}
-              navigation={{
-                  enabled: true
-              }}
-              loop={true}
-              spaceBetween={2}
-              slidesPerView={7}
+        <Grid item xs={12} style={{ padding: "30px 0" }}>
+          <Swiper
+            style={{ height: "100%", width: "100%" }}
+            modules={[Navigation, Pagination]}
+            navigation={{
+              enabled: true,
+            }}
+            loop={true}
+            spaceBetween={2}
+            slidesPerView={7}
           >
-              {categories.map((item:any, index:any) => {
-                  return(
-                    <SwiperSlide key={index}  style={{textAlign:'center'}} onClick={() => handleCategory(item.id)}>
-                      <img  height={'100px'} src={`${item.image}`} alt="" />
-                      <Typography style={storeStyles.categorySubtitle}>{item.name}</Typography>
-                    </SwiperSlide>
-                  )
-              })}
+            {categories.map((item: any, index: any) => {
+              return (
+                <SwiperSlide
+                  key={index}
+                  style={{ textAlign: "center" }}
+                  onClick={() => handleCategory(item.id, 1)}
+                >
+                  <img height={"100px"} src={`${item.image}`} alt=""  style={storeStyles.img}/>
+                  <Typography
+                    style={
+                      item.id === categorySelected.id
+                        ? {
+                            ...storeStyles.categorySubtitle,
+                            borderBottom: "3px solid rgb(153, 121, 28)",
+                          }
+                        : { ...storeStyles.categorySubtitle }
+                    }
+                  >
+                    {item.name}
+                  </Typography>
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </Grid>
+        {/* FILTER SECTION */}
         <Grid item xs={6}></Grid>
         <Grid
           item
@@ -112,44 +143,61 @@ const ContainerStore = () => {
             </Select>
           </FormControl>
         </Grid>
+        {/* BANNER SECTION */}
         <Grid item xs={12}>
           <img
-            src={categories.length > 0 && categorySelected.banner }
+            src={categories.length > 0 && categorySelected.banner}
             alt=""
             style={{
               borderRadius: "20px",
               maxHeight: "300px",
-              width:"100%",
-              objectFit: 'cover'
+              width: "100%",
+              objectFit: "cover",
             }}
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography style={storeStyles.category}>{categorySelected.name}</Typography>
+          <Typography style={storeStyles.category}>
+            {categorySelected.name}
+          </Typography>
         </Grid>
+        {/* PRODUCTS SECTION */}
         <Grid container spacing={2}>
-          {products.map((item:any) => {
+          {products.map((item: any) => {
             return (
-              <Grid item xs={2.4} style={{textAlign:'center'}}>
-                <CardComponent style={{ padding: "20px", borderRadius:"10px" }}>
-                  <img src={item.image} alt="" width={200} height={200}/>
+              <Grid item xs={2.4} style={{ textAlign: "center" }}>
+                <CardComponent
+                  style={{ padding: "20px", borderRadius: "10px" }}
+                >
+                  {item.store.discount > 0 &&
+                  <div className="promotion">
+                    <p>{item.store.discount}</p>
+                    <p>%off</p>
+                    <img src="icons/discount.png" alt="" />
+                  </div>
+                  }
+                  <img src={item.image} alt="" width={200} height={200} />
                   <Typography style={storeStyles.card.title}>
                     {item.name}
                   </Typography>
                   <Typography style={storeStyles.card.subtitle}>
-                   {item.store.presentation}
+                    {item.store.presentation}
                   </Typography>
                   <Typography style={storeStyles.card.content}>
-                   {item.description.slice(0, 65)}
+                    {item.description.slice(0, 50)}
                   </Typography>
                   <Typography style={storeStyles.card.price}>
-                   $ {item.store.price}
+                    $ {item.store.price}
                   </Typography>
+                 
                 </CardComponent>
               </Grid>
             );
           })}
         </Grid>
+        <Stack spacing={2} style={{margin: 'auto', padding:'30px 0'}}>
+          <MyPagination  count={totalPage} page={page} onChange={handleChangePagination} />
+        </Stack>
       </Grid>
     </>
   );
@@ -157,14 +205,19 @@ const ContainerStore = () => {
 
 export default ContainerStore;
 
-//assign 0.64 % down 
+//assign 0.64 % down
 const storeStyles = {
-  category:{
+  img:{
+    border: '1px solid',
+    borderRadius: '50%',
+  },
+  category: {
     fontFamily: "HudsonNYSerif",
     fontSize: "32px",
+    padding:"30px 0",
     color: "#000000",
   },
-  categorySubtitle:{
+  categorySubtitle: {
     fontFamily: "HudsonNYSerif",
     fontSize: "16px",
     color: "#000000",
@@ -173,8 +226,8 @@ const storeStyles = {
     img: {},
     title: {
       fontFamily: "weblysleekuil",
-      fontSize: "16px",
-      fontWeigth: "600",
+      fontSize: "19px",
+      fontWeight: "600",
       color: "#000000",
       height: "110px",
     },
@@ -185,29 +238,30 @@ const storeStyles = {
     },
     content: {
       fontFamily: "weblysleekuil",
-      fontSize: "19px",
+      fontSize: "16px",
+      fontWeight: "300",
       color: "#000000",
-      paddingTop:"20px"
+      paddingTop: "0px",
     },
     price: {
       fontFamily: "HudsonNYSerif",
       fontSize: "19px",
       color: "#000000",
-      padding:"20px 0"
+      padding: "20px 0 0 0",
     },
   },
-  search:{
-    label:{
+  search: {
+    label: {
       fontFamily: "weblysleekuil",
       fontSize: "23px",
       color: "#000000",
     },
-    select:{
+    select: {
       fontFamily: "weblysleekuil",
       fontSize: "23px",
       color: "#000000",
-      marginTop: "-10px", 
-      borderBottom: "none"
-    }
+      marginTop: "-10px",
+      borderBottom: "none",
+    },
   }
 };
