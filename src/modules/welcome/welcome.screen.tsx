@@ -63,8 +63,6 @@ const WelcomeScreen = () => {
   const [isButtonActive, setIsButtonActive] = useState(false)
 
   const dispatch = useDispatch();
-  // TODO PENDING TO REMOVE
-  // const dispatchApp = useAppDispatch();
   
   const [values, setValues] = React.useState({
     textmask: "",
@@ -104,10 +102,6 @@ const WelcomeScreen = () => {
 
   const handleOpen = (isOpen: boolean) => {
     setModalOpen(false);
-  };
-
-  const openModal = () => {
-    setModalOpen(true);
   };
 
   const onCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,24 +155,14 @@ const WelcomeScreen = () => {
         return setErrorcheckBox(true);
 
     dispatch(personalInfoActions.setIsWelcome(true));
-    
-    // TODO PENDING TO REMOVE
-    // const request:LoginRequest = {
-    //     data:{
-    //       email:"asdasd",
-    //       password:"asd"
-    //     }
-    // }
-    // await dispatchApp(userLogin(request)).unwrap()
   };
 
   return (
-    <>
-      {/* <button onClick={() => openModal()}>Open Modal</button> */}
       <ModalComponent
         style={style}
         open={modalOpen}
         handleClose={() => handleOpen(false)}
+        backgrounDrop
       >
         <Grid container spacing={2} style={{ textAlign: "center" }}>
           <Grid
@@ -330,7 +314,6 @@ const WelcomeScreen = () => {
           </Grid>
         </Grid>
       </ModalComponent>
-    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const StringDateFormat = (initialDate: string) => {
+
   const [formattedDate, setFormattedDate] = useState('');
 
   useEffect(() => {
@@ -15,7 +16,6 @@ const StringDateFormat = (initialDate: string) => {
       
       return `${monthName} ${parseInt(day, 10)}, ${year}`;
     };
-
     setFormattedDate(formatDate(initialDate));
   }, [initialDate]);
 
