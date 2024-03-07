@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { selectAllPromotion } from '../../../store/modules/promotions';
 import { Promotion } from '../../../store/modules/promotions/types';
 import StringDateFormat from '../hooks/stringDateFormat/StringDateFormat';
+import UseStringDateFormat from '../hooks/stringDateFormat/UseStringDateFormat';
 
 const modulesArray: any = [];
 
@@ -19,6 +20,7 @@ const SwiperComponent = (props: swiperType) => {
     
     const { modules, slidesPerView, loadingStatus } = props;
     const promotionsDataredux = useSelector(selectAllPromotion); 
+    // const {} = UseStringDateFormat()
     
     useEffect(() => {
         modules.forEach(module => {
