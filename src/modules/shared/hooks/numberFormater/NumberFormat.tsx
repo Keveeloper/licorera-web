@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function useNumberFormatter(value: number) {
+function NumberFormat(value: number) {
   const [formattedValue, setFormattedValue] = useState<string>('');
 
   useEffect(() => {
@@ -15,4 +15,4 @@ function useNumberFormatter(value: number) {
   return formattedValue;
 }
 
-export default useNumberFormatter;
+export default NumberFormat;
