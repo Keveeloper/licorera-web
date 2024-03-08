@@ -1,8 +1,6 @@
 // Import Swiper React components
 import { Swiper, SwiperSlide} from 'swiper/react';
 import { swiperType } from './types/types';
-import { useEffect } from 'react';
-import { Navigation, Pagination } from 'swiper/modules';
 import { displayFlex, displaySpaceBetween } from '../recursiveStyles/RecursiveStyles';
 
 // Material UI
@@ -12,34 +10,18 @@ import { useSelector } from 'react-redux';
 import { selectAllPromotion } from '../../../store/modules/promotions';
 import { Promotion } from '../../../store/modules/promotions/types';
 import StringDateFormat from '../hooks/stringDateFormat/StringDateFormat';
-import UseStringDateFormat from '../hooks/stringDateFormat/UseStringDateFormat';
-
-const modulesArray: any = [];
+import NumberFormat from '../hooks/numberFormater/NumberFormat';
 
 const SwiperComponent = (props: swiperType) => { 
     
     const { modules, slidesPerView, loadingStatus } = props;
-    const promotionsDataredux = useSelector(selectAllPromotion); 
-    const formattedDates = promotionsDataredux.map(item => UseStringDateFormat(item.end_date));
-
-    useEffect(() => {
-        modules.forEach(module => {
-            switch (module) {
-                case 'Navigation':
-                    modulesArray.push(Navigation);
-                    break;
-                case 'Pagination':
-                    modulesArray.push(Pagination);
-                    break;
-                default:
-                    break;
-              }
-        });
-    }, [modules]);
+    const promotionsDataredux = useSelector(selectAllPromotion);
+    const formattedDates = promotionsDataredux.map((item: Promotion) => StringDateFormat(item.end_date));
+    const formattedNumbers = promotionsDataredux.map((item: Promotion) => NumberFormat(item.price));
 
     return(
         <Swiper style={styles.swiper}
-            modules={modulesArray}
+            modules={modules}
             navigation={{
                 enabled: true
             }}
@@ -53,8 +35,6 @@ const SwiperComponent = (props: swiperType) => {
             // onSwiper={(swiper: any) => console.log(swiper)}
         >
             {promotionsDataredux.map((item: Promotion, index) => {
-                // const formattedDate = UseStringDateFormat(item.end_date);
-                // const format = StringDateFormat(item.end_date)
                 return(
                     <SwiperSlide key={index} style={styles.swiper.swiperSlide}>
                             {loadingStatus === 'loading' ? 
@@ -66,7 +46,7 @@ const SwiperComponent = (props: swiperType) => {
                                     <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer}>
                                         <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header}>
                                             <h1 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>{item.name}</h1>
-                                            <h2 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>$ {item.price}</h2>
+                                            <h2 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>$ {formattedNumbers[index]}</h2>
                                         </Box>
                                         <p style={{marginBottom: '30px'}}>{item.description}</p>
                                         <p>Válido hasta: {formattedDates[index]}</p>

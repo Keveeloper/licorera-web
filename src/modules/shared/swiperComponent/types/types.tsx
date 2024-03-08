@@ -1,5 +1,5 @@
 export type swiperType = {
-    modules: Array<any>;
+    modules: any[];
     slidesPerView: number;
     loadingStatus?: string;
 }

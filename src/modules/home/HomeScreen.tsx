@@ -19,7 +19,7 @@ import { selectLoading } from "../../store/modules/promotions/selectors/promotio
 import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
 
 // Material UI
-import Skeleton from '@mui/material/Skeleton';
+import { Navigation, Pagination } from "swiper/modules";
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +54,6 @@ const HomeScreen = () => {
 
   return (
     <>
-
       <HeaderScreen />
       <TabComponent
         tabsArray={["PROMOCIONES", "DESTACADOS", "PRODUCTOS NUEVOS"]}
@@ -64,25 +63,22 @@ const HomeScreen = () => {
         handleChange={handleChange}
       >
         <TabPanel sx={{padding: '0', height: '600px' }} value="1">
-            {/* {loadingStatus === 'loading' && (
-                <Skeleton variant="rectangular" width={210} height={118} />
-            )} */}
           <SwiperComponent
-            modules={["Navigation", "Pagination"]}
+            modules={[Navigation, Pagination]}
             slidesPerView={1}
             loadingStatus={loadingStatus}
           />
         </TabPanel>
         <TabPanel sx={{ height: "700px" }} value="2">
           <SwiperComponent
-            modules={["Navigation", "Pagination"]}
+            modules={[Navigation, Pagination]}
             slidesPerView={1}
             loadingStatus={loadingStatus}
           />
         </TabPanel>
         <TabPanel sx={{ height: "700px" }} value="3">
           <SwiperComponent
-            modules={["Navigation", "Pagination"]}
+            modules={[Navigation, Pagination]}
             slidesPerView={1}
             loadingStatus={loadingStatus}
           />
