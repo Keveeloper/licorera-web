@@ -29,7 +29,6 @@ const CheckBoxComponent: React.FC<CheckBoxProps> = ({
             onChange={onChange}
             checkedIcon={<BpCheckedIcon />}
             icon={<BpIcon />}
-            defaultChecked
             checked={checked} 
           />
         }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import { displaySpaceAround } from "../../../../recursiveStyles/RecursiveStyles";
 import { displayFlexColumn } from "../../../../recursiveStyles/RecursiveStyles";
@@ -12,39 +12,62 @@ import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import Badge from '@mui/material/Badge';
 import LoginScreen from "../../../../../user/login.screen";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllUser, selectIsWelcome } from "../../../../../../store/modules/users/selectors/users.selector";
+import { personalInfoActions } from "../../../../../../store/modules/users/users.slice";
+import ButtonComponent from "../../../../button/button.component";
 
 const Icons = () => {
     const [isLogin, setIslogin] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const user = useSelector(selectAllUser);
+    const isWelcome = useSelector(selectIsWelcome);
+    const dispatch = useDispatch();
+    
     const handleLogin =() => {
         setOpenModal(true);
     }
     const handleClose = (isOpen: boolean) => {
         setOpenModal(isOpen);
+
     };
+
+    const logout = () =>{
+        dispatch(personalInfoActions.clearState(isWelcome));
+    }
+
+    useEffect(() => {
+        if(user?.id && user?.name){
+            setIslogin(true);
+        }else{
+            setIslogin(false);
+        }
+    },[user])
+
     return(
         <Box sx={styles.iconsContainer}>
-            <Dropdown>
-                <MenuButton
-                    onClick={handleLogin}
-                    sx={styles.iconsContainer.menuButton}
-                    slots={{ root: IconButton }}
-                    slotProps={{ root: { variant: 'outlined', color: 'neutral', backgroundColor: 'none' } }}
-                >
-                    <img style={styles.iconsContainer.menuButton.img} src="/icons/account-icon.png" alt="" />
-                </MenuButton>
-                {(!isLogin && openModal) ? <LoginScreen handleClose={() => handleClose(false)} modalOpen={openModal}/> :
-                    isLogin && (<Menu sx={styles.iconsContainer.menu}>
-                        <Box sx={styles.iconsContainer.menu.userContainer}>
-                            <h2>DIEGO DÍAZ</h2>
-                            <p>532 Jotas</p>
-                        </Box>
-                        <MenuItem sx={styles.iconsContainer.menu.menuitem}>Profile</MenuItem>
-                        <MenuItem sx={styles.iconsContainer.menu.menuitem}>My account</MenuItem>
-                        <MenuItem sx={styles.iconsContainer.menu.menuitem}>Logout</MenuItem>
-                    </Menu>)
-                }
-            </Dropdown>
+            {!isLogin && <img  onClick={handleLogin} src="/icons/account-icon.png"alt="" /> }
+            {openModal && <LoginScreen handleClose={() => handleClose(false)} modalOpen={openModal}/>}
+            {isLogin && (
+                <Dropdown>
+                    <MenuButton
+                        sx={styles.iconsContainer.menuButton}
+                        slots={{ root: IconButton }}
+                        slotProps={{ root: { variant: 'outlined', color: 'neutral', backgroundColor: 'none' } }}
+                    >
+                        <img style={styles.iconsContainer.menuButton.img} src="/icons/account-icon.png" alt="" />
+                    </MenuButton>
+                        <Menu sx={styles.iconsContainer.menu}>
+                            <Box sx={styles.iconsContainer.menu.userContainer}>
+                                <h2>{user?.name?.toUpperCase()}</h2>
+                                <p>{user?.points} Jotas</p>
+                            </Box>
+                            <MenuItem sx={styles.iconsContainer.menu.menuitem}>Perfil</MenuItem>
+                            <MenuItem sx={styles.iconsContainer.menu.menuitem}>Mis Pedidos</MenuItem>
+                            <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={logout}>Cerrar Sesión</MenuItem>
+                        </Menu>
+                </Dropdown>
+            )}
             <Badge sx={styles.iconsContainer.badge} badgeContent={12}>
                 <img style={{width: '100%'}} src="/icons/web-shopping-cart-icon.png" alt="" />
             </Badge>
@@ -66,6 +89,13 @@ const styles = {
             cursor: 'pointer'
         },
         menuButton: {
+            width: '20%', 
+            border: 'none',
+            img: {
+                width: '100%'
+            },
+        },
+        menuNormalButton: {
             width: '20%', 
             border: 'none',
             img: {

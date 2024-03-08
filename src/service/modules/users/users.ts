@@ -5,15 +5,29 @@ import { ResponseAuth, LoginRequest } from './types';
 
 export const postUserLogin = async ( reqData: LoginRequest): Promise<ApiResponse<ResponseAuth>> => {
   try {
-   
-    const { data } = await base.post<ResponseAuth>(
+    const { data } = await base.post<any>(
       '/v2/login',
       reqData,
       {}
       );
-    return { response: data, status: data.status, success: !!Object.keys(data).length };
+    return { response: data?.data, status: data.status, success: !!Object.keys(data).length };
   } catch (error) {
     return handleSubModuleError(error);
   }
 };
+
+export const getUser = async (token: string): Promise<ApiResponse<ResponseAuth>> => {
+  try {
+    const { data } = await base.get<any>(
+      '/v2/me',
+      { headers:{
+        Authorization: token
+      } }
+      );
+    return { response: data?.data, status: data.status, success: !!Object.keys(data).length };
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
 

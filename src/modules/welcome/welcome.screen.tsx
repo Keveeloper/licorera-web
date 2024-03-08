@@ -9,9 +9,6 @@ import TextMaskCustom, { typeYear } from "../shared/helper/textMaskCustom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { personalInfoActions } from "../../store/modules/users/users.slice";
-import { userLogin } from "../../store/modules/users/actions/users.actions";
-import { LoginRequest } from "../../service/modules/users/types";
-import { useAppDispatch } from "../../store/store";
 
 const style = {
   position: "absolute" as "absolute",

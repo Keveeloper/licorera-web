@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import "./login.css";
 import ButtonComponent from "../shared/button/button.component";
 import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
-import { userLogin } from "../../store/modules/users/actions/users.actions";
+import { getMe, userLogin } from "../../store/modules/users/actions/users.actions";
 import { useAppDispatch } from "../../store/store";
 import { LoginRequest } from "../../service/modules/users/types";
 import ModalAlertComponent from "../shared/modal/modalAlert.component";
@@ -36,8 +36,8 @@ const LoginScreen: React.FC<LoginScreen> = ({ handleClose, modalOpen }) => {
       password,
     };
     const postLogin = await dispatch(userLogin(loginRequest)).unwrap();
-    console.log(postLogin);
-    if (postLogin.response.success) {
+    if (postLogin.success) {
+      dispatch(getMe()).unwrap();
       modalOpen = false;
       handleClose();
     } else {
