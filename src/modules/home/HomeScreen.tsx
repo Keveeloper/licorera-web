@@ -29,9 +29,6 @@ const HomeScreen = () => {
   
   const loadingStatus = useSelector(selectLoading);
 
-  console.log('Loading status: ', loadingStatus);
-  
-
   const [value, setValue] = useState("1");
   const [promotionsData, setPromotionsData] = useState<Data | undefined>();
   const [categories, setCategories] = useState<any>([]);

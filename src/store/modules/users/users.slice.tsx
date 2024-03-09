@@ -1,22 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { PersonalInfoState, ResponsePersonalInfo } from "./types";
-import { userLogin } from "./actions/users.actions";
+import { getMe, userLogin } from "./actions/users.actions";
 import * as reducers from "./reducers/users.reducers";
 
-export const PERSONAL_INFO_FEATURE_KEY = "personalInfo";
+export const PERSONAL_INFO_FEATURE_KEY = "user";
 
 export const initialState: PersonalInfoState = {
   loadingStatus: "loading",
   error: null,
+  isWelcome: false,
   data: {
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
     token: "",
-    isWelcome: false
   },
+  user:{}
 };
 
 export const personalInfoSlice = createSlice({
@@ -33,10 +34,12 @@ export const personalInfoSlice = createSlice({
       state: PersonalInfoState,
       action: PayloadAction<any>
     ) => {
-      state.data.isWelcome = action.payload;
+      state.isWelcome = action.payload;
     },
-    clearState: () => {
-      // Clearing redux state and localForage happens in store.ts.
+    clearState: (status:PersonalInfoState, action: PayloadAction<any> ) => {
+      status.data = {}
+      status.user = {}
+      status.isWelcome =  action.payload;
     },
     clearPersonalInfo: (status: PersonalInfoState) => {
       status.data = {};
@@ -46,7 +49,10 @@ export const personalInfoSlice = createSlice({
     builder
       .addCase(userLogin.pending, reducers.userLoginInfoPending)
       .addCase(userLogin.fulfilled, reducers.userLoginInfoFulfilled)
-      .addCase(userLogin.rejected, reducers.userLoginInfoRejected);
+      .addCase(userLogin.rejected, reducers.userLoginInfoRejected)
+      .addCase(getMe.pending, reducers.getMePending)
+      .addCase(getMe.fulfilled, reducers.getMeFulfilled)
+      .addCase(getMe.rejected, reducers.getMeRejected);
   },
 });
 

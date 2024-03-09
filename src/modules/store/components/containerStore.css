@@ -21,3 +21,6 @@
   left: 50%;
   font-size: 10px;
 }
+.swiper .swiper-wrapper{
+  padding-top : 30px;
+}

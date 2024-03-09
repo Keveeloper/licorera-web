@@ -23,25 +23,27 @@ export const userLoginInfoRejected = (
   state.loadingStatus = 'error';
   state.error = action.payload || action.error;
 };
-
-export const getuserLoginInfoPending = (state: PersonalInfoState) => {
+// GET ME 
+export const getMePending = (state: PersonalInfoState) => {
   state.loadingStatus = 'loading';
-  state.data = {};
+  state.user = '';
   state.error = undefined;
 };
 
-export const getuserLoginFulfilled = (
+export const getMeFulfilled = (
   state: PersonalInfoState,
   action: PayloadAction<any>
 ) => {
-  state.data = action.payload.response;
+  state.user = action.payload.response;
   state.loadingStatus = 'loaded';
 };
 
-export const getuserLoginInfoRejected = (
+export const getMeRejected = (
   state: PersonalInfoState,
   action: any
 ) => {
   state.loadingStatus = 'error';
   state.error = action.payload || action.error;
 };
+
+

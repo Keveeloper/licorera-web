@@ -5,6 +5,8 @@ export type RootState = ReturnType<typeof reducer>;
 
 export interface PersonalInfoState {
     data: ResponsePersonalInfo ;
+    user?:any;
+    isWelcome?:boolean;
     error: string | null | undefined;
     loadingStatus: LoadingStatus;
 }
@@ -15,5 +17,4 @@ export interface ResponsePersonalInfo {
     phone?: string;
     email?: string;
     token?:string;
-    isWelcome?:boolean;
 }

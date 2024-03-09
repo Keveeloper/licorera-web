@@ -80,14 +80,14 @@ const ContainerStore = () => {
         }}
       >
         {/* CATEGORY SECTION */}
-        <Grid item xs={12} style={{ textAlign: "center" }}>
+        <Grid item xs={12} style={{ textAlign: "center", marginBottom:'-60px' }}>
           <Typography style={storeStyles.category}>
             EXPLORA NUESTRAS CATEGORIAS
           </Typography>
         </Grid>
-        <Grid item xs={12} style={{ padding: "30px 0" }}>
+        <Grid item xs={12}>
           <Swiper
-            style={{ height: "100%", width: "100%" }}
+            style={{ padding: '25px 30px'}}
             modules={[Navigation, Pagination]}
             navigation={{
               enabled: true,
@@ -100,7 +100,7 @@ const ContainerStore = () => {
               return (
                 <SwiperSlide
                   key={index}
-                  style={{ textAlign: "center" }}
+                  style={{ textAlign: "center",padding: "0 20px", cursor: 'pointer' }}
                   onClick={() => handleCategory(item.id, 1)}
                 >
                   <img height={"100px"} src={`${item.image}`} alt=""  style={storeStyles.img}/>
