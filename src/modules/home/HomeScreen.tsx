@@ -16,14 +16,17 @@ import {
 } from "../../store/modules/promotions";
 import { Data } from "../../store/modules/promotions/types";
 import { selectLoading } from "../../store/modules/promotions/selectors/promotion.selector";
-import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
 
 // Material UI
 import { Navigation, Pagination } from "swiper/modules";
+import SwiperCategories from "../shared/swiperCategories/SwiperCategories";
+import { Categories } from "../../store/modules/store/actions/store.actions";
+import { selectAllCategories } from "../../store/modules/store/selectors/store.selector";
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
   const promotionsDataredux = useSelector(selectAllPromotion);
+  
   const loadingStatus = useSelector(selectLoading);
 
   console.log('Loading status: ', loadingStatus);
@@ -31,6 +34,7 @@ const HomeScreen = () => {
 
   const [value, setValue] = useState("1");
   const [promotionsData, setPromotionsData] = useState<Data | undefined>();
+  const [categories, setCategories] = useState<any>([]);
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -39,6 +43,12 @@ const HomeScreen = () => {
       setPromotionsData(res.response);
     }
     getAsynPromotion();
+
+    async function getCategories() {
+      const categories = await dispatch(Categories()).unwrap();
+      setCategories(categories.response.data);
+    }
+    getCategories();
   }, []);
 
   useEffect(() => {
@@ -72,14 +82,14 @@ const HomeScreen = () => {
             loadingStatus={loadingStatus}
           />
         </TabPanel>
-        <TabPanel sx={{ height: "700px" }} value="2">
+        <TabPanel sx={{padding: '0', height: '600px' }} value="2">
           <SwiperComponent
             modules={[Navigation, Pagination]}
             slidesPerView={1}
             loadingStatus={loadingStatus}
           />
         </TabPanel>
-        <TabPanel sx={{ height: "700px" }} value="3">
+        <TabPanel sx={{padding: '0', height: '600px' }} value="3">
           <SwiperComponent
             modules={[Navigation, Pagination]}
             slidesPerView={1}
@@ -87,6 +97,13 @@ const HomeScreen = () => {
           />
         </TabPanel>
       </TabComponent>
+      <SwiperCategories
+        modules={[Navigation]}
+        slidesPerView={7}
+        loadingStatus={loadingStatus}
+        categories={categories}
+        setCategories={setCategories}
+      />
       <FooterScreen />
     </>
   );

@@ -6,7 +6,7 @@ export const displayFlex = {
 
 export const displayFlexColumn = {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as 'column',
     justifyContent: 'center',
     alignItems: 'center'
 }

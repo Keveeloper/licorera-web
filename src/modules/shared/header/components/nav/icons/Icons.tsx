@@ -81,7 +81,7 @@ const styles = {
                 ...displayFlexColumn,
                 borderBottom: `1px solid ${paletteColors.gold} !important`,
                 'h2': {
-                    fontFamily: 'Hudson NY Serif',
+                    fontFamily: 'HudsonNYSerif',
                     color: paletteColors.black,
                     fontSize: '18px'
                 },

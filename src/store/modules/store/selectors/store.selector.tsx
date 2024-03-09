@@ -9,8 +9,18 @@ import { STORE_FEATURE_KEY } from '../store.slice';
 export const getStoreState = (rootState: RootState): PersonalInfoState =>
   rootState[STORE_FEATURE_KEY];
 
-export const selectAllPersonalInfo = createSelector(
+export const selectAllCategories = createSelector(
   getStoreState,
-  (personalInfo) => personalInfo.data
+  (categorie) => categorie.data
+);
+
+export const selectArrayCategories = createSelector(
+  getStoreState,
+  (categories) => categories.categories.data
+);
+
+export const selectCategoriesLoading = createSelector(
+  getStoreState,
+  (categorie) => categorie.loadingStatus
 );
 

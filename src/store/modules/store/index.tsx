@@ -3,4 +3,4 @@ export {
   STORE_FEATURE_KEY,
   storeActions,
 } from "./store.slice";
-export { selectAllPersonalInfo } from "./selectors/store.selector";
+export { selectAllCategories } from "./selectors/store.selector";
