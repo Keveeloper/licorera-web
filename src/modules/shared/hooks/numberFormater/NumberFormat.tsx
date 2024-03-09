@@ -1,18 +1,9 @@
-import { useState, useEffect } from 'react';
-
 function NumberFormat(value: number) {
-  const [formattedValue, setFormattedValue] = useState<string>('');
-
-  useEffect(() => {
-    if (typeof value === 'number') {
-      const formattedNumber = new Intl.NumberFormat('es-ES').format(value);
-      setFormattedValue(formattedNumber);
-    } else {
-      setFormattedValue('');
-    }
-  }, [value]);
-
-  return formattedValue;
+  if (typeof value === 'number') {
+    return new Intl.NumberFormat('es-ES').format(value);
+  } else {
+    return '';
+  }
 }
 
 export default NumberFormat;

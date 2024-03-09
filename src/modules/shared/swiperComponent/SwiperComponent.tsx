@@ -11,14 +11,21 @@ import { selectAllPromotion } from '../../../store/modules/promotions';
 import { Promotion } from '../../../store/modules/promotions/types';
 import StringDateFormat from '../hooks/stringDateFormat/StringDateFormat';
 import NumberFormat from '../hooks/numberFormater/NumberFormat';
+import { useMemo } from 'react';
 
 const SwiperComponent = (props: swiperType) => { 
     
     const { modules, slidesPerView, loadingStatus } = props;
     const promotionsDataredux = useSelector(selectAllPromotion);
-    const formattedDates = promotionsDataredux.map((item: Promotion) => StringDateFormat(item.end_date));
-    const formattedNumbers = promotionsDataredux.map((item: Promotion) => NumberFormat(item.price));
-
+    const formattedDates = useMemo(
+        () => promotionsDataredux.map((item: Promotion) => StringDateFormat(item.end_date)),
+        [promotionsDataredux]
+    );
+      
+    const formattedNumbers = useMemo(
+        () => promotionsDataredux.map((item: Promotion) => NumberFormat(item.price)),
+        [promotionsDataredux]
+    );
     return(
         <Swiper style={styles.swiper}
             modules={modules}
