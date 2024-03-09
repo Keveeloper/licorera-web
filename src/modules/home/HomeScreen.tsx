@@ -31,7 +31,7 @@ const HomeScreen = () => {
 
   const [value, setValue] = useState("1");
   const [promotionsData, setPromotionsData] = useState<Data | undefined>();
-  const [categories, setCategories] = useState<any>([]);
+  // const [categories, setCategories] = useState<any>([]);
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const HomeScreen = () => {
 
     async function getCategories() {
       const categories = await dispatch(Categories()).unwrap();
-      setCategories(categories.response.data);
+      // setCategories(categories.response.data);
     }
     getCategories();
   }, []);
@@ -98,8 +98,6 @@ const HomeScreen = () => {
         modules={[Navigation]}
         slidesPerView={7}
         loadingStatus={loadingStatus}
-        categories={categories}
-        setCategories={setCategories}
       />
       <FooterScreen />
     </>
