@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import ModalComponent from "./modal.component";
 import { Typography } from "@mui/material";
 import ButtonComponent from "../button/button.component";
@@ -30,7 +29,7 @@ const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
       open={open || false}
       handleClose={handleClose}
     >
-      <img src={data.img} style={styleDefault.img} />
+      <img src={data.img} alt="" style={styleDefault.img} />
       <Typography className="inputCustom" style={styleDefault.title}>
         {data.title}
       </Typography>

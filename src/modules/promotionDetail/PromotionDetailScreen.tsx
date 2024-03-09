@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import FooterScreen from "../shared/footer/FooterScreen";
 import HeaderScreen from "../shared/header/HeaderScreen"
 import ButtonComponent from "../shared/button/button.component";
@@ -21,6 +21,7 @@ const PromotionDetailScreen = () => {
     return (
         <>
             <HeaderScreen/>
+            <Box className='columnContainer'>
                 <Grid container spacing={2} style={{ textAlign: "center" }}>
                     <Grid item  xs={12} sx={{ mt: 4, mr:4, ml:4 }}>
                         <img src="/images/slide_03.png" alt="" style={{maxWidth:'100%', maxHeight:'600px'}}/>
@@ -62,6 +63,7 @@ const PromotionDetailScreen = () => {
                         </Grid>
                     </Grid>
                 </div>
+            </Box>
             <FooterScreen />
         </>
         

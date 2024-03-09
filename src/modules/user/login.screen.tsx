@@ -9,13 +9,12 @@ import { getMe, userLogin } from "../../store/modules/users/actions/users.action
 import { useAppDispatch } from "../../store/store";
 import { LoginRequest } from "../../service/modules/users/types";
 import ModalAlertComponent from "../shared/modal/modalAlert.component";
-import { title } from "process";
 
-interface LoginScreen {
+interface LoginScreenInterface {
   handleClose: () => void;
   modalOpen: boolean;
 }
-const LoginScreen: React.FC<LoginScreen> = ({ handleClose, modalOpen }) => {
+const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen }) => {
   const dispatch = useAppDispatch();
   const [showAlert, setShowAlert] = useState(false);
 
@@ -141,12 +140,12 @@ const LoginScreen: React.FC<LoginScreen> = ({ handleClose, modalOpen }) => {
               >
                 <Grid item xs={6} style={displayFlex}>
                   <div className="circleImg">
-                    <img src="icons/google.png" />
+                    <img src="icons/google.png" alt=""/>
                   </div>
                 </Grid>
                 <Grid item xs={6} style={displayFlex}>
                   <div className="circleImg">
-                    <img src="icons/facebook.png" />
+                    <img src="icons/facebook.png" alt=""/>
                   </div>
                 </Grid>
               </Grid>

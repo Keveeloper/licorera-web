@@ -15,7 +15,6 @@ import LoginScreen from "../../../../../user/login.screen";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllUser, selectIsWelcome } from "../../../../../../store/modules/users/selectors/users.selector";
 import { personalInfoActions } from "../../../../../../store/modules/users/users.slice";
-import ButtonComponent from "../../../../button/button.component";
 
 const Icons = () => {
     const [isLogin, setIslogin] = useState(false);

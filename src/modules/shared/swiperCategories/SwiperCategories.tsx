@@ -66,7 +66,7 @@ const styles = {
         // width: '100%',
         // maxWidth: '1450px',
         subtitle: {
-            margin: '50px 0 0 60px',
+            margin: '50px 0 0 0',
             fontFamily: 'HudsonNYSerif',
             fontWeight: 600,
             fontSize: '25px',
