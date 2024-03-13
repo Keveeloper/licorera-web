@@ -15,6 +15,9 @@ const StoreScreen = React.lazy(
     () => import("../modules/store/store.screen")
 );
 
+const ExchangeScreen = React.lazy(
+    () => import("../modules/exchangeProducts/exchange.screen")
+);
 
 const RootRouter = () => {
     return(
@@ -46,6 +49,13 @@ const RootRouter = () => {
                 element={
                     <React.Suspense fallback={<LoaderScreen/>}>
                         <StoreScreen />
+                    </React.Suspense>
+                }
+            />
+            <Route path="/exchange-products"
+                element={
+                    <React.Suspense fallback={<LoaderScreen/>}>
+                        <ExchangeScreen />
                     </React.Suspense>
                 }
             />

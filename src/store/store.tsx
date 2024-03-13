@@ -15,11 +15,13 @@ import {
 } from "./modules/users/users.slice";
 import { STORE_FEATURE_KEY, storeReducer } from "./modules/store/store.slice";
 import { PROMOTION_FEATURE_KEY, promotionReducer } from "./modules/promotions/promotions.slice";
+import { EXCHANGE_FEATURE_KEY, exchangeReducer } from "./modules/exchangeProducts/exchange.slice";
 
 export const reducer = combineReducers({
   [PERSONAL_INFO_FEATURE_KEY]: personalInfoReducer,
   [PROMOTION_FEATURE_KEY]:promotionReducer,
   [STORE_FEATURE_KEY]: storeReducer,
+  [EXCHANGE_FEATURE_KEY]:exchangeReducer
 });
 
 const KEY_PERSIST_CONFIG = "root";

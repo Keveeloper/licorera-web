@@ -1,16 +1,14 @@
 import FooterScreen from "../shared/footer/FooterScreen";
 import HeaderScreen from "../shared/header/HeaderScreen";
-import ContainerStore from "./components/containerStore.component";
+import ExchangeComponent from "./components/exchange.component";
 
-
-const StoreScreen = () => {
+const ExchangeScreen = () => {
     return(
         <>
             <HeaderScreen />
-                <ContainerStore/>
+                <ExchangeComponent/>
             <FooterScreen />
         </>
     )
 }
-export default StoreScreen;
-
+export default ExchangeScreen;

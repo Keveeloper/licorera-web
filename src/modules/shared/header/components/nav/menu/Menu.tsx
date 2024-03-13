@@ -16,7 +16,7 @@ const Menu = () => {
         <Box sx={styles.menuContainer}>
             <Link style={clicked === 'Inicio' ? styles.menuContainer.clicked : {}} to={'/'}>Inicio</Link>
             <Link style={clicked === 'Tienda' ? styles.menuContainer.clicked : {}} to={'/store'}>Tienda</Link>
-            <Link style={clicked === 'Canjes' ? styles.menuContainer.clicked : {}} to={'/promotion-detail'}>Canjes</Link>
+            <Link style={clicked === 'Canjes' ? styles.menuContainer.clicked : {}} to={'/exchange-products'}>Canjes</Link>
         </Box>
     );
 

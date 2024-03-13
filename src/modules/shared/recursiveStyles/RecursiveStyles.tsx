@@ -35,3 +35,13 @@ export const displaySpaceBetween = {
     justifyContent: 'space-between',
     alignItems: 'center'
 }
+
+export const weblysleekFontStyle = {
+    fontFamily: "weblysleekuil",
+    color: "#000000",
+};
+  
+export const hudsonNYFontStyle = {
+    fontFamily: "HudsonNYSerif",
+    color: "#000000",
+};
