@@ -65,9 +65,8 @@ const styles = {
         // backgroundColor: 'blue',
         text: {
             marginBottom: '5px',
-            fontFamily: 'Hudson NY Serif',
-            fontSize: '14px',
-            fontWeight: 600
+            fontFamily: 'HudsonNYSerif',
+            fontSize: '16px',
         },
         search: {
             width: '50%',

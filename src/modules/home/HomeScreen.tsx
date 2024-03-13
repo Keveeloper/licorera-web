@@ -14,28 +14,39 @@ import { getPromotionsThunk } from "../../store/modules/promotions/actions/promo
 import {
   selectAllPromotion,
 } from "../../store/modules/promotions";
-import { Data } from "../../store/modules/promotions/types";
 import { selectLoading } from "../../store/modules/promotions/selectors/promotion.selector";
-import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
 
 // Material UI
 import { Navigation, Pagination } from "swiper/modules";
+import SwiperCategories from "../shared/swiperCategories/SwiperCategories";
+import { Categories } from "../../store/modules/store/actions/store.actions";
+import Experience from "../experiences/Experience";
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
   const promotionsDataredux = useSelector(selectAllPromotion);
+  
   const loadingStatus = useSelector(selectLoading);
 
   const [value, setValue] = useState("1");
-  const [promotionsData, setPromotionsData] = useState<Data | undefined>();
-  const [images, setImages] = useState<string[]>([]);
+  // const [promotionsData, setPromotionsData] = useState<Data | undefined>();
+  // const [categories, setCategories] = useState<any>([]);
+  // const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     async function getAsynPromotion() {
-      const res = await dispatch(getPromotionsThunk()).unwrap();
-      setPromotionsData(res.response);
+      // const res = await dispatch(getPromotionsThunk()).unwrap();
+      dispatch(getPromotionsThunk()).unwrap();
+      // setPromotionsData(res.response);
     }
     getAsynPromotion();
+
+    async function getCategories() {
+      // const categories = await dispatch(Categories()).unwrap();
+      await dispatch(Categories()).unwrap();
+      // setCategories(categories.response.data);
+    }
+    getCategories();
   }, []);
 
   useEffect(() => {
@@ -44,7 +55,7 @@ const HomeScreen = () => {
       promotionsDataredux?.forEach((element) => {
         arrayImages.push(element.image);
       });
-      setImages(arrayImages);
+      // setImages(arrayImages);
     }
   }, [promotionsDataredux]);
 
@@ -69,14 +80,14 @@ const HomeScreen = () => {
             loadingStatus={loadingStatus}
           />
         </TabPanel>
-        <TabPanel sx={{ height: "700px" }} value="2">
+        <TabPanel sx={{padding: '0', height: '600px' }} value="2">
           <SwiperComponent
             modules={[Navigation, Pagination]}
             slidesPerView={1}
             loadingStatus={loadingStatus}
           />
         </TabPanel>
-        <TabPanel sx={{ height: "700px" }} value="3">
+        <TabPanel sx={{padding: '0', height: '600px' }} value="3">
           <SwiperComponent
             modules={[Navigation, Pagination]}
             slidesPerView={1}
@@ -84,6 +95,12 @@ const HomeScreen = () => {
           />
         </TabPanel>
       </TabComponent>
+      <SwiperCategories
+        modules={[Navigation]}
+        slidesPerView={7}
+        loadingStatus={loadingStatus}
+      />
+      <Experience />
       <FooterScreen />
     </>
   );

@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-import { PromotionState, Promotion } from "./types";
-import { getPromotions } from "../../../service/modules/promotions/promotions"; 
+import { PromotionState } from "./types";
 import * as reducers from "./reducers/promotion.reducers";
 import { getPromotionsThunk } from "./actions/promotion.actions";
 

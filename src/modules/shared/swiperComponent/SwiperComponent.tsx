@@ -71,6 +71,7 @@ const SwiperComponent = (props: swiperType) => {
 const styles = {
     swiper: {
         height: '100%',
+        maxWidth: '1450px',
         swiperSlide: {
             ...displayFlex,
             cursor: 'pointer',
@@ -101,11 +102,11 @@ const styles = {
                         marginBottom: '10px',
                         ...displaySpaceBetween,
                         title: {
-                            fontFamily: 'Hudson NY Serif',
+                            fontFamily: 'HudsonNYSerif',
                             fontWeight: 600
                         },
                         price: {
-                            fontFamily: 'Hudson NY Serif',
+                            fontFamily: 'HudsonNYSerif',
                             fontWeight: 600
                         }
                     }

@@ -1,4 +1,4 @@
-import { Box, Modal, ModalProps, Typography } from "@mui/material";
+import { Box, Modal, ModalProps } from "@mui/material";
 import React, { ReactNode, memo } from "react";
 
 interface ModalCustomProps {

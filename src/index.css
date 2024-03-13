@@ -36,3 +36,9 @@ code {
 .css-1aquho2-MuiTabs-indicator{
   background-color: #99791C !important;
 }
+
+.columnContainer {
+  width: 100%;
+  max-width: 1450px;
+  margin: 0px auto 0px auto !important
+}

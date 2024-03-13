@@ -1,4 +1,4 @@
-import { FormControl, Grid, MenuItem, Select, Stack, Typography } from "@mui/material";
+import { FormControl, Grid, MenuItem, Select, Skeleton, Stack, Typography } from "@mui/material";
 import { Pagination as MyPagination } from '@mui/material';
 import React from "react";
 import CardComponent from "../../shared/card/card.component";
@@ -13,6 +13,8 @@ import "./containerStore.css"
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { selectArrayCategories, selectCategoriesLoading } from "../../../store/modules/store/selectors/store.selector";
+import { useSelector } from "react-redux";
 
 const ContainerStore = () => {
   const [search, setSearch] = React.useState<string>("Menor Precio");
@@ -22,6 +24,8 @@ const ContainerStore = () => {
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(1);
   const dispatch = useAppDispatch();
+  const loadingStatus = useSelector(selectCategoriesLoading);
+  const categoriesDataredux = useSelector(selectArrayCategories);
 
   const searchOptions = [
     "Menor Precio",
@@ -73,6 +77,7 @@ const ContainerStore = () => {
   return (
     <>
       <Grid
+        className="columnContainer"
         container
         spacing={2}
         style={{
@@ -86,40 +91,52 @@ const ContainerStore = () => {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Swiper
-            style={{ padding: '25px 30px'}}
-            modules={[Navigation, Pagination]}
-            navigation={{
-              enabled: true,
-            }}
-            loop={true}
-            spaceBetween={2}
-            slidesPerView={7}
-          >
-            {categories.map((item: any, index: any) => {
-              return (
-                <SwiperSlide
-                  key={index}
-                  style={{ textAlign: "center",padding: "0 20px", cursor: 'pointer' }}
-                  onClick={() => handleCategory(item.id, 1)}
-                >
-                  <img height={"100px"} src={`${item.image}`} alt=""  style={storeStyles.img}/>
-                  <Typography
-                    style={
-                      item.id === categorySelected.id
-                        ? {
-                            ...storeStyles.categorySubtitle,
-                            borderBottom: "3px solid rgb(153, 121, 28)",
-                          }
-                        : { ...storeStyles.categorySubtitle }
-                    }
+          {/* {categories?.length > 0 && ( */}
+          {categoriesDataredux?.length > 0 && (
+            <Swiper
+              style={{ padding: '25px 30px'}}
+              modules={[Navigation, Pagination]}
+              navigation={{
+                enabled: true,
+              }}
+              loop={true}
+              spaceBetween={2}
+              slidesPerView={7}
+            >
+              {categoriesDataredux.map((item: any, index: any) => {
+                return (
+                  <SwiperSlide
+                    key={index}
+                    style={{ textAlign: "center",padding: "0 20px", cursor: 'pointer' }}
+                    onClick={() => handleCategory(item.id, 1)}
                   >
-                    {item.name}
-                  </Typography>
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
+                    {loadingStatus === 'loading' ? 
+                        <Skeleton sx={{width: '150px',
+                        height: '150px',
+                        margin: 'auto 0 auto 0',
+                        borderRadius: '50%'}} variant="rectangular" />
+                    :
+                        <>
+                          <img height={"100px"} src={`${item.image}`} alt=""  style={storeStyles.img}/>
+                          <Typography
+                            style={
+                              item.id === categorySelected.id
+                                ? {
+                                    ...storeStyles.categorySubtitle,
+                                    borderBottom: "3px solid rgb(153, 121, 28)",
+                                  }
+                                : { ...storeStyles.categorySubtitle }
+                            }
+                          >
+                            {item.name}
+                          </Typography>
+                        </>
+                  }
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          )}
         </Grid>
         {/* FILTER SECTION */}
         <Grid item xs={6}></Grid>

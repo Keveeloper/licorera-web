@@ -32,8 +32,9 @@ const styles = {
 
         },
         tab: {
-            fontFamily: 'Hudson NY Serif', 
-            fontWeight: 900,
+            fontFamily: 'HudsonNYSerif', 
+            fontSize: '20px',
+            fontWeight: 300,
         }
     }
 }

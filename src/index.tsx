@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
-// React router DOM imports
-import { createBrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom';
-
 // Redux store imports
 import { store } from './store/store';
 import { Provider } from 'react-redux';
