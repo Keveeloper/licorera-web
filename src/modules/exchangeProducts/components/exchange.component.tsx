@@ -5,6 +5,10 @@ import { useAppDispatch } from "../../../store/store";
 import React from "react";
 import { getExchangeProductThunk } from "../../../store/modules/exchangeProducts/actions/exchange.actions";
 import { Pagination  } from "@mui/material";
+import { productExchange } from "../types";
+import { useDispatch } from "react-redux";
+import { storeActions } from "../../../store/modules/store/store.slice";
+import { useNavigate } from "react-router-dom";
 
 const ExchangeComponent = () => {
 
@@ -12,8 +16,10 @@ const ExchangeComponent = () => {
     const [total, setTotal] = React.useState(1);
     const [products, setProducts] = React.useState([]);
 
-    const dispatch = useAppDispatch();
-
+    const dispatchApp = useAppDispatch();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
     const handleChangePagination = (
         event: React.ChangeEvent<unknown>,
         value: number
@@ -23,13 +29,18 @@ const ExchangeComponent = () => {
       };
     
     const handleExchange = async (page:number) => {
-        const {response} = await dispatch(
+        const {response} = await dispatchApp(
             getExchangeProductThunk({page})
         ).unwrap();
         if(response.success){
             setProducts(response.data.data)
             setTotal(response.data.last_page)
         }
+    }
+
+    const cardHandle = (product:productExchange) => {
+        dispatch(storeActions.setProductDetail(product))
+        navigate("/product-detail")
     }
 
     React.useEffect(() => {
@@ -66,7 +77,7 @@ const ExchangeComponent = () => {
                 return (
                     <Grid item xs={6}>
                         <CardComponent
-                        style={{ padding: "20px", borderRadius: "10px" }}
+                        style={{ padding: "20px", borderRadius: "10px",  cursor: 'pointer' }}
                         >
                         <Grid
                                 className="columnContainer"
@@ -75,6 +86,7 @@ const ExchangeComponent = () => {
                                 style={{
                                 padding: "10px 20px",
                                 }}
+                                onClick={() =>cardHandle(item)}
                             >
                                 <Grid item xs={3}>
                                     <img src={item.product.image} alt="" width={100} height={100} />

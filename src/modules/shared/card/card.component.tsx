@@ -3,7 +3,7 @@ import { ReactNode, memo } from "react";
 
 interface ButtonProps {
     children?: ReactNode;
-    style?:object
+    style?:object; 
 }
 
 const CardComponent: React.FC<ButtonProps> = ({children, style}) => {

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 
 import { Categories, CategoriesById } from "./actions/store.actions";
@@ -25,6 +25,12 @@ export const storeSlice = createSlice({
   name: STORE_FEATURE_KEY,
   initialState,
   reducers: {
+    setProductDetail: (
+      state: PersonalInfoState,
+      action: PayloadAction<any>
+    ) => {
+      state.productDetail = action.payload;
+    },
     clearState: () => {
       // Clearing redux state and localForage happens in store.ts.
     },

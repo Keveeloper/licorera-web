@@ -24,3 +24,9 @@ export const selectCategoriesLoading = createSelector(
   (categorie) => categorie.loadingStatus
 );
 
+export const selectProductDetails = createSelector(
+  getStoreState,
+  (categorie) => categorie.productDetail
+);
+
+
