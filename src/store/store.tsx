@@ -17,13 +17,15 @@ import { STORE_FEATURE_KEY, storeReducer } from "./modules/store/store.slice";
 import { PROMOTION_FEATURE_KEY, promotionReducer } from "./modules/promotions/promotions.slice";
 import { EXCHANGE_FEATURE_KEY, exchangeReducer } from "./modules/exchangeProducts/exchange.slice";
 import { SUGGESTED_FEATURE_KEY, suggestedReducer } from "./modules/suggestedProducts/suggested.slice";
+import { CART_FEATURE_KEY, cartReducer } from "./modules/cart/cart.slice";
 
 export const reducer = combineReducers({
   [PERSONAL_INFO_FEATURE_KEY]: personalInfoReducer,
   [PROMOTION_FEATURE_KEY]:promotionReducer,
   [STORE_FEATURE_KEY]: storeReducer,
   [EXCHANGE_FEATURE_KEY]:exchangeReducer,
-  [SUGGESTED_FEATURE_KEY]:suggestedReducer
+  [SUGGESTED_FEATURE_KEY]:suggestedReducer,
+  [CART_FEATURE_KEY]:cartReducer
 });
 
 const KEY_PERSIST_CONFIG = "root";

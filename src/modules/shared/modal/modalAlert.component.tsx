@@ -1,9 +1,10 @@
 import ModalComponent from "./modal.component";
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import ButtonComponent from "../button/button.component";
 
 interface ModalArletCustomProps {
   handleClose: () => void;
+  handleSave?: () => void;
   style?: object;
   open?: boolean;
   data: {
@@ -11,18 +12,18 @@ interface ModalArletCustomProps {
     content: string;
     img: string;
   };
+  isCancellButton?:boolean
 }
 
 const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
   handleClose,
+  handleSave,
   open,
   style,
   data,
+  isCancellButton
 }) => {
 
-  const handleButton = () =>{
-    handleClose()
-  }  
   return (
     <ModalComponent
       style={styleDefault}
@@ -36,13 +37,34 @@ const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
       <Typography className="inputCustom" style={styleDefault.content}>
         {data.content}
       </Typography>
-      <ButtonComponent
-        style={styleDefault.button}
-      >
-        <Typography onClick={handleButton} style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}>
-          ACEPTAR
-        </Typography>
-      </ButtonComponent>
+    
+       
+        <Grid
+            className="columnContainer"
+            container
+            spacing={0}
+        >
+          <Grid item xs={isCancellButton ? 6 : 12}>
+              <ButtonComponent
+                style={styleDefault.button}
+              >
+              <Typography onClick={handleSave} style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}>
+                ACEPTAR
+              </Typography>
+            </ButtonComponent>
+          </Grid>
+          {isCancellButton && 
+            <Grid item xs={6}>
+                <ButtonComponent
+                    style={styleDefault.button}
+                  >
+                <Typography onClick={handleClose} style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}>
+                  CANCELAR
+                </Typography>
+              </ButtonComponent>
+            </Grid>}
+        </Grid>
+      
     </ModalComponent>
   );
 };
@@ -77,7 +99,7 @@ const styleDefault = {
   },
   button:{
     border:"1px solid",
-    width: "100%",
+    width: "95%",
     height: "43px",
     borderRadius: "5px",
     fontFamily: "HudsonNYSerif",

@@ -130,6 +130,7 @@ const styles = {
           fontSize: "16px",
           fontWeight: "300",
           paddingTop: "0px",
+          height: '50px'
         },
         price: {
           ...hudsonNYFontStyle,

@@ -2,23 +2,28 @@ import { Grid, Stack, Typography } from "@mui/material";
 import { displayFlex, hudsonNYFontStyle, weblysleekFontStyle } from "../../shared/recursiveStyles/RecursiveStyles";
 import CardComponent from "../../shared/card/card.component";
 import { useAppDispatch } from "../../../store/store";
-import React from "react";
+import React, { useState } from "react";
 import { getExchangeProductThunk } from "../../../store/modules/exchangeProducts/actions/exchange.actions";
 import { Pagination  } from "@mui/material";
 import { productExchange } from "../types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { storeActions } from "../../../store/modules/store/store.slice";
 import { useNavigate } from "react-router-dom";
+import LoginScreen from "../../user/login.screen";
+import { selectAllUser } from "../../../store/modules/users/selectors/users.selector";
 
 const ExchangeComponent = () => {
 
-    const [page, setPage] = React.useState(1);
-    const [total, setTotal] = React.useState(1);
-    const [products, setProducts] = React.useState([]);
+    const [page, setPage] = useState(1);
+    const [total, setTotal] = useState(1);
+    const [products, setProducts] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
 
     const dispatchApp = useAppDispatch();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const user = useSelector(selectAllUser);
     
     const handleChangePagination = (
         event: React.ChangeEvent<unknown>,
@@ -39,9 +44,17 @@ const ExchangeComponent = () => {
     }
 
     const cardHandle = (product:productExchange) => {
-        dispatch(storeActions.setProductDetail(product))
-        navigate("/product-detail")
+        if(Object.keys(user).length > 0){
+            dispatch(storeActions.setProductDetail(product))
+            navigate("/product-detail")
+        }else{
+            setOpenModal(true)
+        } 
     }
+
+    const handleClose = (isOpen: boolean) => {
+        setOpenModal(isOpen);
+    };
 
     React.useEffect(() => {
         handleExchange(1)
@@ -113,6 +126,7 @@ const ExchangeComponent = () => {
                     />
                 </Stack>
             </Grid>
+            <LoginScreen handleClose={() => handleClose(false)} modalOpen={openModal}/>
         </Grid>
     )
 }

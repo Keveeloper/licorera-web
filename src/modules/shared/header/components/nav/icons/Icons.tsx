@@ -15,12 +15,19 @@ import LoginScreen from "../../../../../user/login.screen";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllUser, selectIsWelcome } from "../../../../../../store/modules/users/selectors/users.selector";
 import { personalInfoActions } from "../../../../../../store/modules/users/users.slice";
+import DrawerComponent from "../../../../drawer/drawer.component";
+import { Anchor } from "@mui/icons-material";
+import Cart from "../../../../../cart/cart.screen";
+import { selectCartProducts } from "../../../../../../store/modules/cart/selectors/cart.selector";
 
 const Icons = () => {
     const [isLogin, setIslogin] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
     const user = useSelector(selectAllUser);
     const isWelcome = useSelector(selectIsWelcome);
+    const products = useSelector(selectCartProducts);
     const dispatch = useDispatch();
     
     const handleLogin =() => {
@@ -34,6 +41,10 @@ const Icons = () => {
     const logout = () =>{
         dispatch(personalInfoActions.clearState(isWelcome));
     }
+
+    const toggleDrawer = (open: boolean) => {
+        setIsDrawerOpen(open);
+    };
 
     useEffect(() => {
         if(user?.id && user?.name){
@@ -67,10 +78,11 @@ const Icons = () => {
                         </Menu>
                 </Dropdown>
             )}
-            <Badge sx={styles.iconsContainer.badge} badgeContent={12}>
-                <img style={{width: '100%'}} src="/icons/web-shopping-cart-icon.png" alt="" />
+            <Badge sx={styles.iconsContainer.badge} badgeContent={products?.length}>
+                <img style={{width: '100%'}} src="/icons/web-shopping-cart-icon.png" alt="" onClick={() => toggleDrawer(true)}/>
             </Badge>
             <img src="/icons/delivery-icon.png" alt="" />
+            <Cart open={isDrawerOpen}  toggleDrawer={toggleDrawer} />
         </Box>
     );
 

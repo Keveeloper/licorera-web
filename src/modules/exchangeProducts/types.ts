@@ -1,14 +1,15 @@
 export interface Product {
     id: number;
     name: string;
-    serial: string | null;
-    lot: string | null;
+    serial?: string | null;
+    lot?: string | null;
     image: string;
+    quantity:number;
     description: string;
     category_id: number;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string | null;
+    created_at?: string;
+    updated_at?: string;
+    deleted_at?: string | null;
 }
 
 export interface productExchange {

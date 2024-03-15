@@ -3,10 +3,53 @@ import ButtonComponent from "../../shared/button/button.component";
 import { useSelector } from "react-redux";
 import { selectProductDetails } from "../../../store/modules/store/selectors/store.selector";
 import { displayFlex, hudsonNYFontStyle, weblysleekFontStyle } from "../../shared/recursiveStyles/RecursiveStyles";
+import useCartHook from "../../shared/hooks/cartHook/useCartHook";
+import { Product } from "../../exchangeProducts/types";
+import ModalAlertComponent from "../../shared/modal/modalAlert.component";
+import { useState } from "react";
+import { selectAllUser } from "../../../store/modules/users/selectors/users.selector";
+
 
 const ProductDetail = () => {
-    const product = useSelector(selectProductDetails);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [showError, setShowError] = useState<boolean>(false);
     
+    const product = useSelector(selectProductDetails);
+    const user = useSelector(selectAllUser);
+    const { addToCart } = useCartHook();
+
+    const handleAlertClose = () => {
+        setShowAlert(false);
+    };
+
+    const handleErrorClose = () => {
+        setShowError(false);
+    };
+
+    const setCart = () => {
+        const newProduct: Product = {
+            quantity:1,
+            name: product?.product.name || "",
+            id: product?.product.id || 0,
+            image: product?.product.image || "",
+            description: product?.product.description || "",
+            category_id: product?.product.category_id || 0,
+        }
+        if(product){
+            addToCart(newProduct);
+        }
+        setShowAlert(false);
+    }
+
+    const handleSave = () => {
+        if(product && product?.points <= user.points){
+            setShowAlert(true);
+        }else{
+            setShowError(true);
+        }
+        
+    }
+
     return(
         <Grid
             className="columnContainer"
@@ -36,12 +79,32 @@ const ProductDetail = () => {
                             </ButtonComponent>
                         </Grid>
                         <Grid item xs={6}>
-                            <ButtonComponent style={style.saveButton}>
+                            <ButtonComponent style={style.saveButton} onClick={handleSave}>
                                 CANJEAR
                             </ButtonComponent>
                         </Grid>
                     </Grid>
             </Grid>
+            <ModalAlertComponent 
+               handleClose={handleAlertClose}
+               handleSave={setCart}
+               open={showAlert}
+               isCancellButton
+               data={{
+                 title:`${product?.product.name}`,
+                 content:`¿Quieres cajearlo por ${product?.points} J?`,
+                 img:`${product?.product.image}`
+               }}/>
+
+            <ModalAlertComponent 
+               handleClose={handleErrorClose}
+               handleSave={handleErrorClose}
+               open={showError}
+               data={{
+                 title:"INFORMACIÓN",
+                 content:`No tienes los puntos suficientes para canjear este producto. Sigue comprando y acumula.`,
+                 img:"icons/alert.png"
+               }}/>
         </Grid>
     )
 }
@@ -84,7 +147,7 @@ const style = {
         height: '48px',
         border:"none",
         borderRadius: '5px',
-        padding: '0 0 5px 0'
-       
+        padding: '0 0 5px 0',
+        cursor:'pointer'
     }
 }

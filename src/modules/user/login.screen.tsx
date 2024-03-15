@@ -36,7 +36,7 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen })
     };
     const postLogin = await dispatch(userLogin(loginRequest)).unwrap();
     if (postLogin.success) {
-      dispatch(getMe()).unwrap();
+      dispatch(getMe(postLogin.response.token)).unwrap();
       modalOpen = false;
       handleClose();
     } else {
