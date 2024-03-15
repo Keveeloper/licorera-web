@@ -8,7 +8,19 @@ interface ButtonProps {
 
 const CardComponent: React.FC<ButtonProps> = ({children, style}) => {
     return(
-         <Card variant="outlined" style={style}>{children}</Card>
+         <Card sx={styles.card} variant="outlined" style={style}>{children}</Card>
     )
+}
+
+const styles = {
+    card: {
+        padding: '20px',
+        borderRadius: '10px',
+        height: '452px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 }
 export default memo(CardComponent);

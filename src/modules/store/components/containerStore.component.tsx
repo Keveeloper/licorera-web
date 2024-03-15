@@ -215,7 +215,9 @@ const ContainerStore = () => {
             return (
               <Grid item xs={2.4} style={{ textAlign: "center" }}>
                 <CardComponent
-                  style={{ padding: "20px", borderRadius: "10px" }}
+                  style={{ 
+                    
+                  }}
                 >
                   {item.store.discount > 0 && (
                     <div className="promotion">
