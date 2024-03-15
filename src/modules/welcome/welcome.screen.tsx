@@ -31,6 +31,7 @@ const styleButtonChecked = {
   fontFamily: "HudsonNYSerif",
   fontSize: "17px",
   marginTop: "20px",
+  cursor: 'pointer'
 };
 
 const styleButton = {
@@ -43,6 +44,7 @@ const styleButton = {
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
+    // cursor: 'pointer'
 };
 
 const styleCheckBox = {
@@ -50,6 +52,7 @@ const styleCheckBox = {
   marginLeft: "20px",
   marginRight: "20px",
   fontAlign: "center",
+  // cursor: 'pointer'
 };
 
 const WelcomeScreen = () => {

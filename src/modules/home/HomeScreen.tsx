@@ -21,6 +21,9 @@ import { Navigation, Pagination } from "swiper/modules";
 import SwiperCategories from "../shared/swiperCategories/SwiperCategories";
 import { Categories } from "../../store/modules/store/actions/store.actions";
 import Experience from "../experiences/Experience";
+import SuggestedProducts from "../productDetail/components/suggestedProducts";
+import Sponsors from "../sponsors/Sponsors";
+import { getSponsorsThunk } from "../../store/modules/sponsors/actions/sponsors.actions";
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
@@ -47,6 +50,13 @@ const HomeScreen = () => {
       // setCategories(categories.response.data);
     }
     getCategories();
+
+    async function getSponsors() {
+      // const categories = await dispatch(Categories()).unwrap();
+      await dispatch(getSponsorsThunk()).unwrap();
+      // setCategories(categories.response.data);
+    }
+    getSponsors();
   }, []);
 
   useEffect(() => {
@@ -101,6 +111,8 @@ const HomeScreen = () => {
         loadingStatus={loadingStatus}
       />
       <Experience />
+      <SuggestedProducts/>
+      <Sponsors/>
       <FooterScreen />
     </>
   );

@@ -5,10 +5,12 @@ const StringDateFormat = (initialDate: string) => {
       'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
     ];
 
-    const [year, month, day] = dateString.split('-');
-    const monthName = months[parseInt(month, 10) - 1];
-
-    return `${monthName} ${parseInt(day, 10)}, ${year}`;
+    if (dateString && typeof dateString === 'string') {
+      const [year, month, day] = dateString.split('-');
+      const monthName = months[parseInt(month, 10) - 1];
+      return `${monthName} ${parseInt(day, 10)}, ${year}`;
+    }
+    
   };
 
   return formatDate(initialDate);
