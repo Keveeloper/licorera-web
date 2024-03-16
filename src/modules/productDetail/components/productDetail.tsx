@@ -29,6 +29,7 @@ const ProductDetail = () => {
     const setCart = () => {
         const newProduct: Product = {
             quantity:1,
+            points:product?.points,
             name: product?.product.name || "",
             id: product?.product.id || 0,
             image: product?.product.image || "",
@@ -137,6 +138,7 @@ const style = {
         height: '48px',
         borderRadius: '5px',
         padding: '0 0 5px 0',
+        border: '1px solid #000000'
     },
     saveButton:{
         ...hudsonNYFontStyle,

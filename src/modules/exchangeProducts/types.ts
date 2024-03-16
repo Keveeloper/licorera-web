@@ -5,6 +5,7 @@ export interface Product {
     lot?: string | null;
     image: string;
     quantity:number;
+    points?:number;
     description: string;
     category_id: number;
     created_at?: string;
