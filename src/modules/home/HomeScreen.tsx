@@ -24,6 +24,7 @@ import Experience from "../experiences/Experience";
 import SuggestedProducts from "../productDetail/components/suggestedProducts";
 import Sponsors from "../sponsors/Sponsors";
 import { getSponsorsThunk } from "../../store/modules/sponsors/actions/sponsors.actions";
+import { getCampaignsThunk } from "../../store/modules/campaigns/actions/campaigns.actions";
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
@@ -57,6 +58,12 @@ const HomeScreen = () => {
       // setCategories(categories.response.data);
     }
     getSponsors();
+
+    async function getCampaigns() {
+      await dispatch(getCampaignsThunk()).unwrap();      
+    }
+    getCampaigns();
+
   }, []);
 
   useEffect(() => {
@@ -88,6 +95,7 @@ const HomeScreen = () => {
             modules={[Navigation, Pagination]}
             slidesPerView={1}
             loadingStatus={loadingStatus}
+            bannerType="Promotions"
           />
         </TabPanel>
         <TabPanel sx={{padding: '0', height: '600px' }} value="2">
@@ -95,6 +103,7 @@ const HomeScreen = () => {
             modules={[Navigation, Pagination]}
             slidesPerView={1}
             loadingStatus={loadingStatus}
+            bannerType="Campaigns"
           />
         </TabPanel>
         <TabPanel sx={{padding: '0', height: '600px' }} value="3">
@@ -102,6 +111,7 @@ const HomeScreen = () => {
             modules={[Navigation, Pagination]}
             slidesPerView={1}
             loadingStatus={loadingStatus}
+            bannerType="Promotions"
           />
         </TabPanel>
       </TabComponent>

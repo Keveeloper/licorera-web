@@ -7,9 +7,7 @@ import { useSelector } from "react-redux";
 
 const Sponsors = () => {
 
-    const sponsorsDataredux = useSelector(selectAllSponsors);
-    console.log('sponsorsDataredux: ', sponsorsDataredux);
-    
+    const sponsorsDataredux = useSelector(selectAllSponsors);    
 
     return (
         <Box className="columnContainer" sx={{marginBottom: '50px !important'}}>

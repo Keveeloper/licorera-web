@@ -34,7 +34,6 @@ const SuggestedProducts = () => {
     }
 
     const setDataProducts  = (data:any) =>{
-      console.log(data);
       let tempArray = []
         for(var i = 0; i < 5; i++){
           tempArray.push(data[i])

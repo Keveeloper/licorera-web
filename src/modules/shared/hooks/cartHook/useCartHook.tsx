@@ -22,7 +22,6 @@ const useCartHook = () => {
   };
 
   const updateCartItem = (updatedProduct: Product) => {
-    console.log(updatedProduct)
     const updatedCart = cart.map(item => {
       if (item.id === updatedProduct.id) {
         return { ...item, quantity: updatedProduct.quantity };

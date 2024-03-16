@@ -12,11 +12,15 @@ import { Promotion } from '../../../store/modules/promotions/types';
 import StringDateFormat from '../hooks/stringDateFormat/StringDateFormat';
 import NumberFormat from '../hooks/numberFormater/NumberFormat';
 import { useMemo } from 'react';
+import { selectAllCampaigns } from '../../../store/modules/campaigns';
 
 const SwiperComponent = (props: swiperType) => { 
     
-    const { modules, slidesPerView, loadingStatus } = props;
+    const { modules, slidesPerView, loadingStatus, bannerType } = props;
     const promotionsDataredux = useSelector(selectAllPromotion);
+    const campaingDataredux = useSelector(selectAllCampaigns);
+    const selector: any = bannerType === 'Promotions' ? promotionsDataredux : campaingDataredux;
+
     const formattedDates = useMemo(
         () => promotionsDataredux.map((item: Promotion) => StringDateFormat(item.end_date)),
         [promotionsDataredux]
@@ -41,7 +45,8 @@ const SwiperComponent = (props: swiperType) => {
             // onSlideChange={() => console.log('slide change')}
             // onSwiper={(swiper: any) => console.log(swiper)}
         >
-            {promotionsDataredux.map((item: Promotion, index) => {
+            {/* {promotionsDataredux.map((item: Promotion, index) => { */}
+            {selector.map((item: any, index: any) => {
                 return(
                     <SwiperSlide key={index} style={styles.swiper.swiperSlide}>
                             {loadingStatus === 'loading' ? 
@@ -49,15 +54,17 @@ const SwiperComponent = (props: swiperType) => {
                             :
                                 <Box sx={styles.swiper.swiperSlide.promotionContainer}>
                                     {/* <img height={'100%'} src={`${img}`} alt="" /> */}
-                                    <img style={styles.swiper.swiperSlide.promotionContainer.image} src={`${item.image}`} alt="" />
-                                    <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer}>
-                                        <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header}>
-                                            <h1 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>{item.name}</h1>
-                                            <h2 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>$ {formattedNumbers[index]}</h2>
+                                    <img style={styles.swiper.swiperSlide.promotionContainer.image} src={`${bannerType === 'Promotions' ? item.image : item.mainImageUrl}`} alt={item.name} />
+                                    {bannerType === 'Promotions' && (
+                                        <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer}>
+                                            <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header}>
+                                                <h1 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>{item.name}</h1>
+                                                <h2 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>$ {formattedNumbers[index]}</h2>
+                                            </Box>
+                                            <p style={{marginBottom: '30px'}}>{item.description}</p>
+                                            <p>Válido hasta: {formattedDates[index]}</p>
                                         </Box>
-                                        <p style={{marginBottom: '30px'}}>{item.description}</p>
-                                        <p>Válido hasta: {formattedDates[index]}</p>
-                                    </Box>
+                                    )}
                                 </Box>
                             }
                     </SwiperSlide>

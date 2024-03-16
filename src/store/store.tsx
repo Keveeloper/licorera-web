@@ -18,7 +18,8 @@ import { PROMOTION_FEATURE_KEY, promotionReducer } from "./modules/promotions/pr
 import { EXCHANGE_FEATURE_KEY, exchangeReducer } from "./modules/exchangeProducts/exchange.slice";
 import { SUGGESTED_FEATURE_KEY, suggestedReducer } from "./modules/suggestedProducts/suggested.slice";
 import { CART_FEATURE_KEY, cartReducer } from "./modules/cart/cart.slice";
-import { SPONSOR_FEATURE_KEY, sponsorReducer } from "./modules/sponsors";
+import { SPONSOR_FEATURE_KEY, sponsorReducer } from "./modules/sponsors/sponsors.slice";
+import { CAMPAIGN_FEATURE_KEY, campaignReducer } from "./modules/campaigns/campaigns.slice";
 
 export const reducer = combineReducers({
   [PERSONAL_INFO_FEATURE_KEY]: personalInfoReducer,
@@ -27,7 +28,8 @@ export const reducer = combineReducers({
   [EXCHANGE_FEATURE_KEY]:exchangeReducer,
   [SUGGESTED_FEATURE_KEY]:suggestedReducer,
   [CART_FEATURE_KEY]:cartReducer,
-  [SPONSOR_FEATURE_KEY]: sponsorReducer
+  [SPONSOR_FEATURE_KEY]: sponsorReducer,
+  [CAMPAIGN_FEATURE_KEY]: campaignReducer
 });
 
 const KEY_PERSIST_CONFIG = "root";
