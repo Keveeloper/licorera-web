@@ -11,4 +11,5 @@ const CardComponent: React.FC<ButtonProps> = ({children, style}) => {
          <Card variant="outlined" style={style}>{children}</Card>
     )
 }
+
 export default memo(CardComponent);

@@ -1,37 +1,27 @@
 // Import Swiper React components
 import { Swiper, SwiperSlide} from 'swiper/react';
 import { swiperType } from './types/types';
-import { displayFlex, displaySpaceBetween } from '../recursiveStyles/RecursiveStyles';
+import { displayFlex, displaySpaceBetween } from '../shared/recursiveStyles/RecursiveStyles';
 
 // Material UI
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { selectAllPromotion } from '../../../store/modules/promotions';
-import { Promotion } from '../../../store/modules/promotions/types';
-import StringDateFormat from '../hooks/stringDateFormat/StringDateFormat';
-import NumberFormat from '../hooks/numberFormater/NumberFormat';
+import { Promotion } from '../../store/modules/newProducts/types';
+import NumberFormat from '../shared/hooks/numberFormater/NumberFormat';
 import { useMemo } from 'react';
-import { selectAllCampaigns } from '../../../store/modules/campaigns';
+import { selectAllNewProducts } from '../../store/modules/newProducts';
 
-const SwiperComponent = (props: swiperType) => { 
+const SwiperNewProducts = (props: swiperType) => { 
     
     const { modules, slidesPerView, loadingStatus, bannerType } = props;
-    const promotionsDataredux = useSelector(selectAllPromotion);
-    const campaingDataredux = useSelector(selectAllCampaigns);
-    console.log('Angela: ', campaingDataredux);
-    
-    const selector: any = bannerType === 'Promotions' ? promotionsDataredux : campaingDataredux;
-
-    const formattedDates = useMemo(
-        () => promotionsDataredux.map((item: Promotion) => StringDateFormat(item.end_date)),
-        [promotionsDataredux]
-    );
+    const newProductsDataredux = useSelector(selectAllNewProducts);
       
     const formattedNumbers = useMemo(
-        () => promotionsDataredux.map((item: Promotion) => NumberFormat(item.price)),
-        [promotionsDataredux]
+        () => newProductsDataredux.map((item: Promotion) => NumberFormat(item.price)),
+        [newProductsDataredux]
     );
+
     return(
         <Swiper style={styles.swiper}
             modules={modules}
@@ -47,26 +37,21 @@ const SwiperComponent = (props: swiperType) => {
             // onSlideChange={() => console.log('slide change')}
             // onSwiper={(swiper: any) => console.log(swiper)}
         >
-            {/* {promotionsDataredux.map((item: Promotion, index) => { */}
-            {selector.map((item: any, index: any) => {
+            {newProductsDataredux.map((item: Promotion, index: any) => {
                 return(
                     <SwiperSlide key={index} style={styles.swiper.swiperSlide}>
                             {loadingStatus === 'loading' ? 
                                 <Skeleton sx={styles.swiper.swiperSlide.skeleton} variant="rectangular" height={'90%'} />
                             :
                                 <Box sx={styles.swiper.swiperSlide.promotionContainer}>
-                                    {/* <img height={'100%'} src={`${img}`} alt="" /> */}
-                                    <img style={styles.swiper.swiperSlide.promotionContainer.image} src={`${bannerType === 'Promotions' ? item.image : item.mainImageUrl}`} alt={item.name} />
-                                    {bannerType === 'Promotions' && (
-                                        <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer}>
-                                            <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header}>
-                                                <h1 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>{item.name}</h1>
-                                                <h2 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>$ {formattedNumbers[index]}</h2>
-                                            </Box>
-                                            <p style={{marginBottom: '30px'}}>{item.description}</p>
-                                            <p>Válido hasta: {formattedDates[index]}</p>
+                                    <img style={styles.swiper.swiperSlide.promotionContainer.image} src={item.bannerImage} alt={item.product.name} />
+                                    <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer}>
+                                        <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header}>
+                                            <h1 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>{item.product.name}</h1>
+                                            <h2 style={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header.title}>$ {formattedNumbers[index]}</h2>
                                         </Box>
-                                    )}
+                                        <p style={{marginBottom: '30px'}}>{item.product.description}</p>
+                                    </Box>
                                 </Box>
                             }
                     </SwiperSlide>
@@ -125,4 +110,4 @@ const styles = {
     }
 }
 
-export default SwiperComponent;
+export default SwiperNewProducts;

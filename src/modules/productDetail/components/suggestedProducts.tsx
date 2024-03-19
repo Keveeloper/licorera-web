@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import CardComponent from "../../shared/card/card.component";
 import { hudsonNYFontStyle, weblysleekFontStyle } from "../../shared/recursiveStyles/RecursiveStyles";
@@ -7,8 +7,13 @@ import { useAppDispatch } from "../../../store/store";
 import { getSuggestedProductThunk } from "../../../store/modules/suggestedProducts/actions/suggested.actions";
 import { useSelector } from "react-redux";
 import { selectAllSuggested } from "../../../store/modules/suggestedProducts/selectors/suggested.selector";
+import { Link, useLocation } from "react-router-dom";
+import { displaySpaceBetween } from "../../shared/recursiveStyles/RecursiveStyles";
 
 const SuggestedProducts = () => {
+
+    const location = useLocation();
+
     const [products, setProducts] = React.useState<any>([]);
     
     const suggested = useSelector(selectAllSuggested);
@@ -29,7 +34,6 @@ const SuggestedProducts = () => {
     }
 
     const setDataProducts  = (data:any) =>{
-      console.log(data);
       let tempArray = []
         for(var i = 0; i < 5; i++){
           tempArray.push(data[i])
@@ -51,24 +55,32 @@ const SuggestedProducts = () => {
             className="columnContainer"
             container
             spacing={2}
-            style={{
-            padding: "30px 5%",
-            }}
+            // style={{
+            //   padding: "30px 5%",
+            // }}
         >
-             <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Typography >También te podría interesar</Typography>
-             </Grid>
+          {location.pathname === '/product-detail' ?
+            <>
+              <Grid item xs={12} style={{ textAlign: "center" }}>
+                  <Typography >También te podría interesar</Typography>
+              </Grid>
+              {/* <Grid item xs={12}  style={styles.link} > */}
+              <div  style={{width: "100%"}}>
+                  <a href="#" className="link" onClick={handleLink}>
+                      Ver todos
+                  </a>
+              </div>
+              {/* </Grid> */}
+            </>
 
-            {/* <Grid item xs={12}  style={styles.link} > */}
-            <div  style={{width: "100%"}}>
-                <a href="#" className="link" onClick={handleLink}>
-                    Ver todos
-                </a>
-            </div>
-            {/* </Grid> */}
-        
-       
-      
+          :
+            <Box sx={{width: '100%', ...displaySpaceBetween}}>
+              <Typography sx={{margin: '50px 0 0 0', fontFamily: 'HudsonNYSerif', fontWeight: 600, fontSize: '25px',}}>
+                productos destacados
+              </Typography>
+              <Link className="link" to={'/store'}>Ver todos</Link>
+            </Box>
+          }
 
         {/* PRODUCTS SECTION */}
         <Grid container spacing={2} sx={{mt:2, mb:2}}>

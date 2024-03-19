@@ -28,6 +28,16 @@ import {
 import { useSelector } from "react-redux";
 import { hudsonNYFontStyle, weblysleekFontStyle } from "../../shared/recursiveStyles/RecursiveStyles";
 
+const cardStyle = {
+  padding: '20px',
+  borderRadius: '10px',
+  height: '452px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center'
+}
+
 const ContainerStore = () => {
   const [search, setSearch] = React.useState<string>("Menor Precio");
   const [categories, setCategories] = React.useState<any>([]);
@@ -215,7 +225,7 @@ const ContainerStore = () => {
             return (
               <Grid item xs={2.4} style={{ textAlign: "center" }}>
                 <CardComponent
-                  style={{ padding: "20px", borderRadius: "10px" }}
+                  style={cardStyle}
                 >
                   {item.store.discount > 0 && (
                     <div className="promotion">
