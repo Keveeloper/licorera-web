@@ -25,6 +25,8 @@ import SuggestedProducts from "../productDetail/components/suggestedProducts";
 import Sponsors from "../sponsors/Sponsors";
 import { getSponsorsThunk } from "../../store/modules/sponsors/actions/sponsors.actions";
 import { getCampaignsThunk } from "../../store/modules/campaigns/actions/campaigns.actions";
+import { getNewProductsThunk } from "../../store/modules/newProducts/actions/newProducts.actions";
+import SwiperNewProducts from "../newProducts/SwiperNewProducts";
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
@@ -33,29 +35,20 @@ const HomeScreen = () => {
   const loadingStatus = useSelector(selectLoading);
 
   const [value, setValue] = useState("1");
-  // const [promotionsData, setPromotionsData] = useState<Data | undefined>();
-  // const [categories, setCategories] = useState<any>([]);
-  // const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     async function getAsynPromotion() {
-      // const res = await dispatch(getPromotionsThunk()).unwrap();
       dispatch(getPromotionsThunk()).unwrap();
-      // setPromotionsData(res.response);
     }
     getAsynPromotion();
 
     async function getCategories() {
-      // const categories = await dispatch(Categories()).unwrap();
       await dispatch(Categories()).unwrap();
-      // setCategories(categories.response.data);
     }
     getCategories();
 
     async function getSponsors() {
-      // const categories = await dispatch(Categories()).unwrap();
       await dispatch(getSponsorsThunk()).unwrap();
-      // setCategories(categories.response.data);
     }
     getSponsors();
 
@@ -63,6 +56,11 @@ const HomeScreen = () => {
       await dispatch(getCampaignsThunk()).unwrap();      
     }
     getCampaigns();
+    
+    async function getNewProducts() {
+      await dispatch(getNewProductsThunk()).unwrap();      
+    }
+    getNewProducts();
 
   }, []);
 
@@ -107,12 +105,13 @@ const HomeScreen = () => {
           />
         </TabPanel>
         <TabPanel sx={{padding: '0', height: '600px' }} value="3">
-          <SwiperComponent
+          <SwiperNewProducts
             modules={[Navigation, Pagination]}
             slidesPerView={1}
             loadingStatus={loadingStatus}
             bannerType="Promotions"
           />
+
         </TabPanel>
       </TabComponent>
       <SwiperCategories
