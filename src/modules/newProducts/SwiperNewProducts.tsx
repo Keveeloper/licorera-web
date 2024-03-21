@@ -64,8 +64,8 @@ const SwiperNewProducts = (props: swiperType) => {
 
 const styles = {
     swiper: {
+        width: '100%',
         height: '100%',
-        maxWidth: '1450px',
         swiperSlide: {
             ...displayFlex,
             cursor: 'pointer',

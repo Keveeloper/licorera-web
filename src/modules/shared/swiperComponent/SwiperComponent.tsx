@@ -19,7 +19,6 @@ const SwiperComponent = (props: swiperType) => {
     const { modules, slidesPerView, loadingStatus, bannerType } = props;
     const promotionsDataredux = useSelector(selectAllPromotion);
     const campaingDataredux = useSelector(selectAllCampaigns);
-    console.log('Angela: ', campaingDataredux);
     
     const selector: any = bannerType === 'Promotions' ? promotionsDataredux : campaingDataredux;
 
@@ -79,8 +78,8 @@ const SwiperComponent = (props: swiperType) => {
 
 const styles = {
     swiper: {
+        with: '100%',
         height: '100%',
-        maxWidth: '1450px',
         swiperSlide: {
             ...displayFlex,
             cursor: 'pointer',

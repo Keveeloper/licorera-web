@@ -6,4 +6,5 @@ export interface tabType {
     value: string;
     setValue: React.Dispatch<React.SetStateAction<string>>;
     handleChange: (event: React.SyntheticEvent, newValue: string) => void;
+    disabled?: boolean;
 }
