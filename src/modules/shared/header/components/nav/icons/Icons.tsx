@@ -19,8 +19,11 @@ import DrawerComponent from "../../../../drawer/drawer.component";
 import { Anchor } from "@mui/icons-material";
 import Cart from "../../../../../cart/cart.screen";
 import { selectCartProducts } from "../../../../../../store/modules/cart/selectors/cart.selector";
+import { useNavigate } from "react-router-dom";
 
 const Icons = () => {
+
+    const navigation = useNavigate();
     const [isLogin, setIslogin] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -72,7 +75,7 @@ const Icons = () => {
                                 <h2>{user?.name?.toUpperCase()}</h2>
                                 <p>{user?.points} Jotas</p>
                             </Box>
-                            <MenuItem sx={styles.iconsContainer.menu.menuitem}>Perfil</MenuItem>
+                            <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={() => navigation('/user-profile')}>Perfil</MenuItem>
                             <MenuItem sx={styles.iconsContainer.menu.menuitem}>Mis Pedidos</MenuItem>
                             <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={logout}>Cerrar Sesión</MenuItem>
                         </Menu>
