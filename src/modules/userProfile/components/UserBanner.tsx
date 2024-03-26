@@ -1,7 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { displayFlex, displayFlexColumn } from "../../shared/recursiveStyles/RecursiveStyles";
+import { useSelector } from "react-redux";
+import { selectAllUser } from "../../../store/modules/users";
 
 const UserBanner = () => {
+
+    const user = useSelector(selectAllUser);
 
     return(
         <Box sx={styles.bannerContainer}>
@@ -10,18 +14,18 @@ const UserBanner = () => {
                     <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/account-icon.png" width={100} alt="" />
                 </Box>
                 <Box sx={styles.bannerContainer.boxLeft.userName}>
-                    <Typography sx={styles.bannerContainer.boxLeft.userName.name}>Diego Fernando Díaz</Typography>
-                    <Typography sx={styles.bannerContainer.boxLeft.userName.jotas}>525 Jotas</Typography>
+                    <Typography sx={styles.bannerContainer.boxLeft.userName.name}>{user?.name} {user?.last_name}</Typography>
+                    <Typography sx={styles.bannerContainer.boxLeft.userName.jotas}>{user?.points} Jotas</Typography>
                 </Box>
             </Box>
             <Box sx={styles.bannerContainer.boxRight}>
                 <img src="/icons/logout-icon.png" width={30} alt="" />
                 <Box sx={styles.bannerContainer.boxRight.circle}>
-                    <Typography sx={styles.bannerContainer.boxRight.circle.text}>999</Typography>
+                    <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.order_quantity}</Typography>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>Pedidos</Typography>
                 </Box>
                 <Box sx={styles.bannerContainer.boxRight.circle}>
-                    <Typography sx={styles.bannerContainer.boxRight.circle.text}>25</Typography>
+                    <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.exchanges_quantity}</Typography>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>Canjes</Typography>
                 </Box>
             </Box>
