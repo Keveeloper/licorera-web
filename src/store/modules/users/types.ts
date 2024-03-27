@@ -15,6 +15,7 @@ export interface ResponsePersonalInfo {
     firstName?: string;
     lastName?: string;
     phone?: string;
-    email?: string;
+    email?: string
+    birthday?: string;
     token?:string;
 }

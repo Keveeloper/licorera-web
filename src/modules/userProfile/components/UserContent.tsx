@@ -48,7 +48,6 @@ const UserContent = () => {
                     <UserInfo />
                 </TabPanel>
             </TabComponent>
-            <Button sx={{margin: '50px 0 0 0', fontFamily: 'HudsonNYSerif'}} variant="outlined" fullWidth color="inherit">Editar</Button>
         </Box>
     );
 
@@ -58,11 +57,6 @@ const styles = {
     contentContainer: {
         margin: '90px auto',
         width: '60%',
-        input: {
-            '& input:disabled': {
-              borderBottomStyle: 'solid', // Cambiar el estilo a sólido
-            },
-        }
     }
 }
 
