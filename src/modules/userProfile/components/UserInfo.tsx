@@ -7,6 +7,13 @@ import { paletteColors } from "../../../paletteColors/paletteColors";
 import { ResponsePersonalInfo } from "../../../store/modules/users/types";
 import { useForm } from "react-hook-form";
 
+// DatePicker components
+import dayjs, { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import 'dayjs/locale/es';
+
 const UserInfo = () => {
 
     const user = useSelector(selectAllUser);
@@ -28,6 +35,7 @@ const UserInfo = () => {
         email: user?.email,
         birthday: user?.birthday,
     });
+    const [date, setDate] = useState<Dayjs | null>(dayjs(user?.birthday));
 
 
     const styles = stylesMethod(edit);
@@ -83,7 +91,7 @@ const UserInfo = () => {
                     onChange={handleChange}
                     name="email"
                 />
-                <Input
+                {/* <Input
                     sx={styles.otherInfoContainer.inputInfo} 
                     placeholder="Fecha de nacimiento"
                     // value={user?.birthday}
@@ -92,7 +100,19 @@ const UserInfo = () => {
                     endAdornment
                     onChange={handleChange}
                     name="birthday"
-                />
+                    type="date"
+                /> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+                    <MobileDatePicker 
+                        sx={styles.otherInfoContainer.datePicker}
+                        // defaultValue={dayjs(new Date())}
+                        value={date}
+                        disabled={edit ? false : true}
+                        onChange={(newValue) => setDate(newValue)}
+                        name="birthday"
+                        // loading
+                    />
+                </LocalizationProvider>
                 <Input
                     sx={styles.otherInfoContainer.inputInfo}  
                     placeholder="Telefono"
@@ -141,6 +161,14 @@ const stylesMethod = (edit: boolean) => ({
             '& .Mui-disabled:before': {
                 borderBottomStyle: 'solid',
             },
+        },
+        datePicker: {
+            margin: '20px 0 0 0',
+            width: '100%',
+            borderBottom: '1px solid rgba(0, 0, 0, 0.42)',
+            '&:hover': {
+                borderBottom: `${edit && ('1px solid black')}`,
+            }
         }
     },
     button: {

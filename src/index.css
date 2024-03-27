@@ -43,6 +43,20 @@ code {
   margin: 0px auto 0px auto !important;
 }
 
+/* User info input styles when disabled */
 .css-1esgoju-MuiInputBase-root-MuiInput-root.Mui-disabled:before, .css-eimus0-MuiInputBase-root-MuiInput-root.Mui-disabled:before {
   border-bottom-style: solid !important;
 }
+
+/* User info picker input styles */
+.MuiOutlinedInput-notchedOutline {
+  border: none !important;
+  border-radius: 0px !important;
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.42) !important; */
+}
+
+/* .MuiOutlinedInput-notchedOutline:hover {
+  border: none !important;
+  border-radius: 0px !important;
+  border-bottom: 1px solid black !important;
+} */
