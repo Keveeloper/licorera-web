@@ -1,30 +1,17 @@
 import { useState } from "react";
 import { TabPanel } from "@mui/lab";
-import { useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
-import { selectAllUser } from "../../../store/modules/users";
 
 // Custom components
 import TabComponent from "../../shared/tabComponent/TabComponent";
 
 // Material UI component
 import { Box } from "@mui/material";
-import Button from '@mui/material/Button';
 import UserInfo from "./UserInfo";
 
 const UserContent = () => {
 
     const [value, setValue] = useState<string>("1");
     const [disabled, setDisabled] = useState<boolean>(false);
-
-    const {
-        register,
-        formState: { errors, isValid },
-        reset,
-        getValues,
-      } = useForm({
-        mode: "onChange",
-      });
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);

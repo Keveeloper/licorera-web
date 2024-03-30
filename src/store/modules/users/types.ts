@@ -12,6 +12,7 @@ export interface PersonalInfoState {
 }
 
 export interface ResponsePersonalInfo {
+    id?: string,
     firstName?: string;
     lastName?: string;
     phone?: string;

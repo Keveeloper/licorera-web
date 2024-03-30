@@ -1,11 +1,12 @@
 import { useSelector } from "react-redux";
-import { selectAllUser } from "../../../store/modules/users";
+import { selectAllPersonalInfo, selectAllUser } from "../../../store/modules/users";
 import { Box, Button, Input } from "@mui/material";
 import { displaySpaceBetween, displayFlexColumn } from "../../shared/recursiveStyles/RecursiveStyles";
 import { useState } from "react";
 import { paletteColors } from "../../../paletteColors/paletteColors";
 import { ResponsePersonalInfo } from "../../../store/modules/users/types";
 import { useForm } from "react-hook-form";
+import { useAppDispatch } from "../../../store/store";
 
 // DatePicker components
 import dayjs, { Dayjs } from 'dayjs';
@@ -13,49 +14,57 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import 'dayjs/locale/es';
+import { putUserRequest } from "../../../service/modules/users/types";
+import { getMe, updateUserInfo } from "../../../store/modules/users/actions/users.actions";
 
 const UserInfo = () => {
 
+    const dispatch = useAppDispatch();
     const user = useSelector(selectAllUser);
-
+    
     const {
         register,
-        formState: { errors, isValid },
-        reset,
+        // formState: { errors, isValid },
+        // reset,
         getValues,
       } = useForm({
         mode: "onChange",
     });
-    
-    const [ edit, setEdit ] = useState<boolean>(false);
-    const [ userInfo, setUserInfo ] = useState<ResponsePersonalInfo>({
-        firstName: user?.name,
-        lastName: user?.last_name,
-        phone: user?.cellphone,
-        email: user?.email,
-        birthday: user?.birthday,
-    });
-    const [date, setDate] = useState<Dayjs | null>(dayjs(user?.birthday));
 
+    const [ userFirstName, setUserFirstName ] = useState<string>(user?.name);
+    const [ userLastName, setUserLastName ] = useState<string>(user?.last_name);
+    const [ userEmail, setUserEmail ] = useState<string>(user?.email);
+    const [ date, setDate ] = useState<Dayjs | null>(dayjs(user?.birthday));
+    const [ userCellphone, setUsercellphone ] = useState<string>(user?.cellphone);
+
+    const [ edit, setEdit ] = useState<boolean>(false);    
 
     const styles = stylesMethod(edit);
 
-    const handleClick = () => {
+    const handleClick = async () => {
         setEdit(!edit); 
+        if (edit) {
+            
+            const updateUserRequest: putUserRequest = {
+                name: userFirstName,
+                last_name: userLastName,
+                birthday: date?.toString(),
+                email: userEmail,
+                cellphone: userCellphone,
+            };
+            
+            const parameterComplete = {
+                reqData: updateUserRequest,
+                userId: user?.id,
+            } 
+            const updateResponse = await dispatch(updateUserInfo(parameterComplete)).unwrap();
+            if (updateResponse.success) {
+                dispatch(getMe(updateResponse.response.api_token)).unwrap();
+            }
+            
+        }
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        const { name, lastName, email, birthday, cellphone } = getValues();
-        const newUserInfo = {
-            firstName: name,
-            lastName: lastName,
-            phone: cellphone,
-            email: email,
-            birthday: birthday,
-        }
-        setUserInfo(newUserInfo);
-    }
     return (
         <>
             <Box sx={styles.nameContainer}>
@@ -63,20 +72,28 @@ const UserInfo = () => {
                     sx={styles.nameContainer.inputInfo}
                     placeholder="Nombre"
                     // value={user?.name}
-                    value={userInfo.firstName}
+                    // value={userInfo.firstName}
+                    value={userFirstName}
                     disabled={edit ? false : true}
                     endAdornment
-                    onChange={handleChange}
+                    {...register("name", {
+                        required: "Este campo es obligatorio",
+                    })}
+                    // onChange={handleChange}
+                    onChange={(event) => setUserFirstName(event?.target.value)}
                     name="name"
                 />
                 <Input
                     sx={styles.nameContainer.inputInfo} 
                     placeholder="Apellido"
                     // value={user?.last_name}
-                    value={userInfo.lastName}
+                    value={userLastName}
                     disabled={edit ? false : true}
                     endAdornment
-                    onChange={handleChange}
+                    {...register("lastName", {
+                        required: "Este campo es obligatorio",
+                    })}
+                    onChange={(event) => setUserLastName(event?.target.value)}
                     name="lastName"
                 />
             </Box>
@@ -85,29 +102,24 @@ const UserInfo = () => {
                     sx={styles.otherInfoContainer.inputInfo} 
                     placeholder="Email"
                     // value={user?.email}
-                    value={userInfo.email}
+                    value={userEmail}
                     disabled={edit ? false : true}
                     endAdornment
-                    onChange={handleChange}
+                    {...register("email", {
+                        required: "Este campo es obligatorio",
+                    })}
+                    onChange={(event) => setUserEmail(event?.target.value)}
                     name="email"
                 />
-                {/* <Input
-                    sx={styles.otherInfoContainer.inputInfo} 
-                    placeholder="Fecha de nacimiento"
-                    // value={user?.birthday}
-                    value={userInfo.birthday}
-                    disabled={edit ? false : true}
-                    endAdornment
-                    onChange={handleChange}
-                    name="birthday"
-                    type="date"
-                /> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
                     <MobileDatePicker 
                         sx={styles.otherInfoContainer.datePicker}
                         // defaultValue={dayjs(new Date())}
                         value={date}
                         disabled={edit ? false : true}
+                        {...register("birthday", {
+                            required: "Este campo es obligatorio",
+                        })}
                         onChange={(newValue) => setDate(newValue)}
                         name="birthday"
                         // loading
@@ -116,10 +128,14 @@ const UserInfo = () => {
                 <Input
                     sx={styles.otherInfoContainer.inputInfo}  
                     placeholder="Telefono"
-                    value={userInfo.phone}
+                    value={userCellphone}
                     disabled={edit ? false : true}
                     endAdornment
-                    onChange={handleChange}
+                    {...register("cellphone", {
+                        required: "Este campo es obligatorio",
+                    })}
+                    onChange={(event) => setUsercellphone(event?.target.value)}
+                    // onChange={(event) => setUserFirstName(event.target.value)}
                     name="cellphone"
                     type="number"
                 />

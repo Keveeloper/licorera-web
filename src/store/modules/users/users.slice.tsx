@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { PersonalInfoState, ResponsePersonalInfo } from "./types";
-import { getMe, userLogin } from "./actions/users.actions";
+import { getMe, userLogin, updateUserInfo } from "./actions/users.actions";
 import * as reducers from "./reducers/users.reducers";
 
 export const PERSONAL_INFO_FEATURE_KEY = "user";
@@ -11,6 +11,7 @@ export const initialState: PersonalInfoState = {
   error: null,
   isWelcome: false,
   data: {
+    id: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -52,7 +53,10 @@ export const personalInfoSlice = createSlice({
       .addCase(userLogin.rejected, reducers.userLoginInfoRejected)
       .addCase(getMe.pending, reducers.getMePending)
       .addCase(getMe.fulfilled, reducers.getMeFulfilled)
-      .addCase(getMe.rejected, reducers.getMeRejected);
+      .addCase(getMe.rejected, reducers.getMeRejected)
+      .addCase(updateUserInfo.pending, reducers.updateuserInfoPending)
+      .addCase(updateUserInfo.fulfilled, reducers.updateUserInfoFulfilled)
+      .addCase(updateUserInfo.rejected, reducers.updateUserInfoRejected)
   },
 });
 
