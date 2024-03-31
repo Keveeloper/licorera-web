@@ -105,5 +105,8 @@ const styleDefault = {
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
+    '&:hover': {
+      cursor: 'pointer'
+    }
   }
 };

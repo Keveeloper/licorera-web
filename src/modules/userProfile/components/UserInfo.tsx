@@ -16,6 +16,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import 'dayjs/locale/es';
 import { putUserRequest } from "../../../service/modules/users/types";
 import { getMe, updateUserInfo } from "../../../store/modules/users/actions/users.actions";
+import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 
 const UserInfo = () => {
 
@@ -38,6 +39,7 @@ const UserInfo = () => {
     const [ userCellphone, setUsercellphone ] = useState<string>(user?.cellphone);
 
     const [ edit, setEdit ] = useState<boolean>(false);    
+    const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const styles = stylesMethod(edit);
 
@@ -59,11 +61,16 @@ const UserInfo = () => {
             } 
             const updateResponse = await dispatch(updateUserInfo(parameterComplete)).unwrap();
             if (updateResponse.success) {
+                setShowAlert(true);
                 dispatch(getMe(updateResponse.response.api_token)).unwrap();
             }
             
         }
     }
+
+    const handleAlertClose = () => {
+        setShowAlert(false);
+    };
 
     return (
         <>
@@ -149,6 +156,16 @@ const UserInfo = () => {
             >
                 {edit ? 'Guardar' : 'Editar'}
             </Button>
+            <ModalAlertComponent
+               handleClose={handleAlertClose}
+               handleSave={handleAlertClose}
+               open={showAlert}
+               isCancellButton={false}
+               data={{
+                 title:`¡felicitaciones!`,
+                 content:`Tu información ha sido actualizada exitosamente.`,
+                 img:`/icons/checkIcon.png`
+            }}/>
         </>
     );
 
