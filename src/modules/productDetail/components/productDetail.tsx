@@ -17,13 +17,14 @@ import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import { useEffect, useState } from "react";
 import { selectAllUser } from "../../../store/modules/users/selectors/users.selector";
 import { CurrencyFormat } from "../../../utils/helpers";
+import SuccessAlert from "../../shared/modal/lottie.Alert";
 
 const ProductDetail = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showError, setShowError] = useState<boolean>(false);
   const [categoryName, setCategoryName] = useState<string>("");
   const [quantity , setQuantity] = useState<number>(1);
-
+  const [isSuccess, setIsSuccess] =  useState<boolean>(false);
 
   const product = useSelector(selectProductDetails);
   const user = useSelector(selectAllUser);
@@ -51,6 +52,12 @@ const ProductDetail = () => {
     };
     if (product) {
       addToCart(newProduct);
+    }
+    if(!product?.isExchange){
+      
+      setIsSuccess(false)
+      setIsSuccess(true)
+      console.log(isSuccess)
     }
     setShowAlert(false);
   };
@@ -179,6 +186,8 @@ const ProductDetail = () => {
           img: "icons/alert.png",
         }}
       />
+
+      {isSuccess &&  <SuccessAlert setOpen={setIsSuccess}/>}
     </Grid>
   );
 };
