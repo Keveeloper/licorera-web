@@ -27,6 +27,10 @@ import {
 } from "../../../store/modules/store/selectors/store.selector";
 import { useSelector } from "react-redux";
 import { hudsonNYFontStyle, weblysleekFontStyle } from "../../shared/recursiveStyles/RecursiveStyles";
+import { storeActions } from "../../../store/modules/store/store.slice";
+import { useNavigate } from "react-router";
+import { Product } from "../types";
+import { productExchange } from "../../exchangeProducts/types";
 
 const ContainerStore = () => {
   const [search, setSearch] = React.useState<string>("Menor Precio");
@@ -36,6 +40,7 @@ const ContainerStore = () => {
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(1);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const loadingStatus = useSelector(selectCategoriesLoading);
   const categoriesDataredux = useSelector(selectArrayCategories);
 
@@ -76,6 +81,37 @@ const ContainerStore = () => {
       setCategorySelected(categoryfilter[0]);
     }
   };
+
+  const handleProduct = (product:Product) => {
+    const mappedProduct: productExchange = {
+      id: product.id,
+      quantity: product.store.quantity,
+      points: product.store.points || 0,
+      price: product.store.price,
+      status: product.store.status,
+      start_date: product.store.start_date || "",
+      end_date: product?.store?.end_date || "",
+      isExchange: false,
+      product_id: product.store.id,
+      features: product.store.features_string,
+      product: {
+        id: product.store.id,
+        name: product.name,
+        serial: product.serial,
+        lot: product.lot,
+        image: product.image,
+        quantity: product.store.quantity,
+        points: product.store.points || undefined,
+        description: product.description,
+        category_id: product.category_id,
+        created_at: product.created_at,
+        updated_at: product.updated_at,
+        deleted_at: product.deleted_at
+      }
+    }
+      dispatch(storeActions.setProductDetail(mappedProduct))
+      navigate("/product-detail")
+  }
 
   React.useEffect(() => {
     async function getCategories() {
@@ -213,18 +249,18 @@ const ContainerStore = () => {
         <Grid container spacing={2}>
           {products.map((item: any) => {
             return (
-              <Grid item xs={2.4} style={{ textAlign: "center" }}>
+              <Grid item xs={2.4} style={{ textAlign: "center" }} onClick={() => handleProduct(item)}>
                 <CardComponent
-                  style={{ padding: "20px", borderRadius: "10px" }}
+                  style={{ padding: "20px", borderRadius: "10px", cursor:"pointer" }}
                 >
                   {item.store.discount > 0 && (
                     <div className="promotion">
                       <p>{item.store.discount}</p>
                       <p>%off</p>
-                      <img src="icons/discount.png" alt="" />
+                      <img src="icons/discount.png" alt=""/>
                     </div>
                   )}
-                  <img src={item.image} alt="" width={200} height={200} />
+                  <img src={item.image} alt="" width={200} height={200}  style={{maxWidth: "100%"}}/>
                   <Typography style={storeStyles.card.title}>
                     {item.name}
                   </Typography>

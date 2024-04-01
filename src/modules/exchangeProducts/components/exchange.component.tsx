@@ -45,7 +45,8 @@ const ExchangeComponent = () => {
 
     const cardHandle = (product:productExchange) => {
         if(Object.keys(user).length > 0){
-            dispatch(storeActions.setProductDetail(product))
+            const updatedProduct = { ...product, isExchange: true };
+            dispatch(storeActions.setProductDetail(updatedProduct))
             navigate("/product-detail")
         }else{
             setOpenModal(true)
