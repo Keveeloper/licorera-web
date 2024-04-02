@@ -5,6 +5,8 @@ export interface Product {
     lot?: string | null;
     image: string;
     quantity:number;
+    points?:number;
+    price?:number;
     description: string;
     category_id: number;
     created_at?: string;
@@ -16,9 +18,12 @@ export interface productExchange {
     id: number;
     quantity: number;
     points: number;
+    price?: number;
     status: boolean;
     start_date: string;
     end_date: string;
     product_id: number;
+    isExchange:boolean;
+    features?: string [];
     product: Product;
 }
