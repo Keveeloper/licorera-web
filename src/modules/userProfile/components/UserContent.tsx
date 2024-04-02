@@ -7,6 +7,7 @@ import TabComponent from "../../shared/tabComponent/TabComponent";
 // Material UI component
 import { Box } from "@mui/material";
 import UserInfo from "./UserInfo";
+import UserPaymentMethods from "./UserPaymentMethods";
 
 const UserContent = () => {
 
@@ -33,6 +34,9 @@ const UserContent = () => {
             >
                 <TabPanel sx={{padding: 0}} value="1">
                     <UserInfo />
+                </TabPanel>
+                <TabPanel sx={{padding: 0}} value="2">
+                    <UserPaymentMethods/>
                 </TabPanel>
             </TabComponent>
         </Box>
