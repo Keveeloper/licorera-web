@@ -141,7 +141,7 @@ const ContainerStore = () => {
         container
         spacing={2}
         style={{
-          padding: "30px 5%",
+          // padding: "30px 5%",
         }}
       >
         {/* CATEGORY SECTION */}
@@ -181,8 +181,8 @@ const ContainerStore = () => {
                     {loadingStatus === "loading" ? (
                       <Skeleton
                         sx={{
-                          width: "150px",
-                          height: "150px",
+                          width: "100px",
+                          height: "100px",
                           margin: "auto 0 auto 0",
                           borderRadius: "50%",
                         }}

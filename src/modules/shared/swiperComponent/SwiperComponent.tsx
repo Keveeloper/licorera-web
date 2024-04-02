@@ -105,7 +105,7 @@ const styles = {
                     border: '1px solid black', 
                     borderBottomLeftRadius: '20px', 
                     borderBottomRightRadius: '20px', 
-                    backgroundColor: 'white',
+                    background: 'white',
                     header: {
                         marginBottom: '10px',
                         ...displaySpaceBetween,

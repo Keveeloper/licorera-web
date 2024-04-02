@@ -70,6 +70,7 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
                     {products.map((item: any) => {
                     return (
                         <CardComponent
+                        key={item.id}
                         style={{ padding: "10px", marginBottom: '10px',borderRadius: "10px",  cursor: 'pointer' }}
                         >
                         <Grid

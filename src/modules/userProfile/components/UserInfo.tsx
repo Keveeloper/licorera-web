@@ -208,10 +208,10 @@ const stylesMethod = (edit: boolean) => ({
         margin: '50px 0 0 0', 
         padding: 2,
         fontFamily: 'HudsonNYSerif',
-        backgroundColor: `${edit ? paletteColors.gold : 'none'}`,
+        background: `${edit ? paletteColors.gold : 'none'}`,
         color: `${edit ? paletteColors.white : paletteColors.black}`,
         '&:hover': {
-            backgroundColor: `${edit ? paletteColors.gold : 'transparent'}`,
+            background: `${edit ? paletteColors.gold : 'transparent'}`,
         },
     }
 });

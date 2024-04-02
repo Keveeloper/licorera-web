@@ -66,7 +66,7 @@ const Icons = () => {
                     <MenuButton
                         sx={styles.iconsContainer.menuButton}
                         slots={{ root: IconButton }}
-                        slotProps={{ root: { variant: 'outlined', color: 'neutral', backgroundColor: 'none' } }}
+                        slotProps={{ root: { variant: 'outlined', color: 'neutral', background: 'none' } }}
                     >
                         <img style={styles.iconsContainer.menuButton.img} src="/icons/account-icon.png" alt="" />
                     </MenuButton>
@@ -141,7 +141,7 @@ const styles = {
             width: '17%',
             "& .MuiBadge-badge": {
                 color: paletteColors.white,
-                backgroundColor: paletteColors.gold
+                background: paletteColors.gold
             }
         }
     }
