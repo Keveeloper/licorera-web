@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { PersonalInfoState, ResponsePersonalInfo } from "./types";
-import { getMe, userLogin, updateUserInfo } from "./actions/users.actions";
+import { getMe, userLogin, updateUserInfo, refreshToken } from "./actions/users.actions";
 import * as reducers from "./reducers/users.reducers";
 
 export const PERSONAL_INFO_FEATURE_KEY = "user";
@@ -51,6 +51,9 @@ export const personalInfoSlice = createSlice({
       .addCase(userLogin.pending, reducers.userLoginInfoPending)
       .addCase(userLogin.fulfilled, reducers.userLoginInfoFulfilled)
       .addCase(userLogin.rejected, reducers.userLoginInfoRejected)
+      .addCase(refreshToken.pending, reducers.userLoginInfoPending)
+      .addCase(refreshToken.fulfilled, reducers.userLoginInfoFulfilled)
+      .addCase(refreshToken.rejected, reducers.userLoginInfoPending)
       .addCase(getMe.pending, reducers.getMePending)
       .addCase(getMe.fulfilled, reducers.getMeFulfilled)
       .addCase(getMe.rejected, reducers.getMeRejected)

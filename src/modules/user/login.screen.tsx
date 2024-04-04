@@ -34,14 +34,20 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen })
       email,
       password,
     };
-    const postLogin = await dispatch(userLogin(loginRequest)).unwrap();
-    if (postLogin.success) {
-      dispatch(getMe(postLogin.response.token)).unwrap();
-      modalOpen = false;
-      handleClose();
-    } else {
+    try{
+      const postLogin = await dispatch(userLogin(loginRequest)).unwrap();
+      if (postLogin.success) {
+        dispatch(getMe(postLogin?.response?.token)).unwrap();
+        modalOpen = false;
+        handleClose();
+      } else {
+        setShowAlert(true);
+      }
+    } catch (error){
+      console.log(error);
       setShowAlert(true);
     }
+    
   };
 
   const handleAlertClose = (isOpen: boolean) => {

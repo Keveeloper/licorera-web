@@ -18,7 +18,7 @@ const SwiperNewProducts = (props: swiperType) => {
     const newProductsDataredux = useSelector(selectAllNewProducts);
       
     const formattedNumbers = useMemo(
-        () => newProductsDataredux.map((item: Promotion) => NumberFormat(item.price)),
+        () => newProductsDataredux?.map((item: Promotion) => NumberFormat(item.price)),
         [newProductsDataredux]
     );
 

@@ -167,7 +167,7 @@ const ContainerStore = () => {
               spaceBetween={2}
               slidesPerView={7}
             >
-              {categoriesDataredux.map((item: any, index: any) => {
+              {categoriesDataredux?.map((item: any, index: any) => {
                 return (
                   <SwiperSlide
                     key={index}
@@ -232,8 +232,8 @@ const ContainerStore = () => {
               onChange={handleChange}
               name="search"
             >
-              {searchOptions.map((item) => {
-                return <MenuItem value={item}>{item}</MenuItem>;
+              {searchOptions.map((item, index) => {
+                return <MenuItem value={item} key={index}>{item}</MenuItem>;
               })}
             </Select>
           </FormControl>

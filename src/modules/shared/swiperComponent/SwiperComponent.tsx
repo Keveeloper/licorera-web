@@ -23,12 +23,12 @@ const SwiperComponent = (props: swiperType) => {
     const selector: any = bannerType === 'Promotions' ? promotionsDataredux : campaingDataredux;
 
     const formattedDates = useMemo(
-        () => promotionsDataredux.map((item: Promotion) => StringDateFormat(item.end_date)),
+        () => promotionsDataredux?.map((item: Promotion) => StringDateFormat(item.end_date)),
         [promotionsDataredux]
     );
       
     const formattedNumbers = useMemo(
-        () => promotionsDataredux.map((item: Promotion) => NumberFormat(item.price)),
+        () => promotionsDataredux?.map((item: Promotion) => NumberFormat(item.price)),
         [promotionsDataredux]
     );
     return(
@@ -47,7 +47,7 @@ const SwiperComponent = (props: swiperType) => {
             // onSwiper={(swiper: any) => console.log(swiper)}
         >
             {/* {promotionsDataredux.map((item: Promotion, index) => { */}
-            {selector.map((item: any, index: any) => {
+            {selector?.length > 0 && selector.map((item: any, index: any) => {
                 return(
                     <SwiperSlide key={index} style={styles.swiper.swiperSlide}>
                             {loadingStatus === 'loading' ? 

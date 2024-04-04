@@ -19,6 +19,17 @@ export const selectAllUser = createSelector(
   (personalInfo) => personalInfo.user
 );
 
+export const selectToken = createSelector(
+  getPersonalInfoState,
+  (personalInfo) => personalInfo.data?.token
+);
+
+export const selectRefreshToken= createSelector(
+  getPersonalInfoState,
+  (personalInfo) => personalInfo.data?.refresh_token
+);
+
+
 export const selectIsWelcome = createSelector(
   getPersonalInfoState,
   (personalInfo) => personalInfo.isWelcome
