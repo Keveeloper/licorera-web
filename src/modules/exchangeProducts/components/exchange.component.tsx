@@ -45,7 +45,8 @@ const ExchangeComponent = () => {
 
     const cardHandle = (product:productExchange) => {
         if(Object.keys(user).length > 0){
-            dispatch(storeActions.setProductDetail(product))
+            const updatedProduct = { ...product, isExchange: true };
+            dispatch(storeActions.setProductDetail(updatedProduct))
             navigate("/product-detail")
         }else{
             setOpenModal(true)
@@ -67,7 +68,7 @@ const ExchangeComponent = () => {
             container
             spacing={2}
             style={{
-            padding: "30px 5%",
+            // padding: "30px 5%",
             }}
         >
             {/* BANNER SECTION */}
@@ -88,28 +89,28 @@ const ExchangeComponent = () => {
             {/* PRODUCTS SECTION */}
             {products.map((item: any) => {
                 return (
-                    <Grid item xs={6}>
+                    <Grid item xs={6} key={item.id}>
                         <CardComponent
-                        style={{ padding: "20px", borderRadius: "10px",  cursor: 'pointer' }}
+                        style={{ padding: "25px 0px", borderRadius: "10px",  cursor: 'pointer', height:"200px"}}
                         >
                         <Grid
                                 className="columnContainer"
                                 container
                                 spacing={0}
                                 style={{
-                                padding: "10px 20px",
+                                height:"100%"
                                 }}
                                 onClick={() =>cardHandle(item)}
                             >
-                                <Grid item xs={3}>
-                                    <img src={item.product.image} alt="" width={100} height={100} />
+                                <Grid item xs={3} style={{...displayFlex, height: '100%'}}>
+                                    <img src={item.product.image} alt=""  height={160} />
                                 </Grid> 
-                                <Grid item xs={6}>
+                                <Grid item xs={7} style={{display:"flex", flexDirection:"column", justifyContent:"space-between"}}>
                                     <Typography style={style.cards.title}>{item.product.name}</Typography>
                                     <Typography style={style.cards.subtitle}>{item.product.description.slice(0, 50)}</Typography>
                                     <Typography style={style.cards.quantity} >Disponibles: {item.quantity}</Typography>
                                 </Grid> 
-                                <Grid item xs={3}>
+                                <Grid item xs={2} style={{display: 'flex',justifyContent: 'flex-end'}}>
                                     <Typography style={style.cards.jotas}>{item.points} J</Typography>
                                 </Grid> 
                             </Grid>   
@@ -162,7 +163,8 @@ const style: React.CSSProperties | any = {
         },
         subtitle:{
             ...weblysleekFontStyle,
-            fontWeight:"300"
+            fontWeight:"300",
+            marginBottom:"30px"
         },
         quantity:{
             ...weblysleekFontStyle,
@@ -174,7 +176,7 @@ const style: React.CSSProperties | any = {
             float: 'right',
             fontSize:"25px",
             position: 'relative',
-            bottom: '10px'
+            bottom: '20px'
         }
     }
 }

@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import SwiperComponent from "../shared/swiperComponent/SwiperComponent";
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
 import { getPromotionsThunk } from "../../store/modules/promotions/actions/promotion.actions";
@@ -27,55 +27,86 @@ import { getSponsorsThunk } from "../../store/modules/sponsors/actions/sponsors.
 import { getCampaignsThunk } from "../../store/modules/campaigns/actions/campaigns.actions";
 import { getNewProductsThunk } from "../../store/modules/newProducts/actions/newProducts.actions";
 import SwiperNewProducts from "../newProducts/SwiperNewProducts";
+import { selectNewProductsLoading } from "../../store/modules/newProducts/selectors/newProducts.selector";
 
 const HomeScreen = () => {
+
   const dispatch = useAppDispatch();
   const promotionsDataredux = useSelector(selectAllPromotion);
   
   const loadingStatus = useSelector(selectLoading);
+  const loadingNewProducts = useSelector(selectNewProductsLoading);
 
   const [value, setValue] = useState("1");
+  const [disabled, setDisabled] = useState<boolean>(false);
 
-  useEffect(() => {
-    async function getAsynPromotion() {
-      dispatch(getPromotionsThunk()).unwrap();
-    }
-    getAsynPromotion();
 
-    async function getCategories() {
-      await dispatch(Categories()).unwrap();
-    }
-    getCategories();
+  const getAsynPromotion = useCallback(async () => {
+    dispatch(getPromotionsThunk()).unwrap();
+  }, []);
 
-    async function getSponsors() {
-      await dispatch(getSponsorsThunk()).unwrap();
-    }
-    getSponsors();
+  const getCategories = useCallback( async () => {
+    await dispatch(Categories()).unwrap();
+  }, []);
+  
+  const getSponsors = useCallback(async () => {
+    await dispatch(getSponsorsThunk()).unwrap();
+  }, []);
+  
+  const getCampaigns = useCallback(async () => {
+    await dispatch(getCampaignsThunk()).unwrap();      
+  }, []);
+  
+  const getNewProducts = useCallback(async () => {
+    await dispatch(getNewProductsThunk()).unwrap();      
+  }, []);
 
-    async function getCampaigns() {
-      await dispatch(getCampaignsThunk()).unwrap();      
-    }
-    getCampaigns();
+  const handleDisabled = (tab: string) => {
+    console.log('Fuera del timeOut');
     
-    async function getNewProducts() {
-      await dispatch(getNewProductsThunk()).unwrap();      
-    }
-    getNewProducts();
-
+    
+  }
+  
+  useEffect(() => {
+    getCategories();
+    getSponsors();
   }, []);
 
   useEffect(() => {
-    const arrayImages: string[] = [];
-    if (promotionsDataredux.length > 0) {
-      promotionsDataredux?.forEach((element) => {
-        arrayImages.push(element.image);
-      });
-      // setImages(arrayImages);
+
+    switch (value) {
+      case "1":
+        getAsynPromotion();
+        break;
+      case "2":
+        getCampaigns();
+        break;
+      case "3":
+        getNewProducts();
+        break;
+      default:
+        break;
     }
-  }, [promotionsDataredux]);
+
+  }, [value]);
+
+  // useEffect(() => {
+  //   const arrayImages: string[] = [];
+  //   if (promotionsDataredux.length > 0) {
+  //     promotionsDataredux?.forEach((element) => {
+  //       arrayImages.push(element.image);
+  //     });
+  //     // setImages(arrayImages);
+  //   }
+  // }, [promotionsDataredux]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+    setTimeout(() => {
+      setDisabled(false);
+    }, 2000);
+    setDisabled(true);
+    
   };
 
   return (
@@ -87,8 +118,9 @@ const HomeScreen = () => {
         value={value}
         setValue={setValue}
         handleChange={handleChange}
+        disabled={disabled}
       >
-        <TabPanel sx={{padding: '0', height: '600px' }} value="1">
+        <TabPanel sx={{padding: '0', height: '600px' }} value="1" className="columnContainer">
           <SwiperComponent
             modules={[Navigation, Pagination]}
             slidesPerView={1}
@@ -96,7 +128,7 @@ const HomeScreen = () => {
             bannerType="Promotions"
           />
         </TabPanel>
-        <TabPanel sx={{padding: '0', height: '600px' }} value="2">
+        <TabPanel sx={{padding: '0', height: '600px' }} value="2" className="columnContainer" >
           <SwiperComponent
             modules={[Navigation, Pagination]}
             slidesPerView={1}
@@ -104,11 +136,11 @@ const HomeScreen = () => {
             bannerType="Campaigns"
           />
         </TabPanel>
-        <TabPanel sx={{padding: '0', height: '600px' }} value="3">
+        <TabPanel sx={{padding: '0', height: '600px' }} value="3" className="columnContainer" >
           <SwiperNewProducts
             modules={[Navigation, Pagination]}
             slidesPerView={1}
-            loadingStatus={loadingStatus}
+            loadingStatus={loadingNewProducts}
             bannerType="Promotions"
           />
 
@@ -127,4 +159,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default memo(HomeScreen);

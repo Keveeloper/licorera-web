@@ -1,8 +1,10 @@
 import {
   getUser,
   postUserLogin,
+  putUser,
+  refreshUserLogin,
 } from "../../../../service/modules/users/users";
-import { LoginRequest } from "../../../../service/modules/users/types";
+import { LoginRequest, putUserRequest } from "../../../../service/modules/users/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const userLogin = createAsyncThunk(
@@ -15,12 +17,32 @@ export const userLogin = createAsyncThunk(
   }
 );
 
+export const refreshToken = createAsyncThunk(
+  "refresh",
+  async (refresh_token: string, { rejectWithValue, dispatch }) => {
+    
+    const response = await refreshUserLogin(refresh_token);
+    if (!response.success) throw rejectWithValue(response);
+    return response;
+  }
+);
+
 export const getMe = createAsyncThunk(
   "getMe",
   async (token:string, { rejectWithValue }) => {
     const response = await getUser(
       token
     );
+    if (!response.success) throw rejectWithValue(response);
+
+    return response;
+  }
+);
+
+export const updateUserInfo = createAsyncThunk(
+  "update",
+  async ({reqData, userId}: {reqData: putUserRequest, userId: string}, { rejectWithValue, dispatch }) => {
+    const response = await putUser(reqData, userId);
     if (!response.success) throw rejectWithValue(response);
 
     return response;

@@ -9,7 +9,7 @@ export const handleSubModuleError = (
   return {
     success: false,
     errorMessage: getErrorMessage(error) || error.message,
-    statusCode: error.response?.status,
+    statusCode: error.request?.status,
     payload: error,
   };
 };

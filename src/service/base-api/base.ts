@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 import { BASE_URL } from '../tools/constans';
+import { useSelector } from 'react-redux';
+import { selectAllPersonalInfo, selectToken } from '../../store/modules/users/selectors/users.selector';
 
 export const base = axios.create({
   baseURL: `${BASE_URL}`,
@@ -9,6 +11,7 @@ export const base = axios.create({
     Accept: 'application/json',
   },
 });
+
 
 base.interceptors.response.use(
   function (response) {

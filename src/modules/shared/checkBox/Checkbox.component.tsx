@@ -48,7 +48,7 @@ const BpIcon = styled("span")(({ theme }) => ({
     theme.palette.mode === "dark"
       ? "0 0 0 1px rgb(16 22 26 / 40%)"
       : "inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)",
-  backgroundColor: theme.palette.mode === "dark" ? "#394b59" : "#f5f8fa",
+      background: theme.palette.mode === "dark" ? "#394b59" : "#f5f8fa",
   backgroundImage:
     theme.palette.mode === "dark"
       ? "linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))"
@@ -58,7 +58,7 @@ const BpIcon = styled("span")(({ theme }) => ({
     outlineOffset: 2,
   },
   "input:hover ~ &": {
-    backgroundColor: theme.palette.mode === "dark" ? "#30404d" : "#ebf1f5",
+    background: theme.palette.mode === "dark" ? "#30404d" : "#ebf1f5",
   },
   "input:disabled ~ &": {
     boxShadow: "none",
@@ -70,7 +70,7 @@ const BpIcon = styled("span")(({ theme }) => ({
 }));
 
 const BpCheckedIcon = styled(BpIcon)({
-  backgroundColor:  "#fff",
+  background:  "#fff",
   backgroundImage:
     "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
   "&::before": {
@@ -84,6 +84,6 @@ const BpCheckedIcon = styled(BpIcon)({
     content: '""',
   },
   "input:hover ~ &": {
-    backgroundColor: "#fff",
+    background: "#fff",
   },
 });

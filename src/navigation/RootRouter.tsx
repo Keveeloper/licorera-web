@@ -9,10 +9,16 @@ const PromotionDetailScreen = React.lazy(
   () => import("../modules/promotionDetail/PromotionDetailScreen")
 );
 
-const StoreScreen = React.lazy(() => import("../modules/store/store.screen"));
+const StoreScreen = React.lazy(
+  () => import("../modules/store/store.screen")
+);
 
 const ExchangeScreen = React.lazy(
   () => import("../modules/exchangeProducts/exchange.screen")
+);
+
+const UserProfileScreen = React.lazy(
+  () => import("../modules/userProfile/UserProfileScreen")
 );
 
 const RootRouter = () => {
@@ -64,6 +70,15 @@ const RootRouter = () => {
         element={
           <React.Suspense fallback={<LoaderScreen />}>
             <ProductDetailScreen />
+          </React.Suspense>
+        }
+      />
+
+      <Route
+        path="/user-profile"
+        element={
+          <React.Suspense fallback={<LoaderScreen />}>
+            <UserProfileScreen />
           </React.Suspense>
         }
       />

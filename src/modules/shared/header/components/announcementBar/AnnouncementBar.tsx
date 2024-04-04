@@ -22,7 +22,7 @@ const styles = {
         width: '100%',
         height: '40px',
         ...displayFlex,
-        backgroundColor: paletteColors.gold,
+        background: paletteColors.gold,
         'p': {
             fontSize: '14px',
             fontWeight: 600,

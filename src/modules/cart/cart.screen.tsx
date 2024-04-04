@@ -70,6 +70,7 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
                     {products.map((item: any) => {
                     return (
                         <CardComponent
+                        key={item.id}
                         style={{ padding: "10px", marginBottom: '10px',borderRadius: "10px",  cursor: 'pointer' }}
                         >
                         <Grid
@@ -87,7 +88,7 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
                                 </Grid>
                                 <Grid item  xs={3} sx={{ mt: 0, mb:0}}>
                                     <img style={style.cards.close} src="/icons/vector_close.png" onClick={() => removeProduct(item.id)} />
-                                    <Typography style={style.cards.price} sx={{mt:5,  mb:-1}} >{item.points ? JotaFormat(item.points) : CurrencyFormat(item.price)}</Typography>
+                                    <Typography style={style.cards.price} sx={{mt:5,  mb:-1, pb:2}} >{item.points ? JotaFormat(item.points) : CurrencyFormat(item.price)}</Typography>
                                     <div  className="iconContainer" onClick={() => onMinus(item)} style={item.quantity === 1 ?  minusDisabled : {width:"20px", height:"20px"} }>
                                         <span className="icon" id="icono-menos" style={{fontSize: '30px', margin: '-7px 0 0 -12px'}}>-</span>
                                     </div>

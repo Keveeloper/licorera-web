@@ -18,7 +18,7 @@ const SwiperNewProducts = (props: swiperType) => {
     const newProductsDataredux = useSelector(selectAllNewProducts);
       
     const formattedNumbers = useMemo(
-        () => newProductsDataredux.map((item: Promotion) => NumberFormat(item.price)),
+        () => newProductsDataredux?.map((item: Promotion) => NumberFormat(item.price)),
         [newProductsDataredux]
     );
 
@@ -64,8 +64,8 @@ const SwiperNewProducts = (props: swiperType) => {
 
 const styles = {
     swiper: {
+        width: '100%',
         height: '100%',
-        maxWidth: '1450px',
         swiperSlide: {
             ...displayFlex,
             cursor: 'pointer',
@@ -91,7 +91,7 @@ const styles = {
                     border: '1px solid black', 
                     borderBottomLeftRadius: '20px', 
                     borderBottomRightRadius: '20px', 
-                    backgroundColor: 'white',
+                    background: 'white',
                     header: {
                         marginBottom: '10px',
                         ...displaySpaceBetween,

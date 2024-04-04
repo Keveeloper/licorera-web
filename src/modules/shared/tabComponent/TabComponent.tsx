@@ -6,15 +6,15 @@ import { tabType } from './types/types';
 
 const TabComponent: React.FC<tabType> = (props) => {
 
-    const { tabsArray, children, handleChange, value} = props;
+    const { tabsArray, children, handleChange, value, disabled} = props;
 
 
     return(
-        <TabContext value={value}>
-            <TabList sx={styles.tabList} onChange={handleChange} aria-label="lab API tabs example" centered>
+        <TabContext value={value} >
+            <TabList sx={styles.tabList} onChange={handleChange} aria-label="lab API tabs example" centered >
                 {tabsArray.map((item, index) => {
                     return(
-                        <Tab key={index + 1} sx={styles.tabList.tab} label={`${item}`} value={`${index + 1}`} />
+                        <Tab key={index + 1} sx={styles.tabList.tab} label={`${item}`} value={`${index + 1}`} disabled={disabled}/>
                     );
                 })}
             </TabList>

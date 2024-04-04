@@ -12,9 +12,12 @@ export interface PersonalInfoState {
 }
 
 export interface ResponsePersonalInfo {
+    id?: string,
     firstName?: string;
     lastName?: string;
     phone?: string;
-    email?: string;
+    email?: string
+    birthday?: string;
     token?:string;
+    refresh_token?:string;
 }

@@ -19,17 +19,16 @@ const SwiperComponent = (props: swiperType) => {
     const { modules, slidesPerView, loadingStatus, bannerType } = props;
     const promotionsDataredux = useSelector(selectAllPromotion);
     const campaingDataredux = useSelector(selectAllCampaigns);
-    console.log('Angela: ', campaingDataredux);
     
     const selector: any = bannerType === 'Promotions' ? promotionsDataredux : campaingDataredux;
 
     const formattedDates = useMemo(
-        () => promotionsDataredux.map((item: Promotion) => StringDateFormat(item.end_date)),
+        () => promotionsDataredux?.map((item: Promotion) => StringDateFormat(item.end_date)),
         [promotionsDataredux]
     );
       
     const formattedNumbers = useMemo(
-        () => promotionsDataredux.map((item: Promotion) => NumberFormat(item.price)),
+        () => promotionsDataredux?.map((item: Promotion) => NumberFormat(item.price)),
         [promotionsDataredux]
     );
     return(
@@ -48,7 +47,7 @@ const SwiperComponent = (props: swiperType) => {
             // onSwiper={(swiper: any) => console.log(swiper)}
         >
             {/* {promotionsDataredux.map((item: Promotion, index) => { */}
-            {selector.map((item: any, index: any) => {
+            {selector?.length > 0 && selector.map((item: any, index: any) => {
                 return(
                     <SwiperSlide key={index} style={styles.swiper.swiperSlide}>
                             {loadingStatus === 'loading' ? 
@@ -79,8 +78,8 @@ const SwiperComponent = (props: swiperType) => {
 
 const styles = {
     swiper: {
+        with: '100%',
         height: '100%',
-        maxWidth: '1450px',
         swiperSlide: {
             ...displayFlex,
             cursor: 'pointer',
@@ -106,7 +105,7 @@ const styles = {
                     border: '1px solid black', 
                     borderBottomLeftRadius: '20px', 
                     borderBottomRightRadius: '20px', 
-                    backgroundColor: 'white',
+                    background: 'white',
                     header: {
                         marginBottom: '10px',
                         ...displaySpaceBetween,

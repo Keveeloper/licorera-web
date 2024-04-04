@@ -86,7 +86,7 @@ const SuggestedProducts = () => {
         <Grid container spacing={2} sx={{mt:2, mb:2}}>
           {products.map((item: any) => {
             return (
-              <Grid item xs={2.4} style={{ textAlign: "center" }}>
+              <Grid key={item.id} item xs={2.4} style={{ textAlign: "center" }}>
                 <CardComponent
                   style={{ padding: "20px", borderRadius: "10px" }}
                 >

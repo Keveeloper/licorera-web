@@ -8,7 +8,7 @@ const Menu = () => {
 
     const location = useLocation();
     const { pathname } = location;
-    const menuSelected = pathname === '/' ? 'Inicio' : pathname === '/store' ? 'Tienda' : 'Canjes';
+    const menuSelected = pathname === '/' ? 'Inicio' : pathname === '/store' ? 'Tienda' : pathname === '/exchange-products' ? 'Canjes' : '';
 
     const [clicked, setClicked] = useState<string>(menuSelected);
 
