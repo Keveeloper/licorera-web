@@ -4,7 +4,6 @@ import { PersonalInfoState } from '../types';
 
 export const userLoginInfoPending = (state: PersonalInfoState) => {
   state.loadingStatus = 'loading';
-  state.data.token = '';
   state.error = undefined;
 };
 
@@ -23,6 +22,7 @@ export const userLoginInfoRejected = (
   state.loadingStatus = 'error';
   state.error = action.payload || action.error;
 };
+
 
 // GET ME 
 export const getMePending = (state: PersonalInfoState) => {
@@ -50,7 +50,6 @@ export const getMeRejected = (
 // UPDATE USER INFO
 export const updateuserInfoPending = (state: PersonalInfoState) => {
   state.loadingStatus = 'loading';
-  state.data.token = '';
   state.error = undefined;
 };
 

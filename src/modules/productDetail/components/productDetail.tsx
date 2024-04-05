@@ -109,9 +109,9 @@ const ProductDetail = () => {
 
         {/* FEATURE SECTIONS */}
         <div style={style.containerFeatures}>
-        {product?.features?.map((item: any) => {
+        {product?.features?.map((item: any, index) => {
             return (
-                <Typography style={style.features}>{item}</Typography>
+                <Typography style={style.features} key={index}>{item}</Typography>
             );
           })}
         </div>

@@ -89,7 +89,7 @@ const ExchangeComponent = () => {
             {/* PRODUCTS SECTION */}
             {products.map((item: any) => {
                 return (
-                    <Grid item xs={6}>
+                    <Grid item xs={6} key={item.id}>
                         <CardComponent
                         style={{ padding: "25px 0px", borderRadius: "10px",  cursor: 'pointer', height:"200px"}}
                         >

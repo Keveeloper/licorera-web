@@ -141,7 +141,7 @@ const ContainerStore = () => {
         container
         spacing={2}
         style={{
-          padding: "30px 5%",
+          // padding: "30px 5%",
         }}
       >
         {/* CATEGORY SECTION */}
@@ -167,7 +167,7 @@ const ContainerStore = () => {
               spaceBetween={2}
               slidesPerView={7}
             >
-              {categoriesDataredux.map((item: any, index: any) => {
+              {categoriesDataredux?.map((item: any, index: any) => {
                 return (
                   <SwiperSlide
                     key={index}
@@ -181,8 +181,8 @@ const ContainerStore = () => {
                     {loadingStatus === "loading" ? (
                       <Skeleton
                         sx={{
-                          width: "150px",
-                          height: "150px",
+                          width: "100px",
+                          height: "100px",
                           margin: "auto 0 auto 0",
                           borderRadius: "50%",
                         }}
@@ -232,8 +232,8 @@ const ContainerStore = () => {
               onChange={handleChange}
               name="search"
             >
-              {searchOptions.map((item) => {
-                return <MenuItem value={item}>{item}</MenuItem>;
+              {searchOptions.map((item, index) => {
+                return <MenuItem value={item} key={index}>{item}</MenuItem>;
               })}
             </Select>
           </FormControl>

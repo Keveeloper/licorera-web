@@ -19,4 +19,5 @@ export interface ResponsePersonalInfo {
     email?: string
     birthday?: string;
     token?:string;
+    refresh_token?:string;
 }

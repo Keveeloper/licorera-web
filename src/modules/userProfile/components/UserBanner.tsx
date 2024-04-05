@@ -49,7 +49,7 @@ const styles = {
                 height: '100%',
                 ...displayFlex,
                 userImage: {
-                    backgroundColor: 'white',
+                    background: 'white',
                     borderRadius: '50%',
                 }
             },
@@ -89,7 +89,7 @@ const styles = {
                 border: '3px solid black',
                 borderRadius: '50%',
                 ...displayFlexColumn,
-                backgroundColor: 'white',
+                background: 'white',
                 text: {
                     fontFamily: 'weblysleekuisb'
                 }
