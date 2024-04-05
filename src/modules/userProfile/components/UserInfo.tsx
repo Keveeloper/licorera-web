@@ -82,7 +82,7 @@ const UserInfo = () => {
                     // value={userInfo.firstName}
                     value={userFirstName}
                     disabled={edit ? false : true}
-                    endAdornment
+                    // endAdornment
                     {...register("name", {
                         required: "Este campo es obligatorio",
                     })}
@@ -96,7 +96,7 @@ const UserInfo = () => {
                     // value={user?.last_name}
                     value={userLastName}
                     disabled={edit ? false : true}
-                    endAdornment
+                    // endAdornment
                     {...register("lastName", {
                         required: "Este campo es obligatorio",
                     })}
@@ -111,7 +111,7 @@ const UserInfo = () => {
                     // value={user?.email}
                     value={userEmail}
                     disabled={edit ? false : true}
-                    endAdornment
+                    // endAdornment
                     {...register("email", {
                         required: "Este campo es obligatorio",
                     })}
@@ -137,7 +137,7 @@ const UserInfo = () => {
                     placeholder="Telefono"
                     value={userCellphone}
                     disabled={edit ? false : true}
-                    endAdornment
+                    // endAdornment
                     {...register("cellphone", {
                         required: "Este campo es obligatorio",
                     })}
