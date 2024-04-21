@@ -48,6 +48,8 @@ const styles = {
     contentContainer: {
         margin: '90px auto',
         width: '60%',
+        height: '500px',
+        // background: 'blue'
     }
 }
 
