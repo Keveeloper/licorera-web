@@ -5,6 +5,8 @@ import { displayFlex } from "../../../../../recursiveStyles/RecursiveStyles";
 import { paletteColors } from "../../../../../../../paletteColors/paletteColors";
 import { displaySpaceBetweenColumn } from "../../../../../recursiveStyles/RecursiveStyles";
 import { displaySpaceBetween } from "../../../../../recursiveStyles/RecursiveStyles";
+import NumberFormat from "../../../../../hooks/numberFormater/NumberFormat";
+import { useMemo } from "react";
 
 const SearchedResult = () => {
 
@@ -16,7 +18,7 @@ const SearchedResult = () => {
         <Box>
             {
                 searchedDataredux && (
-                    searchedDataredux.map((item: any) => (
+                    searchedDataredux.map((item: any, index: any) => (
                         <Box sx={styles.searchCard}>
                             <Box sx={styles.searchCard.imageSide}>
                                 <figure>
@@ -24,11 +26,11 @@ const SearchedResult = () => {
                                 </figure>
                             </Box>
                             <Box sx={styles.searchCard.infoSide}>
-                                <Typography fontSize={14}>{item.product.name}</Typography>
+                                <Typography sx={styles.searchCard.infoSide.title}>{item.product.name}</Typography>
                                 <Typography style={{marginBottom: 'auto'}} fontSize={14}>{item.product.description.slice(0,70)}{'...'}</Typography>
                                 <Box sx={styles.searchCard.infoSide.footer}>
                                     <Typography fontSize={14}>{`presentación: ` + item.presentation}</Typography>
-                                    <Typography fontSize={14}>{item.price}</Typography>
+                                    <Typography sx={styles.searchCard.infoSide.footer.price}>$ {NumberFormat(item.price)}</Typography>
                                 </Box>
                             </Box>
                         </Box>
@@ -45,17 +47,18 @@ const styles = {
     searchCard: {
         margin: '10px auto 0 auto',
         width: '95%',
-        height: '113px',
+        height: '137px',
         ...displayFlex,
         border: `1px solid ${paletteColors.gray}`,
         borderRadius: 4,
         // background: 'blue',
         overflow: 'hidden',
         imageSide: {
-            width: '30%',
+            width: '20%',
             height: '100%',
             // background: 'green',
             'figure': {
+                padding: '10px',
                 width: '100%',
                 height: '100%',
                 'img': {
@@ -64,13 +67,21 @@ const styles = {
             }
         },
         infoSide: {
-            padding: '10px',
-            width: '70%',
+            padding: '10px 20px 10px 10px',
+            width: '80%',
             height: '100%',
             ...displaySpaceBetweenColumn,
             // background: 'red',
+            title: {
+                fontSize: '16px',
+                fontFamily: 'weblysleekuisb',
+            },
             footer: {
                 ...displaySpaceBetween,
+                price: {
+                    fontSize: '16px',
+                    fontFamily: 'HudsonNYSerif',
+                }
             }
         }
     }

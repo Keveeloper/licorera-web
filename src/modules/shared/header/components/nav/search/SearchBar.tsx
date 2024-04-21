@@ -11,10 +11,12 @@ import { searchContext } from "../../../../../../context/searchContext";
 import SearchedResult from "./searchedResult/SearchedResult";
 import { useAppDispatch } from "../../../../../../store/store";
 import { getSearchedThunk } from "../../../../../../store/modules/search/actions/search.actions";
+import { useDispatch } from "react-redux";
+import { searchedActions } from "../../../../../../store/modules/search";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
-    width: '70%',
+    width: '80%',
     borderRadius: '10px',
     border: '1px solid #9E9E9E'
 }));
@@ -41,12 +43,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const SearchBar = () => {
 
     const dispatch = useAppDispatch();
+    const dispatchClear = useDispatch();
     const { searching, setSearching } = useContext(searchContext);
     const [ searchedText, setSearchedText ] = useState<string>('');
 
     const handleBlur = () => {
         setSearchedText('');
         setSearching(false);
+        dispatchClear(searchedActions.clearPersonalInfo());
     }
 
     useEffect(() => {
@@ -59,6 +63,7 @@ const SearchBar = () => {
     
         if (!searchedText) {
             setSearching(false);
+            dispatchClear(searchedActions.clearPersonalInfo());
         }    
         return () => clearTimeout(delayDebounceFn)
     }, [searchedText]);
@@ -112,12 +117,12 @@ const styles = {
         },
         resultsPivot: {
             position: 'relative',
-            width: '70%',
+            width: '80%',
             resultsContainer: {
                 position: 'absolute',
                 paddingBottom: '10px',
                 width: '100%',
-                height: '500px',
+                height: '600px',
                 borderRadius: 4,
                 background: paletteColors.white,
                 // boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px',
