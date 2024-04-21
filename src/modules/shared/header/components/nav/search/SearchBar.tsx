@@ -48,9 +48,9 @@ const SearchBar = () => {
     const [ searchedText, setSearchedText ] = useState<string>('');
 
     const handleBlur = () => {
-        setSearchedText('');
-        setSearching(false);
-        dispatchClear(searchedActions.clearPersonalInfo());
+        // setSearchedText('');
+        // setSearching(false);
+        // dispatchClear(searchedActions.clearPersonalInfo());
     }
 
     useEffect(() => {
@@ -88,7 +88,10 @@ const SearchBar = () => {
             {searching && (
                 <Box sx={styles.searchContainer.resultsPivot}>
                     <Box sx={styles.searchContainer.resultsPivot.resultsContainer}>
-                        <SearchedResult/>
+                        <SearchedResult 
+                            searchedText={searchedText}
+                            setSearchedText={setSearchedText}
+                        />
                     </Box>
                 </Box>
             )}
