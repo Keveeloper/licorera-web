@@ -48,9 +48,11 @@ const SearchBar = () => {
     const [ searchedText, setSearchedText ] = useState<string>('');
 
     const handleBlur = () => {
-        // setSearchedText('');
-        // setSearching(false);
-        // dispatchClear(searchedActions.clearPersonalInfo());
+        setTimeout(() => {
+            setSearchedText('');
+            setSearching(false);
+            dispatchClear(searchedActions.clearPersonalInfo());
+        }, 500);
     }
 
     useEffect(() => {
@@ -59,7 +61,7 @@ const SearchBar = () => {
                 setSearching(true);
                 dispatch(getSearchedThunk(searchedText)).unwrap();                
             }
-        }, 800);
+        }, 500);
     
         if (!searchedText) {
             setSearching(false);

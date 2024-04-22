@@ -18,7 +18,7 @@ export interface Data {
 export interface Promotion {
     id: number;
     product_id: number;
-    quantity: string;
+    quantity: number;
     price: number;
     status: boolean;
     start_date: string;
@@ -26,6 +26,8 @@ export interface Promotion {
     store_type: number;
     points: number;
     presentation: string;
+    features_string: string[];
+    isExchange: boolean;
     product: Product;
   }
 
@@ -37,4 +39,7 @@ export interface Promotion {
     image: string;
     description: string;
     category_id: number;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
   }

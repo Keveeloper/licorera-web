@@ -6,16 +6,32 @@ import { swiperCategoriesType } from './types/types';
 // Material UI
 import Skeleton from '@mui/material/Skeleton';
 import { Box, Typography } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { paletteColors } from '../../../paletteColors/paletteColors';
 import { selectArrayCategories } from '../../../store/modules/store/selectors/store.selector';
+import { CategoriesById } from '../../../store/modules/store/actions/store.actions';
+import { useAppDispatch } from '../../../store/store';
+import { useNavigate } from 'react-router-dom';
 
 
 const SwiperCategories = (props: swiperCategoriesType) => { 
     
     const categoriesDataredux = useSelector(selectArrayCategories);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const { modules, slidesPerView, loadingStatus } = props;
+
+    const handleCategory = async (id: number, page: number) => {
+        dispatch(CategoriesById({ id, page })).unwrap();
+        // setTotalPage(categoriesById.response.data.last_page);
+        // setProducts(categoriesById.response.data.data);
+        // filterCategory(id);
+        const categoryId = {
+            id
+        }
+        navigate("/store", { state: { categoryId } });
+    };
 
     return(
         <Box className={'columnContainer'} sx={styles.swiperContainer}>
@@ -39,7 +55,7 @@ const SwiperCategories = (props: swiperCategoriesType) => {
                     <SwiperSlide
                     key={index}
                     style={styles.swiperContainer.swiper.swiperSlide}
-                    //   onClick={() => handleCategory(item.id, 1)}
+                    onClick={() => handleCategory(item.id, 1)}
                     >
                         {(loadingStatus === 'loading') ? 
                                 <Skeleton sx={styles.swiperContainer.swiper.swiperSlide.skeleton} variant="rectangular" />

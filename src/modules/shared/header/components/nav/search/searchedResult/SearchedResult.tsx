@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectSearched } from "../../../../../../../store/modules/search";
 import { Box, Grid, Typography } from "@mui/material";
 import { displayFlex, displayFlexColumn } from "../../../../../recursiveStyles/RecursiveStyles";
@@ -8,16 +8,52 @@ import { displaySpaceBetween } from "../../../../../recursiveStyles/RecursiveSty
 import NumberFormat from "../../../../../hooks/numberFormater/NumberFormat";
 import { SearchInterface } from "../types/types";
 import { selectAllSuggested } from "../../../../../../../store/modules/suggestedProducts";
+import { Promotion } from "../../../../../../../store/modules/search/types";
 import './searchResult.css';
-import { CardOverflow } from "@mui/joy";
-import { relative } from "path";
+import { useAppDispatch } from "../../../../../../../store/store";
+import { storeActions } from "../../../../../../../store/modules/store";
+import { useNavigate } from "react-router-dom";
+import { productExchange } from "../../../../../../exchangeProducts/types";
 
 const SearchedResult = (props: SearchInterface) => {
 
-    const { searchedText } = props;
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
+    const { searchedText } = props;
     const searchedDataredux = useSelector(selectSearched);
     const suggestedProductsDataredux = useSelector(selectAllSuggested);
+
+    const handleProduct = (item: Promotion) => {
+        const mappedProduct: productExchange = {
+          id: item.id,
+          quantity: item.quantity,
+          points: item.points || 0,
+          price: item.price,
+          status: item.status,
+          start_date: item.start_date || "",
+          end_date: item?.end_date || "",
+          isExchange: false,
+          product_id: item.product.id,
+          features: item.features_string,
+          product: {
+            id: item.product.id,
+            name: item.product.name,
+            serial: item.product.serial,
+            lot: item.product.lot,
+            image: item.product.image,
+            quantity: item.quantity,
+            points: item.points || undefined,
+            description: item.product.description,
+            category_id: item.product.category_id,
+            created_at: item.product.created_at,
+            updated_at: item.product.updated_at,
+            deleted_at: item.product.deleted_at
+          }
+        }
+        dispatch(storeActions.setProductDetail(mappedProduct))
+        navigate("/product-detail")
+      }
     
     return (
         // <h1>Hola mundo</h1>
@@ -25,7 +61,7 @@ const SearchedResult = (props: SearchInterface) => {
             {
                 searchedDataredux.length > 0 ? 
                     searchedDataredux.map((item: any, index: any) => (
-                        <Box sx={styles.searchCard}>
+                        <Box sx={styles.searchCard} onClick={() => handleProduct(item)}>
                             <Box sx={styles.searchCard.imageSide}>
                                 <figure>
                                     <img src={item.product.image} alt={`Imagen de la cerveza: ${item.product.name}`} />
@@ -52,7 +88,7 @@ const SearchedResult = (props: SearchInterface) => {
                     </Box>
                     <Box sx={styles.noResultsHeader.recommendedContainer}>
                     {suggestedProductsDataredux && ( suggestedProductsDataredux.map((item: any, index: any) => (
-                        <Box sx={styles.noResultsHeader.recommendedContainer.recommendedProduct}>
+                        <Box sx={styles.noResultsHeader.recommendedContainer.recommendedProduct} onClick={() => handleProduct(item)}>
                             <figure style={styles.noResultsHeader.recommendedContainer.recommendedProduct.imgContainer}>
                                 {item.discount && (
                                     <figure style={styles.noResultsHeader.recommendedContainer.recommendedProduct.imgContainer.promotionContainer}>
@@ -87,6 +123,7 @@ const styles = {
         width: '95%',
         height: '137px',
         ...displayFlex,
+        cursor: 'pointer',
         border: `1px solid ${paletteColors.gray}`,
         borderRadius: 4,
         // background: 'blue',
@@ -153,6 +190,7 @@ const styles = {
                 maxHeight: '284px',
                 border: '1px solid rgb(190, 190, 190)',
                 borderRadius: '10px',
+                cursor: 'pointer',
                 imgContainer: {
                     position: 'relative' as 'relative',
                     margin: 0,
