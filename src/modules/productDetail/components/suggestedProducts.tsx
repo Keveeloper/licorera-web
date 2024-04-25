@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { selectAllSuggested } from "../../../store/modules/suggestedProducts/selectors/suggested.selector";
 import { Link, useLocation } from "react-router-dom";
 import { displaySpaceBetween } from "../../shared/recursiveStyles/RecursiveStyles";
+import NumberFormat from "../../shared/hooks/numberFormater/NumberFormat";
 
 const SuggestedProducts = () => {
 
@@ -108,7 +109,7 @@ const SuggestedProducts = () => {
                     {item.product.description.slice(0, 50)}
                   </Typography>
                   <Typography style={styles.card.price}>
-                    $ {item.price}
+                    $ {NumberFormat(item.price)}
                   </Typography>
                 </CardComponent>
               </Grid>

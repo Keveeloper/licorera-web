@@ -14,7 +14,7 @@ export const selectAllCampaigns = createSelector(
   (promotion) => promotion.state.data
 );
 
-export const selectLoading = createSelector(
+export const selectLoadingCampaigns = createSelector(
   getPromotionState,
   (promotion) => promotion.loadingStatus
 );

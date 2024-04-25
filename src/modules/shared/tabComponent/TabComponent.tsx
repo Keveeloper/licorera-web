@@ -8,7 +8,6 @@ const TabComponent: React.FC<tabType> = (props) => {
 
     const { tabsArray, children, handleChange, value, disabled} = props;
 
-
     return(
         <TabContext value={value} >
             <TabList sx={styles.tabList} onChange={handleChange} aria-label="lab API tabs example" centered >
