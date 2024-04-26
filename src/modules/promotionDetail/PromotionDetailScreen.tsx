@@ -4,8 +4,13 @@ import HeaderScreen from "../shared/header/HeaderScreen"
 import ButtonComponent from "../shared/button/button.component";
 import './PromotionDetails.css'
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 const PromotionDetailScreen = () => {
+
+    const location = useLocation();
+    const productDetail = location?.state?.productDetail;
+    
     const [count, setCount] = React.useState(1);
 
     const onMinus = () => {
@@ -24,22 +29,27 @@ const PromotionDetailScreen = () => {
             <Box className='columnContainer'>
                 <Grid container spacing={2} style={{ textAlign: "center" }}>
                     <Grid item  xs={12} sx={{ mt: 4, mr:4, ml:4 }}>
-                        <img src="/images/slide_03.png" alt="" style={{maxWidth:'100%', maxHeight:'600px'}}/>
+                        {/* <img src="/images/slide_03.png" alt="" style={{maxWidth:'100%', maxHeight:'600px'}}/> */}
+                        <img src={productDetail.image} alt="" style={{maxWidth:'100%', maxHeight:'600px', borderRadius: 20}}/>
                     </Grid>
                 </Grid>
                 <Typography sx={{ mt:4, mb:4 }} style={{ textAlign:'center',fontFamily:'HudsonNYSerif', color:'#000000', fontSize:'200%'}}>
-                    buchanan’s Master
+                    {/* buchanan’s Master */}
+                    {productDetail.name}
                 </Typography>
                 <Typography  sx={{ mr:4, ml:4 }} style={{ textAlign:'left',fontFamily:'weblysleekuil', color:'#000000', fontSize:'150%'}}>
-                    Resultado de la creación del Master Blender Keith Law, quien seleccionó las mejores maltas de Escocia en su punto más alto de maduración. Vivamos grandes momentos y no te pierdas la grandeza de un Buchanan's Master. con este descuento. 
+                    {/* Resultado de la creación del Master Blender Keith Law, quien seleccionó las mejores maltas de Escocia en su punto más alto de maduración. Vivamos grandes momentos y no te pierdas la grandeza de un Buchanan's Master. con este descuento. 
 
-                    Aquí va toda la descripción de la promoción. Aquí va toda la descripción de la promoción.
+                    Aquí va toda la descripción de la promoción. Aquí va toda la descripción de la promoción. */}
+                    {productDetail.description}
                 </Typography>
                 <Typography  sx={{ mt: 2, mr:4, ml:4 }} style={{ textAlign:'left', fontWeight:'600',fontFamily:'weblysleekuil', color:'#000000', fontSize:'125%'}}>
-                    Válido hasta: Agosto 23, 2023
+                    {/* Válido hasta: Agosto 23, 2023 */}
+                    Válido hasta: {productDetail.end_date}
                 </Typography>
                 <Typography  sx={{ mt: 2, mr:4, ml:4 }} style={{ textAlign:'left', fontWeight:'600',fontFamily:'weblysleekuil', color:'#000000', fontSize:'125%'}}>
-                    Precio: <span style={{fontFamily:'HudsonNYSerif', color:'#000000', fontSize:'200%'}}>$ 127.500</span>
+                    {/* Precio: <span style={{fontFamily:'HudsonNYSerif', color:'#000000', fontSize:'200%'}}>$ 127.500</span> */}
+                    Precio: <span style={{fontFamily:'HudsonNYSerif', color:'#000000', fontSize:'200%'}}>{productDetail.price}</span>
                 </Typography>
                 <div  style={{margin:'0 32px'}} > 
                     <Grid container spacing={2} sx={{ mb:6}}>

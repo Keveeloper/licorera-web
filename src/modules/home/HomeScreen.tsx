@@ -32,6 +32,7 @@ import { Box } from "@mui/material";
 import zIndex from "@mui/material/styles/zIndex";
 import { searchContext } from "../../context/searchContext";
 import { selectLoadingCampaigns } from "../../store/modules/campaigns/selectors/campaigns.selector";
+import Loader from "../shared/Loader/components/Loader";
 
 const HomeScreen = () => {
 
@@ -141,7 +142,8 @@ const HomeScreen = () => {
   }, []);
 
   if (loading) {
-    return <div>Cargando...</div>;
+    // return <div>Cargando...</div>;
+    return <Loader/>;
   }
 
   return (

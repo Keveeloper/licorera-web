@@ -17,7 +17,7 @@ interface Promotion {
     quantity_minimal: number | null;
     divider: number | null;
     multiplier: number | null;
-    price: number;
+    price: string;
     description: string;
     diageo: number;
 }
