@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import LoaderScreen from "../modules/shared/Loader/LoaderScreen";
 import ProductDetailScreen from "../modules/productDetail/productDetail.screen";
+import AboutUs from "../modules/aboutUs/aboutUs.screen";
 
 const HomeScreen = React.lazy(() => import("../modules/home/HomeScreen"));
 
@@ -79,6 +80,15 @@ const RootRouter = () => {
         element={
           <React.Suspense fallback={<LoaderScreen />}>
             <UserProfileScreen />
+          </React.Suspense>
+        }
+      />
+
+      <Route
+        path="/aboutus"
+        element={
+          <React.Suspense fallback={<LoaderScreen />}>
+            <AboutUs />
           </React.Suspense>
         }
       />

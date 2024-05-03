@@ -31,6 +31,7 @@ import { storeActions } from "../../../store/modules/store/store.slice";
 import { useNavigate } from "react-router";
 import { Product } from "../types";
 import { productExchange } from "../../exchangeProducts/types";
+import { CurrencyFormat } from "../../../utils/helpers";
 import { useLocation } from 'react-router-dom';
 
 const cardStyle = {
@@ -266,16 +267,16 @@ const ContainerStore = () => {
           {products.map((item: any) => {
             return (
               <Grid item xs={2.4} style={{ textAlign: "center" }} onClick={() => handleProduct(item)}>
-                <CardComponent
-                  style={cardStyle}
-                >
-                  {item.store.discount > 0 && (
+                 {item.store.discount > 0 && (
                     <div className="promotion">
                       <p>{item.store.discount}</p>
                       <p>%off</p>
                       <img src="icons/discount.png" alt=""/>
                     </div>
                   )}
+                <CardComponent
+                  style={cardStyle}
+                >
                   <img src={item.image} alt="" width={200} height={200}  style={{maxWidth: "100%"}}/>
                   <Typography style={storeStyles.card.title}>
                     {item.name}
@@ -287,7 +288,7 @@ const ContainerStore = () => {
                     {item.description.slice(0, 50)}
                   </Typography>
                   <Typography style={storeStyles.card.price}>
-                    $ {item.store.price}
+                    {CurrencyFormat(item.store.price)}
                   </Typography>
                 </CardComponent>
               </Grid>
@@ -329,11 +330,12 @@ const storeStyles = {
       ...weblysleekFontStyle,
       fontSize: "19px",
       fontWeight: "600",
-      height: "110px",
+      height: "70px",
+      marginTop: "10px"
     },
     subtitle: {
       ...weblysleekFontStyle,
-      fontSize: "13px",
+      fontSize: "16px",
     },
     content: {
       ...weblysleekFontStyle,
