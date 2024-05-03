@@ -3,9 +3,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getCampaignsThunk = createAsyncThunk(
   "campaigns/fetch",
-  async (_, { rejectWithValue }) => {
+  async (campaignId: string, { rejectWithValue }) => {
     try {
-      const response = await getCampaigns();
+      const response = await getCampaigns(campaignId);
       return response;
     } catch (error: any) {
       return rejectWithValue(error.message); // Enviar el mensaje de error

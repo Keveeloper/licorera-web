@@ -61,7 +61,7 @@ const HomeScreen = () => {
   }, []);
   
   const getCampaigns = useCallback(async () => {
-    await dispatch(getCampaignsThunk()).unwrap();      
+    await dispatch(getCampaignsThunk('')).unwrap();      
   }, []);
   
   const getNewProducts = useCallback(async () => {
@@ -117,7 +117,7 @@ const HomeScreen = () => {
           dispatch(getPromotionsThunk()).unwrap().then((response: any) => {
             responsePromotions = response.response.data;
           }),
-          dispatch(getCampaignsThunk()).unwrap().then((response: any) => {
+          dispatch(getCampaignsThunk('')).unwrap().then((response: any) => {
             responseCampaigns = response.response.data;
           }),
           dispatch(getNewProductsThunk()).unwrap().then((response: any) => {

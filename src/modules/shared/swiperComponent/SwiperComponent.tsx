@@ -14,6 +14,7 @@ import NumberFormat from '../hooks/numberFormater/NumberFormat';
 import { useMemo } from 'react';
 import { selectAllCampaigns } from '../../../store/modules/campaigns';
 import { useNavigate } from 'react-router-dom';
+import { PromotionCampaign } from '../../../store/modules/campaigns/types';
 
 const SwiperComponent = (props: swiperType) => { 
     
@@ -34,27 +35,44 @@ const SwiperComponent = (props: swiperType) => {
         [promotionsDataredux]
     );
 
-    const handleClick = (item: Promotion) => {
+    const handleClick = (item: any) => {
         
-        const productDetail: Promotion = {
-            id: item.id,
-            name: item.name,
-            image: item.image,
-            quantity: item.quantity,
-            start_date: item.start_date,
-            end_date: StringDateFormat(item.end_date),
-            promotion_type: item.promotion_type,
-            store_product_id: item.store_product_id,
-            discount: item.discount,
-            quantity_minimal: item.quantity_minimal,
-            divider: item.divider,
-            multiplier: item.multiplier,
-            price: NumberFormat(parseInt(item.price)),
-            // price: typeof item.price === 'string' ? NumberFormat(item.price) : 0,
-            description: item.description,
-            diageo: item.diageo,
+        let productDetail: Promotion;
+        let highlightedCampaign: PromotionCampaign;
+
+        if (bannerType === 'Promotions') {
+            productDetail = {
+                id: item.id,
+                name: item.name,
+                image: item.image,
+                quantity: item.quantity,
+                start_date: item.start_date,
+                end_date: StringDateFormat(item.end_date),
+                promotion_type: item.promotion_type,
+                store_product_id: item.store_product_id,
+                discount: item.discount,
+                quantity_minimal: item.quantity_minimal,
+                divider: item.divider,
+                multiplier: item.multiplier,
+                price: NumberFormat(parseInt(item.price)),
+                // price: typeof item.price === 'string' ? NumberFormat(item.price) : 0,
+                description: item.description,
+                diageo: item.diageo,
+            }
+            navigate('/promotion-detail', {state: {productDetail}});
+        }else{
+            highlightedCampaign = {
+                id: item.id,
+                name: item.name,
+                description: item.description,
+                mainImageUrl: item.mainImageUrl,
+                secondImageUrl: item.secondImageUrl,
+                type: item.type,
+                categoryId: item.categoryId,
+                categoryName: item.categoryName,
+            }
+            navigate('/highlighted-campaigns', {state: {highlightedCampaign}});
         }
-        navigate('/promotion-detail', {state: {productDetail}});
     }
 
     return(

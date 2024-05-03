@@ -23,5 +23,10 @@ export interface PromotionCampaign {
     secondImageUrl: string;
     type: number;
     categoryId: number,
-    categoryName: string,
+    categoryName?: string,
+    products?: Products[],
   }
+
+interface Products {
+    
+}
