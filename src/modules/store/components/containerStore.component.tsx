@@ -26,10 +26,7 @@ import {
   selectCategoriesLoading,
 } from "../../../store/modules/store/selectors/store.selector";
 import { useSelector } from "react-redux";
-import {
-  hudsonNYFontStyle,
-  weblysleekFontStyle,
-} from "../../shared/recursiveStyles/RecursiveStyles";
+import { hudsonNYFontStyle, weblysleekFontStyle } from "../../shared/recursiveStyles/RecursiveStyles";
 import { storeActions } from "../../../store/modules/store/store.slice";
 import { useNavigate } from "react-router";
 import { Product } from "../types";
@@ -38,19 +35,19 @@ import { CurrencyFormat } from "../../../utils/helpers";
 import { useLocation } from 'react-router-dom';
 
 const cardStyle = {
-  padding: "20px",
-  borderRadius: "10px",
-  height: "452px",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  cursor: "pointer",
-};
+  padding: '20px',
+  borderRadius: '10px',
+  height: '452px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  cursor:"pointer"
+}
 
 const ContainerStore = () => {
+
   const location = useLocation();
-  const { id } = location.state.categoryId;
 
   const [search, setSearch] = React.useState<string>("Menor Precio");
   const [categories, setCategories] = React.useState<any>([]);
@@ -101,7 +98,7 @@ const ContainerStore = () => {
     }
   };
 
-  const handleProduct = (product: Product) => {
+  const handleProduct = (product:Product) => {
     const mappedProduct: productExchange = {
       id: product.id,
       quantity: product.store.quantity,
@@ -125,26 +122,27 @@ const ContainerStore = () => {
         category_id: product.category_id,
         created_at: product.created_at,
         updated_at: product.updated_at,
-        deleted_at: product.deleted_at,
-      },
-    };
-    dispatch(storeActions.setProductDetail(mappedProduct));
-    navigate("/product-detail");
-  };
+        deleted_at: product.deleted_at
+      }
+    }
+      dispatch(storeActions.setProductDetail(mappedProduct))
+      navigate("/product-detail")
+  }
 
   React.useEffect(() => {
+   
     async function getCategories() {
       const categories = await dispatch(Categories()).unwrap();
       setCategories(categories.response.data);
-      if (id) {
-        const categoryfilter = categories.response.data.filter(
-          (category: any) => {
-            return category.id === id;
-          }
-        );
+
+      if(location && location.state){
+        const {id} = location.state.categoryId;
+        const categoryfilter = categories.response.data.filter((category: any) => {
+          return category.id === id;
+        });
         setCategorySelected(categoryfilter[0]);
         handleCategory(id, 1);
-      } else {
+      }else{
         setCategorySelected(categories.response.data[0]);
         handleCategory(1, 1);
       }
@@ -152,17 +150,16 @@ const ContainerStore = () => {
     getCategories();
   }, []);
 
+
   return (
     <>
       <Grid
         className="columnContainer"
         container
         spacing={2}
-        style={
-          {
-            // padding: "30px 5%",
-          }
-        }
+        style={{
+          // padding: "30px 5%",
+        }}
       >
         {/* CATEGORY SECTION */}
         <Grid
@@ -253,11 +250,7 @@ const ContainerStore = () => {
               name="search"
             >
               {searchOptions.map((item, index) => {
-                return (
-                  <MenuItem value={item} key={index}>
-                    {item}
-                  </MenuItem>
-                );
+                return <MenuItem value={item} key={index}>{item}</MenuItem>;
               })}
             </Select>
           </FormControl>
@@ -284,27 +277,18 @@ const ContainerStore = () => {
         <Grid container spacing={2}>
           {products.map((item: any) => {
             return (
-              <Grid
-                item
-                xs={2.4}
-                style={{ textAlign: "center" }}
-                onClick={() => handleProduct(item)}
-              >
-                {item.store.discount > 0 && (
-                  <div className="promotion">
-                    <p>{item.store.discount}</p>
-                    <p>%off</p>
-                    <img src="icons/discount.png" alt="" />
-                  </div>
-                )}
-                <CardComponent style={cardStyle}>
-                  <img
-                    src={item.image}
-                    alt=""
-                    width={200}
-                    height={200}
-                    style={{ maxWidth: "100%" }}
-                  />
+              <Grid item xs={2.4} style={{ textAlign: "center" }} onClick={() => handleProduct(item)}>
+                 {item.store.discount > 0 && (
+                    <div className="promotion">
+                      <p>{item.store.discount}</p>
+                      <p>%off</p>
+                      <img src="icons/discount.png" alt=""/>
+                    </div>
+                  )}
+                <CardComponent
+                  style={cardStyle}
+                >
+                  <img src={item.image} alt="" width={200} height={200}  style={{maxWidth: "100%"}}/>
                   <Typography style={storeStyles.card.title}>
                     {item.name}
                   </Typography>
@@ -358,7 +342,7 @@ const storeStyles = {
       fontSize: "19px",
       fontWeight: "600",
       height: "70px",
-      marginTop: "10px",
+      marginTop: "10px"
     },
     subtitle: {
       ...weblysleekFontStyle,
