@@ -114,13 +114,13 @@ const HomeScreen = () => {
       try {
         // Hacer las solicitudes a las APIs
         await Promise.all([
-          dispatch(getPromotionsThunk()).unwrap().then((response) => {
+          dispatch(getPromotionsThunk()).unwrap().then((response: any) => {
             responsePromotions = response.response.data;
           }),
-          dispatch(getCampaignsThunk()).unwrap().then((response) => {
+          dispatch(getCampaignsThunk()).unwrap().then((response: any) => {
             responseCampaigns = response.response.data;
           }),
-          dispatch(getNewProductsThunk()).unwrap().then((response) => {
+          dispatch(getNewProductsThunk()).unwrap().then((response: any) => {
             responseNewProducts = response.response.data;
           })
         ]);

@@ -22,6 +22,10 @@ const UserProfileScreen = React.lazy(
   () => import("../modules/userProfile/UserProfileScreen")
 );
 
+const HighlightedScreen = React.lazy(
+  () => import("../modules/highlightedCampaigns/HighlightedCampaignScreen")
+);
+
 const RootRouter = () => {
   return (
     <Routes>
@@ -89,6 +93,15 @@ const RootRouter = () => {
         element={
           <React.Suspense fallback={<LoaderScreen />}>
             <AboutUs />
+          </React.Suspense>
+        }
+      />
+
+      <Route
+        path="/highlighted-campaigns"
+        element={
+          <React.Suspense fallback={<LoaderScreen />}>
+            <HighlightedScreen />
           </React.Suspense>
         }
       />
