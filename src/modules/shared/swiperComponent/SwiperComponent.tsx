@@ -70,6 +70,7 @@ const SwiperComponent = (props: swiperType) => {
                 type: item.type,
                 categoryId: item.categoryId,
                 categoryName: item.categoryName,
+                products: null,
             }
             navigate('/highlighted-campaigns', {state: {highlightedCampaign}});
         }

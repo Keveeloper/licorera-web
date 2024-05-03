@@ -1,15 +1,24 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { displayFlex } from "../../shared/recursiveStyles/RecursiveStyles";
+import { displaySpaceBetweenColumn } from "../../shared/recursiveStyles/RecursiveStyles";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAllCampaigns } from "../../../store/modules/campaigns";
 import CardComponent from "../../shared/card/card.component";
+import { CampaignInterface } from "../types/types";
+import { selectLoadingCampaigns } from "../../../store/modules/campaigns/selectors/campaigns.selector";
+import './HighlightedCampaignContainer.css';
+import NumberFormat from "../../shared/hooks/numberFormater/NumberFormat";
+import { Height } from "@mui/icons-material";
 
-const HighlightedCampaignContainer = () => {
+const HighlightedCampaignContainer = (props: CampaignInterface) => {
 
     const location = useLocation();
     const highlightedCampaign = location?.state?.highlightedCampaign;
     const campaingDataredux = useSelector(selectAllCampaigns);
+    const loadingStatus = useSelector(selectLoadingCampaigns);
+    console.log('campaingDatareduxxxx: ', campaingDataredux);
+    const { campaignProducts, setCampaignProducts } = props;
 
     return (
         <Box className={'columnContainer'}>
@@ -22,86 +31,95 @@ const HighlightedCampaignContainer = () => {
                 <Typography sx={styles.infoContainer.title}>{highlightedCampaign.name}</Typography>
                 <Typography sx={styles.infoContainer.description}>
                     {highlightedCampaign.description}
-                    <br />
-                    {highlightedCampaign.type}
                 </Typography>
             </Box>
-            <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={2} sx={{padding: 0}}>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <figure>
-                                <img src="" alt="" />
-                            </figure>
-                        </CardComponent>
+            {highlightedCampaign.type === 1 && (
+                <Box sx={styles.productsContainer}>
+                    <Typography sx={styles.productsContainer.subtitle}>Productos</Typography>
+                    <Grid container spacing={2} sx={styles.productsContainer.gridContainer}>
+                        {loadingStatus === 'loaded' && campaignProducts.map((item: any, index: any) => (
+                            <Grid item xs={2.4} sx={styles.productsContainer.gridContainer.cardColumn}>
+                                <CardComponent
+                                    style={styles.productsContainer.gridContainer.cardColumn.card}
+                                >
+                                    <figure style={styles.productsContainer.gridContainer.cardColumn.card.imageContainer}>
+                                        <img className="productImage" src={item.store.product.image} alt="" />
+                                    </figure>
+                                    <Box sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo}>
+                                        <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.title}>{item.store.product.name}</Typography>
+                                        <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.presentation}>{item.store.presentation}</Typography>
+                                        <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.presentation}>{item.store.product.description.slice(0, 50)}...</Typography>
+                                        <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.price}>$ {NumberFormat(parseInt(item.store.price))}</Typography>
+                                    </Box>
+                                </CardComponent>
+                            </Grid>
+                        ))}
+                        {/* <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardComponent
+                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
+                            >
+                                <h1>Hola mundo</h1>
+                            </CardComponent>
+                        </Grid>
+                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardComponent
+                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
+                            >
+                                <h1>Hola mundo</h1>
+                            </CardComponent>
+                        </Grid>
+                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardComponent
+                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
+                            >
+                                <h1>Hola mundo</h1>
+                            </CardComponent>
+                        </Grid>
+                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardComponent
+                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
+                            >
+                                <h1>Hola mundo</h1>
+                            </CardComponent>
+                        </Grid>
+                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardComponent
+                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
+                            >
+                                <h1>Hola mundo</h1>
+                            </CardComponent>
+                        </Grid>
+                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardComponent
+                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
+                            >
+                                <h1>Hola mundo</h1>
+                            </CardComponent>
+                        </Grid>
+                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardComponent
+                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
+                            >
+                                <h1>Hola mundo</h1>
+                            </CardComponent>
+                        </Grid>
+                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardComponent
+                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
+                            >
+                                <h1>Hola mundo</h1>
+                            </CardComponent>
+                        </Grid>
+                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <CardComponent
+                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
+                            >
+                                <h1>Hola mundo</h1>
+                            </CardComponent>
+                        </Grid> */}
                     </Grid>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <h1>Hola mundo</h1>
-                        </CardComponent>
-                    </Grid>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <h1>Hola mundo</h1>
-                        </CardComponent>
-                    </Grid>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <h1>Hola mundo</h1>
-                        </CardComponent>
-                    </Grid>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <h1>Hola mundo</h1>
-                        </CardComponent>
-                    </Grid>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <h1>Hola mundo</h1>
-                        </CardComponent>
-                    </Grid>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <h1>Hola mundo</h1>
-                        </CardComponent>
-                    </Grid>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <h1>Hola mundo</h1>
-                        </CardComponent>
-                    </Grid>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <h1>Hola mundo</h1>
-                        </CardComponent>
-                    </Grid>
-                    <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <CardComponent
-                        style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                        >
-                            <h1>Hola mundo</h1>
-                        </CardComponent>
-                    </Grid>
-                </Grid>
                 </Box>
+            )}
         </Box>
     );
 
@@ -132,8 +150,59 @@ const styles = {
             fontSize: '25px'
         },
         description: {
+            marginBottom: '25px',
             fontFamily: 'weblysleekuil',
             fontSize: '20px'
+        }
+    },
+    productsContainer: {
+        subtitle: {
+            marginBottom: '25px',
+            fontFamily: 'HudsonNYSerif',
+            fontSize: '25px'
+        },
+        gridContainer: {
+            padding: 0,
+            cardColumn: {
+                padding: '10px 10px !important', 
+                ...displayFlex,
+                card: {
+                    padding: "20px", 
+                    width: '100%',
+                    height: '452px', 
+                    borderRadius: "10px",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    imageContainer: {
+                        margin: 0,
+                        padding: 0,
+                        with: '100%',
+                        height: '40%',
+                        productImage: {
+                            with: '100%' as '100%',
+                        }
+                    },
+                    productInfo: {
+                        height: '60%',
+                        ...displaySpaceBetweenColumn,
+                        title: {
+                            fontFamily: 'weblysleekuisb',
+                            fontSize: '19px',
+                            textAlign: 'center',
+                        },
+                        presentation: {
+                            fontFamily: 'weblysleekuil',
+                            fontSize: '16px',
+                            textAlign: 'center',
+                        },
+                        price: {
+                            fontFamily: 'HudsonNYSerif',
+                            fontSize: '20px',
+                            textAlign: 'center',
+                        }
+                    }
+                }
+            }
         }
     }
 }

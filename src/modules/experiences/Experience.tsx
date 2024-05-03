@@ -40,6 +40,7 @@ const Experience = () => {
                     type: campaignsDataRedux[index].type,
                     categoryId: campaignsDataRedux[index].categoryId,
                     categoryName: campaignsDataRedux[index].categoryName,
+                    products: null,
                 });
             }
         }
@@ -57,6 +58,7 @@ const Experience = () => {
             type: item.type,
             categoryId: item.categoryId,
             categoryName: item.categoryName,
+            products: null,
         }
         navigate('/highlighted-campaigns', {state: {highlightedCampaign}});
     }
