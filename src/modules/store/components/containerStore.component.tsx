@@ -32,6 +32,7 @@ import { useNavigate } from "react-router";
 import { Product } from "../types";
 import { productExchange } from "../../exchangeProducts/types";
 import { CurrencyFormat } from "../../../utils/helpers";
+import { useLocation } from 'react-router-dom';
 
 const cardStyle = {
   padding: '20px',
@@ -45,6 +46,10 @@ const cardStyle = {
 }
 
 const ContainerStore = () => {
+
+  const location = useLocation();
+  const categoryId = location?.state?.categoryId;
+
   const [search, setSearch] = React.useState<string>("Menor Precio");
   const [categories, setCategories] = React.useState<any>([]);
   const [categorySelected, setCategorySelected] = React.useState<any>({});

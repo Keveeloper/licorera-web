@@ -36,6 +36,13 @@ export const displaySpaceBetween = {
     alignItems: 'center'
 }
 
+export const displaySpaceBetweenColumn = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    // alignItems: 'center'
+}
+
 export const weblysleekFontStyle = {
     fontFamily: "weblysleekuil",
     color: "#000000",

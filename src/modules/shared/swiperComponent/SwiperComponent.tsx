@@ -13,9 +13,11 @@ import StringDateFormat from '../hooks/stringDateFormat/StringDateFormat';
 import NumberFormat from '../hooks/numberFormater/NumberFormat';
 import { useMemo } from 'react';
 import { selectAllCampaigns } from '../../../store/modules/campaigns';
+import { useNavigate } from 'react-router-dom';
 
 const SwiperComponent = (props: swiperType) => { 
     
+    const navigate = useNavigate();
     const { modules, slidesPerView, loadingStatus, bannerType } = props;
     const promotionsDataredux = useSelector(selectAllPromotion);
     const campaingDataredux = useSelector(selectAllCampaigns);
@@ -28,9 +30,33 @@ const SwiperComponent = (props: swiperType) => {
     );
       
     const formattedNumbers = useMemo(
-        () => promotionsDataredux?.map((item: Promotion) => NumberFormat(item.price)),
+        () => promotionsDataredux?.map((item: Promotion) => NumberFormat(parseInt(item.price))),
         [promotionsDataredux]
     );
+
+    const handleClick = (item: Promotion) => {
+        
+        const productDetail: Promotion = {
+            id: item.id,
+            name: item.name,
+            image: item.image,
+            quantity: item.quantity,
+            start_date: item.start_date,
+            end_date: StringDateFormat(item.end_date),
+            promotion_type: item.promotion_type,
+            store_product_id: item.store_product_id,
+            discount: item.discount,
+            quantity_minimal: item.quantity_minimal,
+            divider: item.divider,
+            multiplier: item.multiplier,
+            price: NumberFormat(parseInt(item.price)),
+            // price: typeof item.price === 'string' ? NumberFormat(item.price) : 0,
+            description: item.description,
+            diageo: item.diageo,
+        }
+        navigate('/promotion-detail', {state: {productDetail}});
+    }
+
     return(
         <Swiper style={styles.swiper}
             modules={modules}
@@ -53,7 +79,7 @@ const SwiperComponent = (props: swiperType) => {
                             {loadingStatus === 'loading' ? 
                                 <Skeleton sx={styles.swiper.swiperSlide.skeleton} variant="rectangular" height={'90%'} />
                             :
-                                <Box sx={styles.swiper.swiperSlide.promotionContainer}>
+                                <Box sx={styles.swiper.swiperSlide.promotionContainer} onClick={() => handleClick(item)}>
                                     {/* <img height={'100%'} src={`${img}`} alt="" /> */}
                                     <img style={styles.swiper.swiperSlide.promotionContainer.image} src={`${bannerType === 'Promotions' ? item.image : item.mainImageUrl}`} alt={item.name} />
                                     {bannerType === 'Promotions' && (
@@ -94,6 +120,7 @@ const styles = {
                 borderRadius: '20px', 
                 display: 'inline-block', 
                 overflow: 'hidden',
+                // background: 'blue',
                 image: {
                     height: '100%'
                 },
