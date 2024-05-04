@@ -20,35 +20,37 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
     const navigate = useNavigate();
     const location = useLocation();
     const highlightedCampaign = location?.state?.highlightedCampaign;
-    // const campaingDataredux = useSelector(selectAllCampaigns);
+    const campaingDataredux = useSelector(selectAllCampaigns);
     const loadingStatus = useSelector(selectLoadingCampaigns);
     const { campaignProducts, setCampaignProducts } = props;
 
     const handleClick = (item: any) => {
+        console.log(item);
+        
         const mappedProduct: productExchange = {
-        id: item.id,
-        quantity: item.quantity,
-        points: item.points || 0,
-        price: item.price,
-        status: item.status,
-        start_date: item.start_date || "",
-        end_date: item?.end_date || "",
+        id: item.store.product.id,
+        quantity: item.store.quantity,
+        points: item.store.points || 0,
+        price: item.store.price,
+        status: item.store.status,
+        start_date: item.store.start_date || "",
+        end_date: item?.store.end_date || "",
         isExchange: false,
-        product_id: item.product.id,
-        features: item.features_string,
+        product_id: item.store.product.id,
+        features: [''],
         product: {
-            id: item.product.id,
-            name: item.product.name,
-            serial: item.product.serial,
-            lot: item.product.lot,
-            image: item.product.image,
-            quantity: item.quantity,
-            points: item.points || undefined,
-            description: item.product.description,
-            category_id: item.product.category_id,
-            created_at: item.product.created_at,
-            updated_at: item.product.updated_at,
-            deleted_at: item.product.deleted_at
+            id: item.store.product.id,
+            name: item.store.product.name,
+            serial: item.store.product.serial,
+            lot: item.store.product.lot,
+            image: item.store.product.image,
+            quantity: item.store.quantity,
+            points: item.store.points || undefined,
+            description: item.store.product.description,
+            category_id: item.store.product.category_id,
+            created_at: item.store.product.created_at,
+            updated_at: item.store.product.updated_at,
+            deleted_at: item.store.product.deleted_at
         }
         }
         dispatch(storeActions.setProductDetail(mappedProduct))
@@ -76,16 +78,17 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
                             <Grid item xs={2.4} sx={styles.productsContainer.gridContainer.cardColumn}>
                                 <CardComponent
                                     style={styles.productsContainer.gridContainer.cardColumn.card}
-
                                 >
-                                    <figure style={styles.productsContainer.gridContainer.cardColumn.card.imageContainer}>
-                                        <img className="productImage" src={item.store.product.image} alt="" />
-                                    </figure>
-                                    <Box sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo}>
-                                        <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.title}>{item.store.product.name}</Typography>
-                                        <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.presentation}>{item.store.presentation}</Typography>
-                                        <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.presentation}>{item.store.product.description.slice(0, 50)}...</Typography>
-                                        <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.price}>$ {NumberFormat(parseInt(item.store.price))}</Typography>
+                                    <Box onClick={() => handleClick(item)}>
+                                        <figure style={styles.productsContainer.gridContainer.cardColumn.card.imageContainer}>
+                                            <img className="productImage" src={item.store.product.image} alt="" />
+                                        </figure>
+                                        <Box sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo}>
+                                            <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.title}>{item.store.product.name}</Typography>
+                                            <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.presentation}>{item.store.presentation}</Typography>
+                                            <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.presentation}>{item.store.product.description.slice(0, 50)}...</Typography>
+                                            <Typography sx={styles.productsContainer.gridContainer.cardColumn.card.productInfo.price}>$ {NumberFormat(parseInt(item.store.price))}</Typography>
+                                        </Box>
                                     </Box>
                                 </CardComponent>
                             </Grid>
@@ -147,6 +150,7 @@ const styles = {
                     borderRadius: "10px",
                     display: 'flex',
                     flexDirection: 'column',
+                    cursor: 'pointer',
                     imageContainer: {
                         margin: 0,
                         padding: 0,
