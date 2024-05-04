@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { displayFlex } from "../../shared/recursiveStyles/RecursiveStyles";
 import { displaySpaceBetweenColumn } from "../../shared/recursiveStyles/RecursiveStyles";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAllCampaigns } from "../../../store/modules/campaigns";
 import CardComponent from "../../shared/card/card.component";
@@ -10,15 +10,50 @@ import { selectLoadingCampaigns } from "../../../store/modules/campaigns/selecto
 import './HighlightedCampaignContainer.css';
 import NumberFormat from "../../shared/hooks/numberFormater/NumberFormat";
 import { Height } from "@mui/icons-material";
+import { useAppDispatch } from "../../../store/store";
+import { productExchange } from "../../exchangeProducts/types";
+import { storeActions } from "../../../store/modules/store";
 
 const HighlightedCampaignContainer = (props: CampaignInterface) => {
 
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const location = useLocation();
     const highlightedCampaign = location?.state?.highlightedCampaign;
-    const campaingDataredux = useSelector(selectAllCampaigns);
+    // const campaingDataredux = useSelector(selectAllCampaigns);
     const loadingStatus = useSelector(selectLoadingCampaigns);
-    console.log('campaingDatareduxxxx: ', campaingDataredux);
     const { campaignProducts, setCampaignProducts } = props;
+
+    const handleClick = (item: any) => {
+        const mappedProduct: productExchange = {
+        id: item.id,
+        quantity: item.quantity,
+        points: item.points || 0,
+        price: item.price,
+        status: item.status,
+        start_date: item.start_date || "",
+        end_date: item?.end_date || "",
+        isExchange: false,
+        product_id: item.product.id,
+        features: item.features_string,
+        product: {
+            id: item.product.id,
+            name: item.product.name,
+            serial: item.product.serial,
+            lot: item.product.lot,
+            image: item.product.image,
+            quantity: item.quantity,
+            points: item.points || undefined,
+            description: item.product.description,
+            category_id: item.product.category_id,
+            created_at: item.product.created_at,
+            updated_at: item.product.updated_at,
+            deleted_at: item.product.deleted_at
+        }
+        }
+        dispatch(storeActions.setProductDetail(mappedProduct))
+        navigate("/product-detail")
+    }
 
     return (
         <Box className={'columnContainer'}>
@@ -41,6 +76,7 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
                             <Grid item xs={2.4} sx={styles.productsContainer.gridContainer.cardColumn}>
                                 <CardComponent
                                     style={styles.productsContainer.gridContainer.cardColumn.card}
+
                                 >
                                     <figure style={styles.productsContainer.gridContainer.cardColumn.card.imageContainer}>
                                         <img className="productImage" src={item.store.product.image} alt="" />
@@ -54,69 +90,7 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
                                 </CardComponent>
                             </Grid>
                         ))}
-                        {/* <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <CardComponent
-                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                            >
-                                <h1>Hola mundo</h1>
-                            </CardComponent>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <CardComponent
-                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                            >
-                                <h1>Hola mundo</h1>
-                            </CardComponent>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <CardComponent
-                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                            >
-                                <h1>Hola mundo</h1>
-                            </CardComponent>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <CardComponent
-                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                            >
-                                <h1>Hola mundo</h1>
-                            </CardComponent>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <CardComponent
-                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                            >
-                                <h1>Hola mundo</h1>
-                            </CardComponent>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <CardComponent
-                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                            >
-                                <h1>Hola mundo</h1>
-                            </CardComponent>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <CardComponent
-                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                            >
-                                <h1>Hola mundo</h1>
-                            </CardComponent>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <CardComponent
-                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                            >
-                                <h1>Hola mundo</h1>
-                            </CardComponent>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{padding: '10px 10px' + '!important', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <CardComponent
-                            style={{ padding: "20px", width: '100%', borderRadius: "10px" }}
-                            >
-                                <h1>Hola mundo</h1>
-                            </CardComponent>
-                        </Grid> */}
+                        
                     </Grid>
                 </Box>
             )}
