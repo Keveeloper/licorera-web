@@ -1,6 +1,6 @@
 import { Box, Divider, Grid, Typography } from "@mui/material";
 import DrawerComponent from "../shared/drawer/drawer.component";
-import { hudsonNYFontStyle, weblysleekFontStyle } from "../shared/recursiveStyles/RecursiveStyles";
+import { hudsonNYFontStyle, weblysleekBoltFontStyle, weblysleekFontStyle } from "../shared/recursiveStyles/RecursiveStyles";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCartProducts } from "../../store/modules/cart/selectors/cart.selector";
@@ -10,6 +10,7 @@ import "./cart.screen.css"
 import { Product } from "../exchangeProducts/types";
 import { CurrencyFormat, JotaFormat } from "../../utils/helpers";
 import ButtonComponent from "../shared/button/button.component";
+import { selectAllInfo } from "../../store/modules/users/selectors/users.selector";
 
 interface cartInterface {
   open: boolean;
@@ -20,6 +21,9 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
     const [isEmpty, setIsEmpty] = useState<boolean>(false);
     const products = useSelector(selectCartProducts);
     const [total, setTotal] = useState<number>(0);
+    const [points, setPoints] = useState<number>(0);
+
+    const Info = useSelector(selectAllInfo);
     
     const { removeCartItem, updateCartItem } = useCartHook();
 
@@ -42,6 +46,8 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
     useEffect(() => {
         if(products.length === 0){
             setIsEmpty(true)
+        }else{
+            setIsEmpty(false)
         }
         let newtotal = 0;
         products.forEach((item)=>{
@@ -50,6 +56,7 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
             }
         })
         setTotal(newtotal);
+        setPoints((newtotal / Info?.data?.minimumAmountForPoints) || 0)
     },[products])
     
     return (
@@ -71,7 +78,7 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
                     return (
                         <CardComponent
                         key={item.id}
-                        style={{ padding: "10px", marginBottom: '10px',borderRadius: "10px",  cursor: 'pointer' }}
+                        style={{ borderRadius: "10px",  cursor: 'pointer', marginBottom: '10px' }}
                         >
                         <Grid
                                 className="columnContainer"
@@ -80,21 +87,23 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
                                 style={{}}
                             >
                                 <Grid item xs={3}>
-                                    <img src={item.image} alt="" width={100} height={100} />
+                                    <img src={item.image} alt="" width={100} height={100} style={{marginLeft: '-20px'}} />
                                 </Grid> 
-                                <Grid item xs={6}>
+                                <Grid item xs={6} style={{display: 'flex',
+                                    flexDirection:'column',
+                                    justifyContent: 'space-between'}}>
                                     <Typography style={style.cards.title}>{item.name}</Typography>
-                                    <Typography style={style.cards.quantity} ></Typography>
+                                    <Typography style={style.cards.quantity} >{item.presentation}</Typography>
                                 </Grid>
                                 <Grid item  xs={3} sx={{ mt: 0, mb:0}}>
                                     <img style={style.cards.close} src="/icons/vector_close.png" onClick={() => removeProduct(item.id)} />
                                     <Typography style={style.cards.price} sx={{mt:5,  mb:-1, pb:2}} >{item.points ? JotaFormat(item.points) : CurrencyFormat(item.price)}</Typography>
                                     <div  className="iconContainer" onClick={() => onMinus(item)} style={item.quantity === 1 ?  minusDisabled : {width:"20px", height:"20px"} }>
-                                        <span className="icon" id="icono-menos" style={{fontSize: '30px', margin: '-7px 0 0 -12px'}}>-</span>
+                                        <span className="icon" id="icono-menos" style={{fontSize: '20px', width: '100%', marginBottom: '30%', justifyItems: 'center'}}>-</span>
                                     </div>
                                     <span className="normalText" style={{margin: '0px', fontSize:'18px'}}> {item.quantity} </span> 
                                     <div  className="iconContainer" onClick={() => onPlus(item)} style={{width:"20px", height:"20px"}}>
-                                        <span className="icon" id="icono-mas" style={{fontSize: '30px', margin: '-7px 0 0 -19px'}}>+</span>
+                                        <span className="icon" id="icono-mas" style={{fontSize: '20px', width: '100%', marginBottom: '30%'}}>+</span>
                                     </div>
                                 </Grid>
                             </Grid>   
@@ -102,7 +111,7 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
                     )
                     })}
                
-                <Typography style={style.footer.title}>Obtienes por tu compra 101 J</Typography>
+                <Typography style={style.footer.title}>Obtienes por tu compra {points} J</Typography>
                 <Divider />
                 <Grid
                     container
@@ -114,7 +123,7 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
                     <Grid item  xs={6} style={style.footer.textLeft}>TOTAL:</Grid>
                     <Grid item  xs={6} style={style.footer.textRigth}>{CurrencyFormat(total)}</Grid>
                 </Grid>
-                <Typography style={style.footer.text}>Domicilio gratis por compras mayores a $ %@ IVA incluido.</Typography>
+                <Typography style={style.footer.text}>Domicilio gratis por compras mayores a {CurrencyFormat(Info?.data?.minimumOrderValueFree)} IVA incluido.</Typography>
                 <ButtonComponent style={style.footer.button}>IR A PAGAR</ButtonComponent>
                 </div>
                 </>
@@ -149,7 +158,8 @@ const style: React.CSSProperties | any = {
             ...weblysleekFontStyle,
             fontWeight:"600",
             position: 'relative',
-            bottom: '10px'
+            top: '10px',
+            fontSize:"15px"
         },
         subtitle:{
             ...weblysleekFontStyle,
@@ -157,11 +167,14 @@ const style: React.CSSProperties | any = {
         },
         quantity:{
             ...weblysleekFontStyle,
-            marginTop: '30px',
-            fontWeight:"600"
+            marginBottom: '10px',
+            fontWeight:"600",
+            fontSize:"12px"
         },
         close:{
-            float: 'right'
+            float: 'right',
+            marginTop: '10px',
+            width: '10px'
         },
         price:{
             ...hudsonNYFontStyle,
@@ -170,7 +183,7 @@ const style: React.CSSProperties | any = {
     },
     footer:{
         title:{
-            ...weblysleekFontStyle,
+            ...weblysleekBoltFontStyle,
             fontSize:"14px",
             padding: '20px 0',
             fontWeight:"600"
@@ -193,7 +206,7 @@ const style: React.CSSProperties | any = {
         },
         button:{
             ...hudsonNYFontStyle,
-            fontSize: "22px",
+            fontSize: "16px",
             background:"#FFFFFF",
             width: '100%',
             height: '40px',
@@ -205,7 +218,7 @@ const style: React.CSSProperties | any = {
     }
 }
 const minusDisabled ={
-    background:"#fdbd0063",
+    // background:"#fdbd0063",
     width:"20px", 
     height:"20px"
 }

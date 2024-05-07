@@ -174,7 +174,7 @@ const WelcomeScreen = () => {
               alignItems: "center",
             }}
           >
-            <img src="/images/logo-300.png" alt="" width={300} />
+            <img src="/images/logo-300.png" alt="" width={250} />
           </Grid>
           <Grid item xs={6}>
           
@@ -201,9 +201,9 @@ const WelcomeScreen = () => {
                 id="modal-modal-description"
                 sx={{ mt: 2 }}
                 style={{
-                  fontFamily: "weblysleekuil",
+                  fontFamily: "weblysleekuisb",
                   fontWeight: 600,
-                  fontSize: "18px",
+                  fontSize: "16px",
                   color: "#000000",
                 }}
               >
@@ -213,8 +213,9 @@ const WelcomeScreen = () => {
               <Grid container spacing={2} style={{ textAlign: "center" }}>
                 <Grid item xs={4}>
                   <TextField
+                    style={{background: 'white'}}
                     label="Dia"
-                    variant="filled"
+                    variant="standard"
                     {...register("day", { required: true })}
                     onChange={handleChange}
                     name="day"
@@ -230,8 +231,9 @@ const WelcomeScreen = () => {
                 </Grid>
                 <Grid item xs={4}>
                   <TextField
+                    style={{background: 'white'}}
                     label="Mes"
-                    variant="filled"
+                    variant="standard"
                     {...register("month", { required: true })}
                     name="month"
                     onChange={handleChangeMoth}
@@ -247,8 +249,9 @@ const WelcomeScreen = () => {
                 </Grid>
                 <Grid item xs={4}>
                   <TextField
+                    style={{background: 'white'}}
                     label="Año"
-                    variant="filled"
+                    variant="standard"
                     {...register("year", { required: true })}
                     name="year"
                     defaultValue="" // react-hook-form maneja el valor inicial con defaultValue
@@ -277,10 +280,11 @@ const WelcomeScreen = () => {
                 onChange={onCheckBox}
               >
                 <Typography
-                  style={{ fontFamily: "weblysleekuil", fontSize: "12px" }}
+                  style={{ fontFamily: "weblysleekuil", fontSize: "12px", fontWeight: 600,
+                  color: '#000000'  }}
                 >
                   Al ingresar acepto los{" "}
-                  <a href="#" style={{ color: "#99791C" }}>
+                  <a href="https://www.licorera3jjjs.com/condiciones"  target="_blank" style={{ color: "#99791C" }}>
                     términos y condiciones
                   </a>
                 </Typography>
@@ -302,7 +306,7 @@ const WelcomeScreen = () => {
               </ButtonComponent>
 
               <Typography
-                style={{ fontFamily: "weblysleekuil", fontSize: "12px" }}
+                style={{ fontFamily: "weblysleekuil", fontSize: "12px"}}
                 sx={{ mt: 2 }}
               >
                 El contenido de esta aplicación es solo para mayores de edad.

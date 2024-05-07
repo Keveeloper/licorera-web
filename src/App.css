@@ -45,10 +45,12 @@
   font-family: 'weblysleekuil';
   src: url('../public/fonts/weblysleekuil.ttf') format('truetype');
 }
+/* italic text */
 @font-face {
   font-family: 'weblysleekuili';
   src: url('../public/fonts/weblysleekuili.otf') format('truetype');
 }
+/* Bolt Text */
 @font-face {
   font-family: 'weblysleekuisb';
   src: url('../public/fonts/weblysleekuisb.ttf') format('truetype');
