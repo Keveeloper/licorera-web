@@ -23,6 +23,8 @@ const SearchedResult = (props: SearchInterface) => {
     const { searchedText } = props;
     const searchedDataredux = useSelector(selectSearched);
     const suggestedProductsDataredux = useSelector(selectAllSuggested);
+    console.log('suggestedProductsDataredux: ', suggestedProductsDataredux);
+    
 
     const handleProduct = (item: Promotion) => {
         const mappedProduct: productExchange = {
@@ -101,6 +103,7 @@ const SearchedResult = (props: SearchInterface) => {
                             </figure>
                             <Box sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer}>
                                 <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer.productName}>{item.product.name}</Typography>
+                                <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer.description}>{item.presentation}</Typography>
                                 <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer.description}>{item.product.description.slice(0, 70)}...</Typography>
                                 <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer.price}>$ {NumberFormat(item.price)}</Typography>
                             </Box>

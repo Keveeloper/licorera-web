@@ -46,6 +46,7 @@ const SearchBar = () => {
     const dispatchClear = useDispatch();
     const { searching, setSearching } = useContext(searchContext);
     const [ searchedText, setSearchedText ] = useState<string>('');
+    const [ searchLoading, setSearchLoading ] = useState<boolean>(true);
 
     const handleBlur = () => {
         setTimeout(() => {
@@ -56,16 +57,20 @@ const SearchBar = () => {
     }
 
     useEffect(() => {
+        setSearchLoading(true);
         const delayDebounceFn = setTimeout(() => {
             if(searchedText) {
                 setSearching(true);
-                dispatch(getSearchedThunk(searchedText)).unwrap();                
+                dispatch(getSearchedThunk(searchedText)).unwrap().finally(() => {
+                    setSearchLoading(false);
+                });                
             }
         }, 500);
-    
+        
         if (!searchedText) {
             setSearching(false);
             dispatchClear(searchedActions.clearPersonalInfo());
+            setSearchLoading(false);
         }    
         return () => clearTimeout(delayDebounceFn)
     }, [searchedText]);
@@ -90,10 +95,20 @@ const SearchBar = () => {
             {searching && (
                 <Box sx={styles.searchContainer.resultsPivot}>
                     <Box sx={styles.searchContainer.resultsPivot.resultsContainer}>
-                        <SearchedResult 
-                            searchedText={searchedText}
-                            setSearchedText={setSearchedText}
-                        />
+                        {searchLoading ? 
+                            <figure style={styles.searchContainer.resultsPivot.resultsContainer.searchLoaderContainer}>
+                                <img src="/images/Loader-background.png" alt="loader square background" />
+                                <img 
+                                    style={styles.searchContainer.resultsPivot.resultsContainer.searchLoaderContainer.loaderSpinner} 
+                                    src="/images/loader-circle.png" alt="loader circle spinner" 
+                                />
+                            </figure>
+                        :
+                            <SearchedResult 
+                                searchedText={searchedText}
+                                setSearchedText={setSearchedText}
+                            />
+                        }
                     </Box>
                 </Box>
             )}
@@ -135,6 +150,25 @@ const styles = {
                 zIndex: 3,
                 overflow: 'auto',
                 scrollbarWidth: 'none',
+                searchLoaderContainer: {
+                    position: 'relative' as 'relative',
+                    margin: 0,
+                    padding: 0,
+                    width: '100%',
+                    height: '100%',
+                    loaderSpinner: {
+                        position: 'absolute' as 'absolute',
+                        animation: 'rotateMobile360 1s linear infinite',
+                    },
+                    '@keyframes rotateMobile360': {
+                        '0%': {
+                            transform: 'rotate(0deg)',
+                        },                    
+                        '100%': {
+                            transform: 'rotate(360deg)',
+                        }
+                    }
+                }
             }
         }
     },
