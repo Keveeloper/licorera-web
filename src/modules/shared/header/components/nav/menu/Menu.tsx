@@ -30,9 +30,9 @@ const styles = {
         'a': {
             padding: '0 25px 0 25px',
             color: paletteColors.black,
-            fontFamily: 'weblysleekuil',
+            fontFamily: 'weblysleekuisb',
             fontSize: '16px',
-            fontWeight: 600,
+            fontWeight: 900,
             textDecoration: 'none'
         },
         'a:hover': {
