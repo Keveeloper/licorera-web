@@ -49,6 +49,7 @@ const ProductDetail = () => {
       image: product?.product.image || "",
       description: product?.product.description || "",
       category_id: product?.product.category_id || 0,
+      presentation:  product?.product.presentation
     };
     if (product) {
       addToCart(newProduct);
