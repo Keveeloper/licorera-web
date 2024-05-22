@@ -70,7 +70,7 @@ const SearchedResult = (props: SearchInterface) => {
                                     <img src={item.product.image} alt={`Imagen de la cerveza: ${item.product.name}`} />
                                     {item.discount && (
                                         <figure>
-                                            <img style={styles.searchCard.imageSide.figure.figure.discountImage} src="/icons/discount.png" alt="" />
+                                            <img style={styles.searchCard.imageSide.figure.figure.discountImage} src="/icons/discount-icon.png" alt="" />
                                             <Typography sx={styles.searchCard.imageSide.figure.figure.text1}>{item.discount}</Typography>
                                             <Typography sx={styles.searchCard.imageSide.figure.figure.text2}>%Off</Typography>
                                         </figure>
@@ -110,7 +110,7 @@ const SearchedResult = (props: SearchInterface) => {
                                     <figure style={styles.noResultsHeader.recommendedContainer.recommendedProduct.imgContainer.promotionContainer}>
                                         <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.imgContainer.promotionContainer.discountNumber}>{item.discount}</Typography>
                                         <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.imgContainer.promotionContainer.discountOff}>% off</Typography>
-                                        <img style={styles.noResultsHeader.recommendedContainer.recommendedProduct.imgContainer.promotionContainer.promotionIcon} src="/icons/discount.png" alt=""/>
+                                        <img style={styles.noResultsHeader.recommendedContainer.recommendedProduct.imgContainer.promotionContainer.promotionIcon} src="/icons/discount-icon.png" alt=""/>
                                     </figure>
                                 )}
                                 <img className="productImage"src={item.product.image} alt={`imagen del producto: ${item.product.name}`}/>
@@ -174,17 +174,19 @@ const styles = {
                         margin: 0,
                         padding: 0,
                         fontFamily: 'HudsonNYSerif',
-                        fontSize: '14px',
+                        fontSize: '16px',
                         color: paletteColors.white,
+                        lineHeight: 1,
                         zIndex: 2
                     },
                     text2: {
                         margin: 0,
                         padding: 0,
-                        fontFamily: 'weblysleekuisb',
-                        // fontFamily: 'HudsonNYSerif',
-                        fontSize: '8px',
+                        // fontFamily: 'weblysleekuisb',
+                        fontFamily: 'HudsonNYSerif',
+                        fontSize: '6px',
                         color: paletteColors.white,
+                        lineHeight: 1,
                         zIndex: 2
                     }
                 }
@@ -282,6 +284,7 @@ const styles = {
                         },
                         promotionIcon: {
                             position: 'absolute' as 'absolute',
+                            background: 'blue'
                         }
                     },
                     productImage: {

@@ -6,7 +6,7 @@ import { paletteColors } from "../../../../../paletteColors/paletteColors";
 const Info = () => {
     return(
         <Box sx={styles.infoContainer}>
-            <Link to={'/'}>Quienes somos</Link>
+            <Link to={'/aboutus'}>Quienes somos</Link>
             <Link to={'/'}>Sugerencias</Link>
             <Link to={'/'}>Términos y condiciones</Link>
             <Link to={'/'}>Eliminar mis datos</Link>
