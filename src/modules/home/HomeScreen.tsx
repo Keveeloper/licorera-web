@@ -33,6 +33,9 @@ import zIndex from "@mui/material/styles/zIndex";
 import { searchContext } from "../../context/searchContext";
 import { selectLoadingCampaigns } from "../../store/modules/campaigns/selectors/campaigns.selector";
 import Loader from "../shared/Loader/components/Loader";
+import { getInfoThunk } from "../../store/modules/users/actions/users.actions";
+import { selectAllInfo } from "../../store/modules/users/selectors/users.selector";
+
 
 const HomeScreen = () => {
 
@@ -42,6 +45,7 @@ const HomeScreen = () => {
   const loadingStatus = useSelector(selectLoading);
   const loadingCampaigns = useSelector(selectLoadingCampaigns);
   const loadingNewProducts = useSelector(selectNewProductsLoading);
+  const loadInfo = useSelector(selectAllInfo);
 
   const [value, setValue] = useState("1");
   const [disabled, setDisabled] = useState<boolean>(false);
@@ -61,11 +65,15 @@ const HomeScreen = () => {
   }, []);
   
   const getCampaigns = useCallback(async () => {
-    await dispatch(getCampaignsThunk()).unwrap();      
+    await dispatch(getCampaignsThunk('')).unwrap();      
   }, []);
   
   const getNewProducts = useCallback(async () => {
     await dispatch(getNewProductsThunk()).unwrap();      
+  }, []);
+
+  const getInfo = useCallback(async () => {
+    await dispatch(getInfoThunk()).unwrap();     
   }, []);
 
   // const handleDisabled = (tab: string) => {
@@ -75,6 +83,9 @@ const HomeScreen = () => {
   useEffect(() => {
     getCategories();
     getSponsors();
+    if(!loadInfo || !loadInfo.success){
+      getInfo();
+    }
   }, []);
 
   useEffect(() => {
@@ -114,13 +125,13 @@ const HomeScreen = () => {
       try {
         // Hacer las solicitudes a las APIs
         await Promise.all([
-          dispatch(getPromotionsThunk()).unwrap().then((response) => {
+          dispatch(getPromotionsThunk()).unwrap().then((response: any) => {
             responsePromotions = response.response.data;
           }),
-          dispatch(getCampaignsThunk()).unwrap().then((response) => {
+          dispatch(getCampaignsThunk('')).unwrap().then((response: any) => {
             responseCampaigns = response.response.data;
           }),
-          dispatch(getNewProductsThunk()).unwrap().then((response) => {
+          dispatch(getNewProductsThunk()).unwrap().then((response: any) => {
             responseNewProducts = response.response.data;
           })
         ]);

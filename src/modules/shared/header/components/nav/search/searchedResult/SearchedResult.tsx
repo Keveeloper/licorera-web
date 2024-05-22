@@ -14,6 +14,7 @@ import { useAppDispatch } from "../../../../../../../store/store";
 import { storeActions } from "../../../../../../../store/modules/store";
 import { useNavigate } from "react-router-dom";
 import { productExchange } from "../../../../../../exchangeProducts/types";
+import zIndex from "@mui/material/styles/zIndex";
 
 const SearchedResult = (props: SearchInterface) => {
 
@@ -23,6 +24,8 @@ const SearchedResult = (props: SearchInterface) => {
     const { searchedText } = props;
     const searchedDataredux = useSelector(selectSearched);
     const suggestedProductsDataredux = useSelector(selectAllSuggested);
+    console.log('suggestedProductsDataredux: ', suggestedProductsDataredux);
+    
 
     const handleProduct = (item: Promotion) => {
         const mappedProduct: productExchange = {
@@ -65,14 +68,27 @@ const SearchedResult = (props: SearchInterface) => {
                             <Box sx={styles.searchCard.imageSide}>
                                 <figure>
                                     <img src={item.product.image} alt={`Imagen de la cerveza: ${item.product.name}`} />
+                                    {item.discount && (
+                                        <figure>
+                                            <img style={styles.searchCard.imageSide.figure.figure.discountImage} src="/icons/discount.png" alt="" />
+                                            <Typography sx={styles.searchCard.imageSide.figure.figure.text1}>{item.discount}</Typography>
+                                            <Typography sx={styles.searchCard.imageSide.figure.figure.text2}>%Off</Typography>
+                                        </figure>
+                                    )}
                                 </figure>
                             </Box>
                             <Box sx={styles.searchCard.infoSide}>
                                 <Typography sx={styles.searchCard.infoSide.title}>{item.product.name}</Typography>
                                 <Typography style={{margin: '10px 0 auto 0'}} fontSize={14}>{item.product.description.slice(0,70)}{'...'}</Typography>
-                                <Box sx={styles.searchCard.infoSide.footer}>
-                                    <Typography fontSize={14}>{`Presentación: ` + item.presentation}</Typography>
-                                    <Typography sx={styles.searchCard.infoSide.footer.price}>$ {NumberFormat(item.price)}</Typography>
+                                <Box sx={item.points ? styles.searchCard.infoSide.footerJotas : styles.searchCard.infoSide.footer}>
+                                    {item.points ?
+                                        <Typography sx={styles.searchCard.infoSide.footer.price}>{NumberFormat(item.points)} J</Typography>
+                                    :
+                                        <>
+                                            <Typography fontSize={14}>{`Presentación: ` + item.presentation}</Typography>
+                                            <Typography sx={styles.searchCard.infoSide.footer.price}>$ {NumberFormat(item.price)}</Typography>
+                                        </>
+                                    }
                                 </Box>
                             </Box>
                         </Box>
@@ -101,6 +117,7 @@ const SearchedResult = (props: SearchInterface) => {
                             </figure>
                             <Box sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer}>
                                 <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer.productName}>{item.product.name}</Typography>
+                                <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer.description}>{item.presentation}</Typography>
                                 <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer.description}>{item.product.description.slice(0, 70)}...</Typography>
                                 <Typography sx={styles.noResultsHeader.recommendedContainer.recommendedProduct.infoSearchedContainer.price}>$ {NumberFormat(item.price)}</Typography>
                             </Box>
@@ -129,21 +146,53 @@ const styles = {
         // background: 'blue',
         overflow: 'hidden',
         imageSide: {
-            width: '20%',
+            width: '30%',
             height: '100%',
             // background: 'green',
             'figure': {
+                position: 'relative' as 'relative',
                 padding: '10px',
                 width: '100%',
                 height: '100%',
                 'img': {
                     height: '100%',
+                },
+                'figure': {
+                    position: 'absolute' as 'absolute',
+                    padding: 3,
+                    top: 10,
+                    left: 10,
+                    width: '35px',
+                    height: '35px',
+                    ...displayFlexColumn,
+                    discountImage: {
+                        position: 'inherit' as 'inherit',
+                        width: '100%',
+                        height: '100%',
+                    },
+                    text1: {
+                        margin: 0,
+                        padding: 0,
+                        fontFamily: 'HudsonNYSerif',
+                        fontSize: '14px',
+                        color: paletteColors.white,
+                        zIndex: 2
+                    },
+                    text2: {
+                        margin: 0,
+                        padding: 0,
+                        fontFamily: 'weblysleekuisb',
+                        // fontFamily: 'HudsonNYSerif',
+                        fontSize: '8px',
+                        color: paletteColors.white,
+                        zIndex: 2
+                    }
                 }
             }
         },
         infoSide: {
             padding: '10px 20px 10px 10px',
-            width: '80%',
+            width: '70%',
             height: '100%',
             ...displaySpaceBetweenColumn,
             // background: 'red',
@@ -157,6 +206,10 @@ const styles = {
                     fontSize: '16px',
                     fontFamily: 'HudsonNYSerif',
                 }
+            },
+            footerJotas: {
+                display: 'flex',
+                justifyContent: 'flex-end',
             }
         }
     },

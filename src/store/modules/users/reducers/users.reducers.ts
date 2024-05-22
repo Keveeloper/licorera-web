@@ -69,5 +69,27 @@ export const updateUserInfoRejected = (
   state.error = action.payload || action.error;
 };
 
+// GET INFO 
+export const getInfoPending = (state: PersonalInfoState) => {
+  state.loadingStatus = 'loading';
+  state.info = '';
+  state.error = undefined;
+};
+
+export const getInfoFulfilled = (
+  state: PersonalInfoState,
+  action: PayloadAction<any>
+) => {
+  state.info = action.payload.response;
+  state.loadingStatus = 'loaded';
+};
+
+export const getInfoRejected = (
+  state: PersonalInfoState,
+  action: any
+) => {
+  state.loadingStatus = 'error';
+  state.error = action.payload || action.error;
+};
 
 

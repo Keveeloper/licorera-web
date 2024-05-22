@@ -3,17 +3,14 @@ import { base } from '../../base-api/base';
 import { handleSubModuleError } from '../../tools/apiError';
 import { ApiResponse } from '../../tools/types';
 
-export const getCampaigns = async (campaignId: string): Promise<ApiResponse<Data>> => {
+export const getInfo = async (): Promise<ApiResponse<Data>> => {
   try {
-   
     const  {data}  = await base.get<Data>(
-      `/mobile/campaigns${campaignId}`,
-      {}
+      `/mobile/tresjotasInfo`
       );
-      return { response: data, success: !!Object.keys(data).length };
+    return { response: data, success: !!Object.keys(data).length };
     
   } catch (error) {
     return handleSubModuleError(error);
   }
 };
-

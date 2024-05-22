@@ -122,7 +122,8 @@ const ContainerStore = () => {
         category_id: product.category_id,
         created_at: product.created_at,
         updated_at: product.updated_at,
-        deleted_at: product.deleted_at
+        deleted_at: product.deleted_at,
+        presentation: product.store.presentation
       }
     }
       dispatch(storeActions.setProductDetail(mappedProduct))

@@ -1,9 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import { paletteColors } from "../../paletteColors/paletteColors";
 import { Swiper, SwiperSlide} from 'swiper/react';
-import { Navigation } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import { selectAllSponsors } from "../../store/modules/sponsors/selectors/sponsors.selector";
 import { useSelector } from "react-redux";
+import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
+import { displayFlexColumn } from "../shared/recursiveStyles/RecursiveStyles";
+import { BorderRight, Padding } from "@mui/icons-material";
 
 const Sponsors = () => {
 
@@ -12,7 +15,7 @@ const Sponsors = () => {
     return (
         <Box className="columnContainer" sx={{marginBottom: '50px !important'}}>
             <Typography sx={{
-                margin: '50px 0 0 0',
+                margin: '50px 0 50px 0',
                 fontFamily: 'HudsonNYSerif',
                 fontSize: '25px',
                 textAlign: 'center'
@@ -20,7 +23,8 @@ const Sponsors = () => {
                 Encuentra tus <span style={{color: paletteColors.gold}}>marcas favoritas</span>
             </Typography>
             <Swiper
-                modules={[Navigation]}
+                style={styles.swiper}
+                modules={[Navigation, Pagination]}
                 navigation={{
                     enabled: true
                 }}
@@ -29,7 +33,7 @@ const Sponsors = () => {
                 }}
                 loop={true}
                 spaceBetween={1}
-                slidesPerView={7}
+                slidesPerView={sponsorsDataredux.length}
                 // onSlideChange={() => console.log('slide change')}
                 // onSwiper={(swiper: any) => console.log(swiper)}
             >
@@ -42,7 +46,7 @@ const Sponsors = () => {
                         {/* {(loadingStatus === 'loading') ? 
                                 <Skeleton sx={styles.swiperContainer.swiper.swiperSlide.skeleton} variant="rectangular" />
                             : */}
-                                <Box>
+                                <Box sx={styles.swiper.sponsorContainer}>
                                     <img height={"100px"} src={`${item.imageUrl}`} alt=""/>
                                     <Typography>
                                         {item.name}
@@ -58,4 +62,18 @@ const Sponsors = () => {
 
 }
 
+const styles = {
+    swiper: {
+        padding: '0 30px 0 30px',
+        // width: '100%',
+        // maxWidth: '1450px',
+        height: '190px',
+        sponsorContainer: {
+            height: '100%',
+            ...displayFlexColumn,
+            borderRight: '0.5px solid',
+            // background: 'blue',
+        }
+    }
+}
 export default Sponsors;

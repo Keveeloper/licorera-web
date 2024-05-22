@@ -12,6 +12,7 @@ export interface Product {
     created_at?: string;
     updated_at?: string;
     deleted_at?: string | null;
+    presentation?:string
 }
 
 export interface productExchange {
