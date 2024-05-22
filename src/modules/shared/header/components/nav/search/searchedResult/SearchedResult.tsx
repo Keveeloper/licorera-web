@@ -272,6 +272,7 @@ const styles = {
                             fontFamily: 'HudsonNYSerif',
                             fontSize: '16px',
                             color: 'white',
+                            lineHeight: 1,
                             zIndex: 1,
                         },
                         discountOff: {
@@ -280,11 +281,14 @@ const styles = {
                             fontFamily: 'HudsonNYSerif',
                             fontSize: '6px',
                             color: 'white',
+                            lineHeight: 1,
                             zIndex: 1,
                         },
                         promotionIcon: {
                             position: 'absolute' as 'absolute',
-                            background: 'blue'
+                            width: '100%',
+                            height: '100%',
+                            // background: 'blue'
                         }
                     },
                     productImage: {

@@ -34,6 +34,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     fontFamily: 'weblysleekuisb',
     fontSize: '14px',
+    fontWeight: 600,
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
@@ -49,11 +50,11 @@ const SearchBar = () => {
     const [ searchLoading, setSearchLoading ] = useState<boolean>(true);
 
     const handleBlur = () => {
-        setTimeout(() => {
-            setSearchedText('');
-            setSearching(false);
-            dispatchClear(searchedActions.clearPersonalInfo());
-        }, 500);
+        // setTimeout(() => {
+        //     setSearchedText('');
+        //     setSearching(false);
+        //     dispatchClear(searchedActions.clearPersonalInfo());
+        // }, 500);
     }
 
     useEffect(() => {
