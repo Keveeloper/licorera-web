@@ -17,13 +17,10 @@ const ExchangeComponent = () => {
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(1);
     const [products, setProducts] = useState([]);
-    const [openModal, setOpenModal] = useState(false);
 
     const dispatchApp = useAppDispatch();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const user = useSelector(selectAllUser);
     
     const handleChangePagination = (
         event: React.ChangeEvent<unknown>,
@@ -44,18 +41,10 @@ const ExchangeComponent = () => {
     }
 
     const cardHandle = (product:productExchange) => {
-        if(Object.keys(user).length > 0){
-            const updatedProduct = { ...product, isExchange: true };
-            dispatch(storeActions.setProductDetail(updatedProduct))
-            navigate("/product-detail")
-        }else{
-            setOpenModal(true)
-        } 
+        const updatedProduct = { ...product, isExchange: true };
+        dispatch(storeActions.setProductDetail(updatedProduct))
+        navigate("/product-detail")
     }
-
-    const handleClose = (isOpen: boolean) => {
-        setOpenModal(isOpen);
-    };
 
     React.useEffect(() => {
         handleExchange(1)
@@ -127,7 +116,6 @@ const ExchangeComponent = () => {
                     />
                 </Stack>
             </Grid>
-            <LoginScreen handleClose={() => handleClose(false)} modalOpen={openModal}/>
         </Grid>
     )
 }

@@ -63,7 +63,7 @@ const SuggestedProducts = () => {
           {location.pathname === '/product-detail' ?
             <>
               <Grid item xs={12} style={{ textAlign: "center" }}>
-                  <Typography >También te podría interesar</Typography>
+                  <Typography style={{fontWeight:600}}>También te podría interesar</Typography>
               </Grid>
               {/* <Grid item xs={12}  style={styles.link} > */}
               <div  style={{width: "100%"}}>
@@ -84,7 +84,7 @@ const SuggestedProducts = () => {
           }
 
         {/* PRODUCTS SECTION */}
-        <Grid container spacing={2} sx={{mt:2, mb:2}}>
+        <Grid container spacing={2} sx={{mt:2, mb:10}}>
           {products.map((item: any) => {
             return (
               <Grid key={item.id} item xs={2.4} style={{ textAlign: "center" }}>
@@ -94,8 +94,8 @@ const SuggestedProducts = () => {
                   {item.discount > 0 && (
                     <div className="promotion">
                       <p>{item.discount}</p>
-                      <p>%off</p>
-                      <img src="icons/discount.png" alt="" />
+                      <p>% off</p>
+                      <img src="icons/discount.png" alt="" width={50}/>
                     </div>
                   )}
                   <img src={item.product.image} alt="" width={200} height={200} />

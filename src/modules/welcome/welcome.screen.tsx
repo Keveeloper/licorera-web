@@ -61,6 +61,7 @@ const WelcomeScreen = () => {
   const [errorFields, setErrorFields] = useState(false);
   const [errorcheckBox, setErrorcheckBox] = useState(false);
   const [isButtonActive, setIsButtonActive] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("");
 
   const dispatch = useDispatch();
   
@@ -106,7 +107,13 @@ const WelcomeScreen = () => {
 
   const onCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { day, month, year } = getValues();
+    if(!ValidateRealDate(day, month, year)){
+      setErrorMessage("Ingresar una fecha valida.")
+      return setErrorFields(true);
+    }
+
     if (!validateDate(day, month, year)) {
+        setErrorMessage("La fecha debe ser mayor a 18 años.")
         setErrorFields(true);
         return;
     } else {
@@ -142,14 +149,47 @@ const WelcomeScreen = () => {
     return birthDate <= date18YearsAgo;
   };
 
+  const ValidateRealDate = (day: string, month: string, year: string): boolean => {
+      const d = parseInt(day, 10);
+      const m = parseInt(month, 10);
+      const y = parseInt(year, 10);
+  
+      if (isNaN(d) || isNaN(m) || isNaN(y)) {
+          return false;
+      }
+  
+      if (m < 1 || m > 12) {
+          return false;
+      }
+
+      const lastDayOfMonth = new Date(y, m, 0).getDate();
+      if (d < 1 || d > lastDayOfMonth) {
+          return false;
+      }
+
+      const date = new Date(y, m - 1, d);
+      return (
+          date.getFullYear() === y &&
+          date.getMonth() === m - 1 &&
+          date.getDate() === d
+      );
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setErrorFields(false);
     setErrorcheckBox(false);
     const { day, month, year } = getValues();
     event.preventDefault();
 
-    if (!validateDate(day, month, year)) 
+    if(!ValidateRealDate(day, month, year)){
+      setErrorMessage("Ingresar una fecha valida.")
+      return setErrorFields(true);
+    }
+    
+    if (!validateDate(day, month, year)){
+        setErrorMessage("La fecha debe ser mayor a 18 años.")
         return setErrorFields(true);
+    }
 
     if(!checked)
         return setErrorcheckBox(true);
@@ -254,8 +294,8 @@ const WelcomeScreen = () => {
                     variant="standard"
                     {...register("year", { required: true })}
                     name="year"
-                    defaultValue="" // react-hook-form maneja el valor inicial con defaultValue
-                    onChange={handleChangeYear} // Manejo personalizado del cambio para actualizar react-hook-form
+                    defaultValue="" 
+                    onChange={handleChangeYear} 
                     InputProps={{
                       inputComponent: TextMaskCustom as any,
                       inputProps: {
@@ -268,7 +308,7 @@ const WelcomeScreen = () => {
                 {errorFields && (
                     <Grid item xs={12}>
                     <Typography style={{ color: "rgb(211, 47, 47)" }}>
-                        La fecha debe ser mayor a 18 años.
+                        {errorMessage}
                     </Typography>
                     </Grid>
                 )}

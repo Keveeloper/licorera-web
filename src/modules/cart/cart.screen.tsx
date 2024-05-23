@@ -258,13 +258,13 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
       </Box>
 
       {/* Modal Info*/}
-      <CustomModal
+      {/* <CustomModal
         modalStyle="cartModal"
         open={showAlert}
         onClose={handleErrorClose}
       >
         <InfoAlertScreen title="" onClose={handleErrorClose} />
-      </CustomModal>
+      </CustomModal> */}
 
       {/* Modal Delete*/}
       <CustomModal
@@ -320,7 +320,7 @@ const style: React.CSSProperties | any = {
       ...weblysleekFontStyle,
       marginBottom: "10px",
       fontWeight: "600",
-      fontSize: "12px",
+      fontSize: "14px",
     },
     close: {
       float: "right",

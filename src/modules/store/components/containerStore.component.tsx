@@ -123,7 +123,8 @@ const ContainerStore = () => {
         created_at: product.created_at,
         updated_at: product.updated_at,
         deleted_at: product.deleted_at,
-        presentation: product.store.presentation
+        presentation: product.store.presentation,
+        discount: product.store.discount
       }
     }
       dispatch(storeActions.setProductDetail(mappedProduct))
@@ -220,6 +221,7 @@ const ContainerStore = () => {
                               ? {
                                   ...storeStyles.categorySubtitle,
                                   borderBottom: "3px solid rgb(153, 121, 28)",
+                                  height: "30px"
                                 }
                               : { ...storeStyles.categorySubtitle }
                           }
@@ -282,8 +284,8 @@ const ContainerStore = () => {
                  {item.store.discount > 0 && (
                     <div className="promotion">
                       <p>{item.store.discount}</p>
-                      <p>%off</p>
-                      <img src="icons/discount.png" alt=""/>
+                      <p>%  off</p>
+                      <img src="icons/discount.png" alt="" width={50}/>
                     </div>
                   )}
                 <CardComponent
@@ -357,7 +359,7 @@ const storeStyles = {
     },
     price: {
       ...hudsonNYFontStyle,
-      fontSize: "19px",
+      fontSize: "25px",
       padding: "20px 0 0 0",
     },
   },

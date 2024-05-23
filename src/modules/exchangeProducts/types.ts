@@ -12,7 +12,8 @@ export interface Product {
     created_at?: string;
     updated_at?: string;
     deleted_at?: string | null;
-    presentation?:string
+    presentation?:string,
+    discount?:number
 }
 
 export interface productExchange {
