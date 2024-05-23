@@ -53,11 +53,11 @@ const SearchBar = () => {
     const [ searchLoading, setSearchLoading ] = useState<boolean>(true);
 
     const handleBlur = () => {
-        // setTimeout(() => {
-        //     setSearchedText('');
-        //     setSearching(false);
-        //     dispatchClear(searchedActions.clearPersonalInfo());
-        // }, 500);
+        setTimeout(() => {
+            setSearchedText('');
+            setSearching(false);
+            dispatchClear(searchedActions.clearPersonalInfo());
+        }, 500);
     }
 
     useEffect(() => {
