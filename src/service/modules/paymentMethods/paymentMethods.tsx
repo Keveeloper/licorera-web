@@ -1,4 +1,4 @@
-import { Data } from '../../../store/modules/newProducts/types';
+import { Data } from '../../../store/modules/paymentMethods/types';
 import { base } from '../../base-api/base';
 import { handleSubModuleError } from '../../tools/apiError';
 import { ApiResponse } from '../../tools/types';

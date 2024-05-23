@@ -3,32 +3,32 @@ import { LoadingStatus } from "../../tools";
 
 export type RootState = ReturnType<typeof reducer>;
 
-export interface PromotionState {
+export interface PaymentMethodState {
     state: Data ;
     error: string | null | undefined;
     loadingStatus: LoadingStatus;
 }
 
 export interface Data {
-    data:Promotion[];
+    data: PaymentMethods;
     success:boolean;
     message:string
 }
 
-export interface Promotion {
-    id: number;
+export interface PaymentMethods {
+    id_customer: string;
     name: string;
-    image: string;
-    quantity: number;
-    start_date: string;
-    end_date: string;
-    promotion_type: number;
-    store_product_id: number;
-    discount: number | null;
-    quantity_minimal: number | null;
-    divider: number | null;
-    multiplier: number | null;
-    price: string;
-    description: string;
-    diageo: number;
-  }
+    created: string;
+    email: string;
+    phone: string;
+    address: string;
+    cards: Card[];
+}
+
+export interface Card {
+    token: string;
+    franchise: string;
+    mask: string;
+    created: string;
+    default: boolean;
+}

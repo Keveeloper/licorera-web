@@ -1,14 +1,14 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import { PromotionState } from '../types';
+import { PaymentMethodState } from '../types';
 
-export const promotionPending = (state: PromotionState) => {
+export const paymentMethodsPending = (state: PaymentMethodState) => {
   state.loadingStatus = 'loading';
   state.error = undefined;
 };
 
-export const promotionFulfilled = (
-  state: PromotionState,
+export const paymentMethodsFulfilled = (
+  state: PaymentMethodState,
   action: PayloadAction<any>
 ) => {
   state.state = action.payload.response;
@@ -16,8 +16,8 @@ export const promotionFulfilled = (
   // state.loadingStatus = 'loading';
 };
 
-export const promotionRejected = (
-  state: PromotionState,
+export const paymentMethodsRejected = (
+  state: PaymentMethodState,
   action: any
 ) => {
   state.loadingStatus = 'error';
