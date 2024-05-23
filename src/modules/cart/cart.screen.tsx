@@ -14,10 +14,14 @@ import "./cart.screen.css";
 import { Product } from "../exchangeProducts/types";
 import { CurrencyFormat, JotaFormat } from "../../utils/helpers";
 import ButtonComponent from "../shared/button/button.component";
-import { selectAllInfo } from "../../store/modules/users/selectors/users.selector";
+import {
+  selectAllInfo,
+  selectAllUser,
+} from "../../store/modules/users/selectors/users.selector";
 import InfoAlertScreen from "./alert.screens/infoAlertScreen";
 import CustomModal from "../shared/modal/customModal";
 import DeleteAlertScreen from "./alert.screens/deleteAlertScreen";
+import WarningAlertScreen from "./alert.screens/warningAlertScreen";
 
 interface cartInterface {
   open: boolean;
@@ -29,26 +33,34 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
   const products = useSelector(selectCartProducts);
   const [total, setTotal] = useState<number>(0);
   const [points, setPoints] = useState<number>(0);
+  const user = useSelector(selectAllUser);
 
   const [product, setProduct] = useState<Product>();
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
-  
+  const [showWarningAlert, setShoWarningAlert] = useState<boolean>(false);
+
   const Info = useSelector(selectAllInfo);
 
   const { removeCartItem, updateCartItem } = useCartHook();
 
   const onMinus = (product: Product) => {
     if (product.quantity > 1) {
-        const updatedProduct = { ...product, quantity: product.quantity - 1 };
-        updateCartItem(updatedProduct);
-    }else{
-        handleDeleteOpen(product);
+      const updatedProduct = { ...product, quantity: product.quantity - 1 };
+      updateCartItem(updatedProduct);
+    } else {
+      handleDeleteOpen(product);
     }
   };
 
   const onPlus = (product: Product) => {
+    if (product.points && product?.points > 0) {
+      if (!validatePoints(points + product?.points)) {
+        setShoWarningAlert(true) 
+        return
+      }
+    }
     const updatedProduct = { ...product, quantity: product.quantity + 1 };
     updateCartItem(updatedProduct);
   };
@@ -56,6 +68,13 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
   const removeProduct = (id: number) => {
     removeCartItem(id);
     setShowDeleteAlert(false);
+  };
+
+  const validatePoints = (points: number) => {
+    if (user.points >= points) 
+      return true;
+    else 
+      return false;
   };
 
   useEffect(() => {
@@ -86,11 +105,14 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
     setShowDeleteAlert(false);
   };
 
-  const handleDeleteOpen = (item:Product) => {
-    setProduct(item)
-    setShowDeleteAlert(true);
+  const handleWarningClose = () => {
+    setShoWarningAlert(false);
   };
 
+  const handleDeleteOpen = (item: Product) => {
+    setProduct(item);
+    setShowDeleteAlert(true);
+  };
 
   return (
     <DrawerComponent open={open} anchor="right" toggleDrawer={toggleDrawer}>
@@ -269,17 +291,31 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
       {/* Modal Delete*/}
       <CustomModal
         modalStyle="cartModal"
+        modalContentStyle="cartModalContent"
         open={showDeleteAlert}
         onClose={handleDeleteClose}
       >
         <DeleteAlertScreen
-          img={product?.image || ''}
-          title={product?.name || ''}
+          img={product?.image || ""}
+          title={product?.name || ""}
           onClose={handleDeleteClose}
-          onAccept={()=>removeProduct(product?.id || 0)}
+          onAccept={() => removeProduct(product?.id || 0)}
         />
       </CustomModal>
 
+      {/* Modal Warning*/}
+      <CustomModal
+        modalStyle="cartModal"
+        modalContentStyle="cartModalContent"
+        open={showWarningAlert}
+        onClose={handleWarningClose}
+      >
+        <WarningAlertScreen
+          title="INFORMACIÓN"
+          Text="No tienes suficientes puntos para este canje. Compra y acumula más puntos."
+          onClose={handleWarningClose}
+        />
+      </CustomModal>
     </DrawerComponent>
   );
 };
