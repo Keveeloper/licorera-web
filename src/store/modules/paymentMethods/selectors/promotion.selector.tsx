@@ -9,14 +9,9 @@ import { PROMOTION_FEATURE_KEY } from '../promotions.slice';
 export const getPromotionState = (rootState: RootState): PromotionState =>
   rootState[PROMOTION_FEATURE_KEY];
 
-export const selectAllPromotion = createSelector(
+export const selectAllPaymentMethods = createSelector(
   getPromotionState,
   (promotion) => promotion.state.data
-);
-
-export const selectFirstImage = createSelector(
-  getPromotionState,
-  (promotion) => promotion.state.data[0].image
 );
 
 export const selectLoading = createSelector(

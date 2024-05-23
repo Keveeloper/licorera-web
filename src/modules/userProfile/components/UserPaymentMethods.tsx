@@ -1,11 +1,57 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectAllPaymentMethods } from "../../../store/modules/paymentMethods";
+import { displayFlex } from "../../shared/recursiveStyles/RecursiveStyles";
+import { Typography } from "@mui/material";
 
 const UserPaymentMethods = ({ items, onItemDelete }: any) => {
 
+  const paymentMethodsRedux = useSelector(selectAllPaymentMethods);
+  console.log('paymentMethodsRedux: ', paymentMethodsRedux);
+  
+
   return (
     
-    <Box sx={{width: '100%', height: '100%', bgcolor: 'blue'}}>
-      {/* Hola */}
+    <Box sx={{width: '100%', height: '100%'}}>
+      <Box sx={{padding: '60px 5%', width: '100%', height: '88%', overflow: 'auto'}}>
+        {/* {paymentMethodsRedux.cards.map((item: any, index: any) => ( */}
+          <Box sx={{marginTop: '30px', padding: '0 0 20px 0', width: '100%', height: '25%', ...displayFlex, borderBottom: '1px solid gray' }}>
+            <figure style={{width: '10%', height: '100%', ...displayFlex}}>
+              <img style={{height: '50%'}} src="/icons/credit-card-color.png" alt="credit card color icon" />
+            </figure>
+            <Box sx={{width: '80%'}}>
+              <Typography sx={{fontFamily: 'weblysleekuisb'}}>4513 **** **** 1234</Typography>
+              <Typography>Diego Diaz</Typography>
+            </Box>
+            <figure style={{width: '10%', height: '100%', ...displayFlex}}>
+              <img style={{height: '40%'}} src="/icons/trash.png" alt="credit card color icon" />
+            </figure>
+          </Box>
+          <Box sx={{marginTop: '30px', padding: '0 0 20px 0', width: '100%', height: '25%', ...displayFlex, borderBottom: '1px solid gray' }}>
+            <figure style={{width: '10%', height: '100%', ...displayFlex}}>
+              <img style={{height: '50%'}} src="/icons/credit-card-color.png" alt="credit card color icon" />
+            </figure>
+            <Box sx={{width: '80%'}}>
+              <Typography sx={{fontFamily: 'weblysleekuisb'}}>4513 **** **** 1234</Typography>
+              <Typography>Diego Diaz</Typography>
+            </Box>
+            <figure style={{width: '10%', height: '100%', ...displayFlex}}>
+              <img style={{height: '40%'}} src="/icons/trash.png" alt="credit card color icon" />
+            </figure>
+          </Box>
+        {/* ))} */}
+      </Box>
+      <Button 
+          // sx={styles.button}
+          sx={{height: '12%'}}
+          variant="outlined" 
+          fullWidth 
+          color="inherit" 
+          // onClick={handleClick}
+      >
+          {/* {edit ? 'Guardar' : 'Editar'} */}
+          Agregar
+      </Button>
     </Box>
   );
 };

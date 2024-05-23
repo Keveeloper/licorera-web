@@ -35,7 +35,7 @@ const UserContent = () => {
                 <TabPanel sx={{padding: 0}} value="1">
                     <UserInfo />
                 </TabPanel>
-                <TabPanel sx={{padding: 0}} value="2">
+                <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="2">
                     <UserPaymentMethods/>
                 </TabPanel>
             </TabComponent>
@@ -49,7 +49,7 @@ const styles = {
         margin: '90px auto',
         width: '60%',
         height: '500px',
-        // background: 'blue'
+        // background: 'orange'
     }
 }
 

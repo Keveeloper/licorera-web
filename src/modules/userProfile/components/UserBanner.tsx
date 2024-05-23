@@ -11,7 +11,8 @@ const UserBanner = () => {
         <Box sx={styles.bannerContainer}>
             <Box sx={styles.bannerContainer.boxLeft}>
                 <Box sx={styles.bannerContainer.boxLeft.userIcon}>
-                    <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/account-icon.png" width={100} alt="" />
+                    {/* <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/account-icon.png" width={100} alt="" /> */}
+                    <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/user.png" width={100} alt="" />
                 </Box>
                 <Box sx={styles.bannerContainer.boxLeft.userName}>
                     <Typography sx={styles.bannerContainer.boxLeft.userName.name}>{user?.name} {user?.last_name}</Typography>
@@ -49,8 +50,10 @@ const styles = {
                 height: '100%',
                 ...displayFlex,
                 userImage: {
+                    padding: '10px',
                     background: 'white',
                     borderRadius: '50%',
+                    border: '3px solid black',
                 }
             },
             userName: {
