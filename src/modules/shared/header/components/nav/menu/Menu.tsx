@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { displayFlexEnd } from "../../../../recursiveStyles/RecursiveStyles";
 import { paletteColors } from "../../../../../../paletteColors/paletteColors";
 import { useState } from "react";
+import { Padding } from "@mui/icons-material";
 
 const Menu = () => {
 
@@ -28,17 +29,19 @@ const styles = {
         height: '100%',
         ...displayFlexEnd,
         'a': {
-            padding: '0 25px 0 25px',
+            padding: '0 25px 5px 25px',
             color: paletteColors.black,
             fontFamily: 'weblysleekuisb',
             fontSize: '16px',
             fontWeight: 900,
-            textDecoration: 'none'
+            textDecoration: 'none',
         },
         'a:hover': {
+            padding: '0 25px 5px 25px',
             borderBottom: `3px solid ${paletteColors.gold}`,
         },
         clicked: {
+            padding: '0 25px 5px 25px',
             borderBottom: `3px solid ${paletteColors.gold}`,
         }
     }

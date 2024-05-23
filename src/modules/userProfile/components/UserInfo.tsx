@@ -176,6 +176,7 @@ const stylesMethod = (edit: boolean) => ({
         margin: '40px 0 0 0',
         width: '100%',
         ...displaySpaceBetween,
+        // background: 'purple',
         inputInfo: {
             margin: '20px 0 0 0',
             padding: '10px', 
