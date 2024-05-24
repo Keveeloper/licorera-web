@@ -20,7 +20,7 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
     const navigate = useNavigate();
     const location = useLocation();
     const highlightedCampaign = location?.state?.highlightedCampaign;
-    const campaingDataredux = useSelector(selectAllCampaigns);
+    // const campaingDataredux = useSelector(selectAllCampaigns);
     const loadingStatus = useSelector(selectLoadingCampaigns);
     const { campaignProducts, setCampaignProducts } = props;
 

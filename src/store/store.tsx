@@ -22,6 +22,7 @@ import { SPONSOR_FEATURE_KEY, sponsorReducer } from "./modules/sponsors/sponsors
 import { CAMPAIGN_FEATURE_KEY, campaignReducer } from "./modules/campaigns/campaigns.slice";
 import { NEW_PRODUCTS_FEATURE_KEY, newProductsReducer } from "./modules/newProducts/newProducts.slice";
 import { SEARCH_FEATURE_KEY, searchedReducer } from "./modules/search/search.slice";
+import { PAYMENT_METHODS_FEATURE_KEY, paymentMethodsReducer } from "./modules/paymentMethods/paymentMethods.slice";
 
 export const reducer = combineReducers({
   [PERSONAL_INFO_FEATURE_KEY]: personalInfoReducer,
@@ -34,6 +35,7 @@ export const reducer = combineReducers({
   [CAMPAIGN_FEATURE_KEY]: campaignReducer,
   [NEW_PRODUCTS_FEATURE_KEY]: newProductsReducer,
   [SEARCH_FEATURE_KEY]: searchedReducer,
+  [PAYMENT_METHODS_FEATURE_KEY]: paymentMethodsReducer,
 });
 
 const KEY_PERSIST_CONFIG = "root";
