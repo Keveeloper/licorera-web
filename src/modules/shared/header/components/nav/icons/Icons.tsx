@@ -42,7 +42,7 @@ const Icons = () => {
     };
 
     const logout = () =>{
-        dispatch(personalInfoActions.clearState(isWelcome));
+        dispatch(personalInfoActions.clearUserState(isWelcome));
     }
 
     const toggleDrawer = (open: boolean) => {

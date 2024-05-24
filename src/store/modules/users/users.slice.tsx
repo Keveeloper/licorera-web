@@ -37,12 +37,12 @@ export const personalInfoSlice = createSlice({
     ) => {
       state.isWelcome = action.payload;
     },
-    clearState: (status:PersonalInfoState, action: PayloadAction<any> ) => {
+    clearUserState: (status:PersonalInfoState, action: PayloadAction<any> ) => {
       status.data = {}
       status.user = {}
       status.isWelcome =  action.payload;
     },
-    clearPersonalInfo: (status: PersonalInfoState) => {
+    clearUserInfo: (status: PersonalInfoState) => {
       status.data = {};
     },
   },
