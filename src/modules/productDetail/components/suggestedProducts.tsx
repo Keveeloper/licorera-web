@@ -89,7 +89,7 @@ const SuggestedProducts = () => {
             return (
               <Grid key={item.id} item xs={2.4} style={{ textAlign: "center" }}>
                 <CardComponent
-                  style={{ padding: "20px", borderRadius: "10px" }}
+                  style={{ padding: "0 20px", borderRadius: "10px", minHeight:"400px" }}
                 >
                   {item.discount > 0 && (
                     <div className="promotion">
@@ -99,18 +99,22 @@ const SuggestedProducts = () => {
                     </div>
                   )}
                   <img src={item.product.image} alt="" width={200} height={200} />
-                  <Typography style={styles.card.title}>
-                    {item.product.name}
-                  </Typography>
-                  <Typography style={styles.card.subtitle}>
-                    {item.presentation}
-                  </Typography>
-                  <Typography style={styles.card.content}>
-                    {item.product.description.slice(0, 50)}
-                  </Typography>
-                  <Typography style={styles.card.price}>
-                    $ {NumberFormat(item.price)}
-                  </Typography>
+                  <div style={{display: 'flex',flexDirection: 'column',justifyContent: 'space-between',height: '170px'}}>
+                    <div>
+                      <Typography style={styles.card.title}>
+                        {item.product.name}
+                      </Typography>
+                      <Typography style={styles.card.subtitle}>
+                        {item.presentation}
+                      </Typography>
+                      <Typography style={styles.card.content}>
+                        {item.product.description.slice(0, 50)}
+                      </Typography>
+                    </div>
+                    <Typography style={styles.card.price}>
+                      $ {NumberFormat(item.price)}
+                    </Typography>
+                  </div>
                 </CardComponent>
               </Grid>
             );
@@ -132,7 +136,7 @@ const styles = {
           ...weblysleekFontStyle,
           fontSize: "19px",
           fontWeight: "600",
-          height: "110px",
+          // height: "110px",
         },
         subtitle: {
           ...weblysleekFontStyle,
@@ -143,7 +147,8 @@ const styles = {
           fontSize: "16px",
           fontWeight: "300",
           paddingTop: "0px",
-          height: '50px'
+          height: '50px',
+          marginTop:'10px'
         },
         price: {
           ...hudsonNYFontStyle,

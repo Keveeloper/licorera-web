@@ -22,9 +22,11 @@ import { useNavigate } from "react-router-dom";
 
 interface customProps {
   isCheckout?: boolean;
+  onClick?:() => void;
+  isFormValid?:boolean;
 }
 
-const CartComponent: React.FC<customProps> = ({ isCheckout }) => {
+const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid }) => {
   const products = useSelector(selectCartProducts);
   const user = useSelector(selectAllUser);
   const Info = useSelector(selectAllInfo);
@@ -33,6 +35,8 @@ const CartComponent: React.FC<customProps> = ({ isCheckout }) => {
   const { removeCartItem, updateCartItem } = useCartHook();
 
   const [total, setTotal] = useState<number>(0);
+  const [subTotal, setSubTotal] = useState<number>(0);
+  const [delivery, setDelivery] = useState<number>(0);
   const [points, setPoints] = useState<number>(0);
   const [product, setProduct] = useState<Product>();
   const [showWarningAlert, setShoWarningAlert] = useState<boolean>(false);
@@ -92,7 +96,8 @@ const CartComponent: React.FC<customProps> = ({ isCheckout }) => {
         newtotal += item.quantity * item.price;
       }
     });
-    setTotal(newtotal);
+    setSubTotal(newtotal)
+    setTotal(newtotal + delivery);
     setPoints(newtotal / Info?.data?.minimumAmountForPoints || 0);
   }, [products]);
 
@@ -243,7 +248,7 @@ const CartComponent: React.FC<customProps> = ({ isCheckout }) => {
                   fontSize: "14px",
                 }}
               >
-                {CurrencyFormat(total)}
+                {CurrencyFormat(subTotal)}
               </Grid>
               <Grid
                 item
@@ -266,7 +271,7 @@ const CartComponent: React.FC<customProps> = ({ isCheckout }) => {
                   fontSize: "14px",
                 }}
               >
-                {CurrencyFormat(total)}
+                {CurrencyFormat(delivery)}
               </Grid>
             </>
           )}
@@ -283,9 +288,9 @@ const CartComponent: React.FC<customProps> = ({ isCheckout }) => {
         </Typography>
         {isCheckout ? (
           <ButtonComponent
-            disabled={false}
-            // onClick={() => handleAlertOpen()}
-            style={style.footer.button}
+            disabled={!isFormValid}
+            onClick={onClick}
+            style={isFormValid ? style.footer.button : style.footer.disabledButton}
           >
             CONFIRMAR
           </ButtonComponent>
@@ -424,6 +429,18 @@ const style: React.CSSProperties | any = {
       cursor: "pointer",
       border: "1px solid #000000",
     },
+    disabledButton:{
+      ...hudsonNYFontStyle,
+      fontSize: "16px",
+      background: "#D1D1D1",
+      width: "100%",
+      height: "40px",
+      borderRadius: "5px",
+      padding: "0 0 8px 0",
+      cursor: "pointer",
+      color:"#FFFFFF",
+      border: "none",
+    }
   },
 };
 const minusDisabled = {

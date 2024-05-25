@@ -19,6 +19,7 @@ import { selectAllUser } from "../../../store/modules/users/selectors/users.sele
 import { CurrencyFormat } from "../../../utils/helpers";
 import SuccessAlert from "../../shared/modal/lottie.Alert";
 import LoginScreen from "../../user/login.screen";
+import { Margin } from "@mui/icons-material";
 
 const ProductDetail = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -115,7 +116,7 @@ const ProductDetail = () => {
     >
       <Grid item xs={4} style={displayFlex}>
         <div style={{ position: "relative" }}>
-          {product?.product.discount && (
+          {product?.product.discount ? (
             <div className="promotion">
               <p style={{ fontSize: "33px", marginTop: "3px" }}>
                 {product.product.discount}
@@ -123,7 +124,7 @@ const ProductDetail = () => {
               <p style={{ fontSize: "17px", marginTop: "5px" }}>% off</p>
               <img src="icons/discount-detail.png" alt="" width="100px" />
             </div>
-          )}
+          ): ''}
           <img src={product?.product.image} alt="" width={350} height={350} />
         </div>
       </Grid>
@@ -154,10 +155,10 @@ const ProductDetail = () => {
             {product?.product.discount ? (
               <>
                 <span style={{ ...style.points, ...style.beforePrice }}>
-                  ANTES: <span style={{textDecoration: 'line-through'}}>{CurrencyFormat(discount)}</span>
+                  ANTES: <span style={{textDecoration: 'line-through'}}>{CurrencyFormat(product?.price)}</span>
                 </span>
-                <span style={style.points}>
-                  AHORA: {CurrencyFormat(product?.price)}  
+                <span style={{...style.points, marginLeft:"20px"}}>
+                  AHORA: {CurrencyFormat(discount)}  
                 </span>
               </>
             ) : (
@@ -295,7 +296,7 @@ const style = {
   },
   points: {
     ...hudsonNYFontStyle,
-    fontSize: "45px",
+    fontSize: "45px"
   },
   beforePrice:{
     color: '#BBBBBB',
