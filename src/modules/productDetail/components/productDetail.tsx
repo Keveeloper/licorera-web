@@ -20,6 +20,8 @@ import { CurrencyFormat } from "../../../utils/helpers";
 import SuccessAlert from "../../shared/modal/lottie.Alert";
 import LoginScreen from "../../user/login.screen";
 import { Margin } from "@mui/icons-material";
+import { FaMinusCircle } from "react-icons/fa";
+import { FaPlusCircle } from "react-icons/fa";
 
 const ProductDetail = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -192,21 +194,7 @@ const ProductDetail = () => {
                 xs={4}
                 style={{ alignItems: "center", display: "flex" }}
               >
-                <div
-                  className="iconContainer"
-                  onClick={onMinus}
-                  style={
-                    quantity === 1
-                      ? minusDisabled
-                      : { width: "40px", height: "40px" }
-                  }
-                >
-                  <span
-                    className="icon-detail-minus"
-                  >
-                    -
-                  </span>
-                </div>
+                <FaMinusCircle style={quantity === 1 ? {color:'#fdbd0063', fontSize: '40px', cursor:'pointer'} : {color:'#fdbd00', fontSize: '40px', cursor:'pointer'}} onClick={onMinus}/>
                 <span
                   className="normalText"
                   style={{
@@ -217,16 +205,10 @@ const ProductDetail = () => {
                 >
                   {quantity}
                 </span>
-                <div
-                  className="iconContainer"
-                  onClick={onPlus}
-                  style={{ width: "40px", height: "40px", display: 'flex' }}
-                >
-                  <span className="icon-detail">+</span>
-                </div>
+                <FaPlusCircle style={{color:'#fdbd00', fontSize: '40px', cursor:'pointer'}}  onClick={onPlus}/>
               </Grid>
               <Grid item xs={8}>
-                <ButtonComponent style={style.addButton} onClick={setCart}>
+                <ButtonComponent style={style.addButton} onClick={setCart} >
                   AGREGAR
                 </ButtonComponent>
               </Grid>

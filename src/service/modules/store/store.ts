@@ -17,8 +17,9 @@ export const getCategories = async (): Promise<ApiResponse<CategoriesResponse>> 
 
 export const getCategoriesById = async (request:CategoriesRequest): Promise<ApiResponse<CategoriesResponse>> => {
     try {
+      var sort = request.sort ? `&sort=${request.sort}` : '';
       const { data } = await base.get<CategoriesResponse>(
-        `/mobile/categories/${request.id}/products?page=${request.page}`,
+        `/mobile/categories/${request.id}/products?page=${request.page}${sort}`,
         {}
         );
       return { response: data, status: 200, success: !!Object.keys(data).length };

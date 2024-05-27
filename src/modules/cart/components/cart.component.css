@@ -1,26 +1,7 @@
-.iconContainer{
-    display: inline-flex;;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%; 
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    background: #fdbd00;
-}
 
 .icono {
     display: inline-block;
     text-align: center;
-}
-
-#icono-mas {
-    width: 0px;
-}
-
-  
-#icono-menos {
-    width: 0px;
 }
 
 .modal-container {
@@ -43,7 +24,13 @@
 .cartModalContent{
     background-color: white;
     padding: 10px;
-    border-radius: 50px;
+    border-radius:25px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
     text-align: center;
+}
+.contentIcons{
+    display: inline-flex;
+    justify-items: center;
+    align-items: center;
+    gap: 5px;
 }

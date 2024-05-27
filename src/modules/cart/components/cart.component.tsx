@@ -19,6 +19,7 @@ import WarningAlertScreen from "../alert.screens/warningAlertScreen";
 import DeleteAlertScreen from "../alert.screens/deleteAlertScreen";
 import "./cart.component.css";
 import { useNavigate } from "react-router-dom";
+import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 
 interface customProps {
   isCheckout?: boolean;
@@ -145,7 +146,7 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
                 >
                   <Typography style={style.cards.title}>{item.name}</Typography>
                   <Typography style={style.cards.quantity}>
-                    {item.presentation}
+                    {item.presentation && (<span>Presentación: </span>)}{item.presentation}
                   </Typography>
                 </Grid>
                 <Grid item xs={3} sx={{ mt: 0, mb: 0 }}>
@@ -162,51 +163,15 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
                       ? JotaFormat(item.points)
                       : CurrencyFormat(item.price)}
                   </Typography>
-                  <div
-                    className="iconContainer"
-                    onClick={() => onMinus(item)}
-                    style={
-                      item.quantity === 1
-                        ? minusDisabled
-                        : { width: "20px", height: "20px" }
-                    }
-                  >
+                  <div className="contentIcons">
+                    <FaMinusCircle   onClick={() => onMinus(item)} style={{color:'#fdbd00', fontSize: '20px', cursor:'pointer'}}/>
                     <span
-                      className="icon"
-                      id="icono-menos"
-                      style={{
-                        fontSize: "20px",
-                        width: "100%",
-                        marginBottom: "30%",
-                        justifyItems: "center",
-                      }}
+                      className="normalText"
+                      style={{ margin: "0px", fontSize: "18px" }}
                     >
-                      -
+                      {" "}{item.quantity}{" "}
                     </span>
-                  </div>
-                  <span
-                    className="normalText"
-                    style={{ margin: "0px", fontSize: "18px" }}
-                  >
-                    {" "}
-                    {item.quantity}{" "}
-                  </span>
-                  <div
-                    className="iconContainer"
-                    onClick={() => onPlus(item)}
-                    style={{ width: "20px", height: "20px" }}
-                  >
-                    <span
-                      className="icon"
-                      id="icono-mas"
-                      style={{
-                        fontSize: "20px",
-                        width: "100%",
-                        marginBottom: "30%",
-                      }}
-                    >
-                      +
-                    </span>
+                    <FaPlusCircle   onClick={() => onPlus(item)} style={{color:'#fdbd00', fontSize: '20px', cursor:'pointer'}}/>
                   </div>
                 </Grid>
               </Grid>
@@ -374,6 +339,7 @@ const style: React.CSSProperties | any = {
       position: "relative",
       top: "10px",
       fontSize: "15px",
+      textAlign: "left"
     },
     subtitle: {
       ...weblysleekFontStyle,
@@ -384,6 +350,7 @@ const style: React.CSSProperties | any = {
       marginBottom: "10px",
       fontWeight: "600",
       fontSize: "14px",
+      textAlign: "left"
     },
     close: {
       float: "right",

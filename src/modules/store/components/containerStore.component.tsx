@@ -26,7 +26,7 @@ import {
   selectCategoriesLoading,
 } from "../../../store/modules/store/selectors/store.selector";
 import { useSelector } from "react-redux";
-import { hudsonNYFontStyle, weblysleekFontStyle } from "../../shared/recursiveStyles/RecursiveStyles";
+import { hudsonNYFontStyle, weblysleekBoltFontStyle, weblysleekFontStyle } from "../../shared/recursiveStyles/RecursiveStyles";
 import { storeActions } from "../../../store/modules/store/store.slice";
 import { useNavigate } from "react-router";
 import { Product } from "../types";
@@ -61,15 +61,16 @@ const ContainerStore = () => {
   const categoriesDataredux = useSelector(selectArrayCategories);
 
   const searchOptions = [
-    "Menor Precio",
-    "Mayor Precio",
-    "Alfabéticamente",
-    "Recomendados",
-    "Popularidad",
+    {title:"Menor Precio", value:"price:asc"},
+    {title:"Mayor Precio", value:"price:desc"},
+    {title:"Alfabéticamente", value:"alphabetically"},
+    {title:"Recomendados", value:"recommended"},
+    {title:"Popularidad", value:"ranking"}
   ];
 
   const handleChange = (event: any) => {
     setSearch(event.target.value);
+    handleCategory(categorySelected.id, 1, event.target.value)
   };
 
   const handleChangePagination = (
@@ -77,15 +78,20 @@ const ContainerStore = () => {
     value: number
   ) => {
     setPage(value);
-    handleCategory(categorySelected.id, value);
+    if(search){
+      handleCategory(categorySelected.id, value, search);
+    }else{
+      handleCategory(categorySelected.id, value);
+    }
+   
   };
 
-  const handleCategory = async (id: number, page: number) => {
+  const handleCategory = async (id: number, page: number, sort?:string) => {
     const categoriesById = await dispatch(
-      CategoriesById({ id, page })
+      CategoriesById({ id, page, sort })
     ).unwrap();
-    setTotalPage(categoriesById.response.data.last_page);
-    setProducts(categoriesById.response.data.data);
+    setTotalPage(categoriesById.response.data?.last_page);
+    setProducts(categoriesById.response.data?.data);
     filterCategory(id);
   };
 
@@ -253,7 +259,7 @@ const ContainerStore = () => {
               name="search"
             >
               {searchOptions.map((item, index) => {
-                return <MenuItem value={item} key={index}>{item}</MenuItem>;
+                return <MenuItem value={item.value} key={index}>{item.title}</MenuItem>;
               })}
             </Select>
           </FormControl>
@@ -278,14 +284,14 @@ const ContainerStore = () => {
         </Grid>
         {/* PRODUCTS SECTION */}
         <Grid container spacing={2}>
-          {products.map((item: any) => {
+          {products?.map((item: any) => {
             return (
               <Grid item xs={2.4} style={{ textAlign: "center" }} onClick={() => handleProduct(item)}>
-                 {item.store.discount > 0 && (
+                 {item?.store?.discount > 0 && (
                     <div className="promotion">
                       <p>{item.store.discount}</p>
                       <p>%  off</p>
-                      <img src="icons/discount.png" alt="" width={50}/>
+                      <img src="icons/discount-icon.png" alt="" width={50}/>
                     </div>
                   )}
                 <CardComponent
@@ -296,13 +302,13 @@ const ContainerStore = () => {
                     {item.name}
                   </Typography>
                   <Typography style={storeStyles.card.subtitle}>
-                    {item.store.presentation}
+                    {item.store?.presentation}
                   </Typography>
                   <Typography style={storeStyles.card.content}>
                     {item.description.slice(0, 50)}
                   </Typography>
                   <Typography style={storeStyles.card.price}>
-                    {CurrencyFormat(item.store.price)}
+                    {CurrencyFormat(item?.store?.price)}
                   </Typography>
                 </CardComponent>
               </Grid>
@@ -341,7 +347,7 @@ const storeStyles = {
   card: {
     img: {},
     title: {
-      ...weblysleekFontStyle,
+      ...weblysleekBoltFontStyle,
       fontSize: "19px",
       fontWeight: "600",
       height: "70px",
