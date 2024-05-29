@@ -14,3 +14,15 @@ export const getGoogleApi = async (search:string): Promise<ApiResponse<Data>> =>
     return handleSubModuleError(error);
   }
 };
+
+export const getGoogleReverseApi = async (latitude:number,longitude:number): Promise<ApiResponse<Data>> => {
+  try {
+    const  {data}  = await base.get<Data>(
+      `/v2/locations/google/${latitude}/${longitude}`
+      );
+    return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
