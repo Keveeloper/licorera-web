@@ -15,6 +15,9 @@
     font-family: 'weblysleekuil';
     font-weight: 300
 }
+.addressText{
+    width: 350px;
+}
 .addressText p{
     font-family: 'weblysleekuisb';
     font-weight: 600
