@@ -3,13 +3,20 @@ import FooterScreen from "../shared/footer/FooterScreen";
 import HeaderScreen from "../shared/header/HeaderScreen"
 import ButtonComponent from "../shared/button/button.component";
 import './PromotionDetails.css'
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { Product } from "../exchangeProducts/types";
+import useCartHook from "../shared/hooks/cartHook/useCartHook";
+import SuccessAlert from "../shared/modal/lottie.Alert";
 
 const PromotionDetailScreen = () => {
 
     const location = useLocation();
     const productDetail = location?.state?.productDetail;
+    const { addToCart } = useCartHook();
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
+    console.log('productDetail: ', productDetail);
+    
     
     const [count, setCount] = React.useState(1);
 
@@ -21,6 +28,25 @@ const PromotionDetailScreen = () => {
 
     const onPlus = () => {
         setCount(count + 1)
+    }
+
+    const setCart = () => {
+        const newProduct: Product = {
+          quantity: count,
+          points: 0,
+          price: productDetail?.price,
+          name: productDetail?.name || "",
+          id: productDetail?.id || 0,
+          image: productDetail?.image || "",
+          description: productDetail?.description || "",
+          category_id: 0,
+          presentation: "",
+        };
+        if (productDetail) {
+          addToCart(newProduct);
+        //   setIsSuccess(false);
+          setIsSuccess(true);
+        }
     }
 
     return (
@@ -65,7 +91,8 @@ const PromotionDetailScreen = () => {
                         <Grid item  xs={9} sx={{ mt: 2, mb:4}}>
                             <ButtonComponent style={styleButtonChecked}>
                                 <Typography
-                                style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}
+                                    style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif", cursor: 'pointer' }}
+                                    onClick={setCart}
                                 >
                                 AGREGAR
                                 </Typography>
@@ -74,6 +101,7 @@ const PromotionDetailScreen = () => {
                     </Grid>
                 </div>
             </Box>
+            {isSuccess && <SuccessAlert setOpen={setIsSuccess} />}
             <FooterScreen />
         </>
         
