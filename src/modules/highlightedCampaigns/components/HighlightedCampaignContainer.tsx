@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, Button } from "@mui/material";
 import { displayFlex } from "../../shared/recursiveStyles/RecursiveStyles";
 import { displaySpaceBetweenColumn } from "../../shared/recursiveStyles/RecursiveStyles";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -57,6 +57,13 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
         navigate("/product-detail")
     }
 
+    const goToStore = () => {
+        const categoryId = {
+            id: highlightedCampaign?.categoryId
+        }
+        navigate("/store", { state: { categoryId } });
+    }
+
     return (
         <Box className={'columnContainer'}>
             <Box sx={styles.headerContainer}>
@@ -96,6 +103,17 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
                         
                     </Grid>
                 </Box>
+            )}
+            {highlightedCampaign.type === 2 && (
+                <Button
+                    sx={{marginBottom: '100px', padding: '10px'}}
+                    variant="outlined" 
+                    fullWidth 
+                    color="inherit"
+                    onClick={goToStore}
+                >
+                    Ver productos
+                </Button>
             )}
         </Box>
     );
