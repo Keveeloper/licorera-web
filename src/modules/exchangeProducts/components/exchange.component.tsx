@@ -91,10 +91,10 @@ const ExchangeComponent = () => {
                                 }}
                                 onClick={() =>cardHandle(item)}
                             >
-                                <Grid item xs={3} style={{...displayFlex, height: '100%'}}>
-                                    <img src={item.product.image} alt=""  height={160} />
+                                <Grid item xs={3} style={{...displayFlex, justifyContent:'start', height: '100%'}}>
+                                    <img src={item.product.image} alt=""  height={160} style={{maxWidth:'100%'}} />
                                 </Grid> 
-                                <Grid item xs={7} style={{display:"flex", flexDirection:"column", justifyContent:"space-between"}}>
+                                <Grid item xs={7} style={{display:"flex", flexDirection:"column", justifyContent:"space-between", padding: '0 10px'}}>
                                     <Typography style={style.cards.title}>{item.product.name}</Typography>
                                     <Typography style={style.cards.subtitle}>{item.product.description.slice(0, 50)}</Typography>
                                     <Typography style={style.cards.quantity} >Disponibles: {item.quantity}</Typography>

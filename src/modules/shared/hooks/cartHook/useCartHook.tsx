@@ -15,6 +15,7 @@ const useCartHook = () => {
   const addToCart = (product: Product) => {
     const oldCart = cart.filter(item => item.id === product.id);
     if(oldCart.length > 0){
+      updateCartItem(product)
       return
     }
     const newCart = [...cart, product];

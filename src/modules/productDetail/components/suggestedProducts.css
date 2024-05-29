@@ -7,6 +7,7 @@
 
 .promotion{
    position: absolute;
+   margin: 20px 0 0 0;
 }
 
 .promotion p{
@@ -20,13 +21,13 @@
  transform: translate(-55%, -90%);
  left: 50%;
  font-weight: 400;
- font-size: 20px;
+ font-size: 25px;
  font-family: 'HudsonNYSerif';
 }
 .promotion p:nth-child(2){
  top: 47%;
  transform: translate(-50%, 0%);
  left: 50%;
- font-size: 10px;
+ font-size: 14px;
  margin-top: 2px;
 }

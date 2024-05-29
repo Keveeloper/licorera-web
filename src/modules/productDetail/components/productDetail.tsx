@@ -155,14 +155,14 @@ const ProductDetail = () => {
         ) : (
           <>
             {product?.product.discount ? (
-              <>
+              <div  style={{ margin:"20px 0 40px 0"}}>
                 <span style={{ ...style.points, ...style.beforePrice }}>
                   ANTES: <span style={{textDecoration: 'line-through'}}>{CurrencyFormat(product?.price)}</span>
                 </span>
                 <span style={{...style.points, marginLeft:"20px"}}>
                   AHORA: {CurrencyFormat(discount)}  
                 </span>
-              </>
+              </div>
             ) : (
               <span style={style.points}>{CurrencyFormat(product?.price)}</span>
             )}
@@ -199,8 +199,9 @@ const ProductDetail = () => {
                   className="normalText"
                   style={{
                     margin: "0px",
-                    fontSize: "18px",
+                    fontSize: "22px",
                     padding: "0px 20px",
+                    fontFamily: 'weblysleekuisb'
                   }}
                 >
                   {quantity}

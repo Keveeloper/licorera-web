@@ -291,7 +291,7 @@ const ContainerStore = () => {
                     <div className="promotion">
                       <p>{item.store.discount}</p>
                       <p>%  off</p>
-                      <img src="icons/discount-icon.png" alt="" width={50}/>
+                      <img src="icons/discount-icon.png" alt="" width={70}/>
                     </div>
                   )}
                 <CardComponent

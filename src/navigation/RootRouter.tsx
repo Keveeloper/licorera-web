@@ -30,6 +30,10 @@ const CheckOut = React.lazy(
   () => import("../modules/checkout/checkout.screen")
 );
 
+const Address = React.lazy(
+  () => import("../modules/address/address.screen")
+);
+
 const RootRouter = () => {
   return (
     <Routes>
@@ -115,6 +119,15 @@ const RootRouter = () => {
         element={
           <React.Suspense fallback={<LoaderScreen />}>
             <CheckOut />
+          </React.Suspense>
+        }
+      />
+
+      <Route
+        path="/address/*"
+        element={
+          <React.Suspense fallback={<LoaderScreen />}>
+            <Address />
           </React.Suspense>
         }
       />

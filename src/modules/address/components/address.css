@@ -1,0 +1,21 @@
+.addressContainer{
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+.mt-20 {
+    margin-top: 20px;
+}
+.searchTitle span{
+    font-family: 'weblysleekuisb';
+    font-weight: 600
+}
+.searchTitle p{
+    font-family: 'weblysleekuil';
+    font-weight: 300
+}
+.addressText p{
+    font-family: 'weblysleekuisb';
+    font-weight: 600
+}

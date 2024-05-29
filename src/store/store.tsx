@@ -23,6 +23,7 @@ import { CAMPAIGN_FEATURE_KEY, campaignReducer } from "./modules/campaigns/campa
 import { NEW_PRODUCTS_FEATURE_KEY, newProductsReducer } from "./modules/newProducts/newProducts.slice";
 import { SEARCH_FEATURE_KEY, searchedReducer } from "./modules/search/search.slice";
 import { PAYMENT_METHODS_FEATURE_KEY, paymentMethodsReducer } from "./modules/paymentMethods/paymentMethods.slice";
+import { ADDRESS_FEATURE_KEY, addressReducer } from "./modules/address";
 
 export const reducer = combineReducers({
   [PERSONAL_INFO_FEATURE_KEY]: personalInfoReducer,
@@ -36,6 +37,7 @@ export const reducer = combineReducers({
   [NEW_PRODUCTS_FEATURE_KEY]: newProductsReducer,
   [SEARCH_FEATURE_KEY]: searchedReducer,
   [PAYMENT_METHODS_FEATURE_KEY]: paymentMethodsReducer,
+  [ADDRESS_FEATURE_KEY]: addressReducer,
 });
 
 const KEY_PERSIST_CONFIG = "root";

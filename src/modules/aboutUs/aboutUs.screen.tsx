@@ -10,7 +10,7 @@ const AboutUs: React.FC<props> = () => {
       <HeaderScreen />
         <div className="columnContainer" style={{padding:"30px 0px"}}>
             <div style={styles.img}>
-                <img src="/images/whiteLogo.png" alt="" />
+                <img src="/images/whiteLogo.png" alt="" width={320}/>
             </div>
             <Typography style={styles.title}>Quienes Somos<br /><br /></Typography>
             <Typography style={styles.subtitle}>

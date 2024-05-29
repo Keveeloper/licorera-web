@@ -95,7 +95,7 @@ const SuggestedProducts = () => {
                     <div className="promotion">
                       <p>{item.discount}</p>
                       <p>% off</p>
-                      <img src="icons/discount.png" alt="" width={50}/>
+                      <img src="icons/discount-icon.png" alt="" width={70}/>
                     </div>
                   )}
                   <img src={item.product.image} alt="" width={200} height={200} />
@@ -140,7 +140,7 @@ const styles = {
         },
         subtitle: {
           ...weblysleekFontStyle,
-          fontSize: "13px",
+          fontSize: "17px",
         },
         content: {
           ...weblysleekFontStyle,
