@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, Stack } from "@mui/material";
 import { displayFlex, displayFlexColumn, hudsonNYFontStyle, weblysleekFontStyle } from "../../shared/recursiveStyles/RecursiveStyles";
 import zIndex from "@mui/material/styles/zIndex";
 import { useSelector } from "react-redux";
@@ -10,12 +10,22 @@ import { useAppDispatch } from "../../../store/store";
 import { useNavigate } from "react-router-dom";
 import CardComponent from "../../shared/card/card.component";
 import { CurrencyFormat } from "../../../utils/helpers";
+import { Pagination as MyPagination } from "@mui/material";
+import './RecommendedProducts.css';
+import { useState } from "react";
 
 const RecommendedProducts = () => {
 
     const suggestedRedux = useSelector(selectAllSuggested);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const [page, setPage] = useState<number>(1);
+    const [totalPage, setTotalPage] = useState<number>(Math.ceil(suggestedRedux.length / 10));
+    
+    console.log('page: ', page);
+    console.log('suggestedRedux: ', suggestedRedux.length);
+    console.log('totalPage: ', totalPage);
+    
 
     const handleProduct = (product:Product) => {
         const mappedProduct: productExchange = {
@@ -49,6 +59,14 @@ const RecommendedProducts = () => {
           dispatch(storeActions.setProductDetail(mappedProduct))
           navigate("/product-detail")
     }
+
+    const handleChangePagination = (
+        event: React.ChangeEvent<unknown>,
+        value: number
+      ) => {
+        setPage(value);
+        // handleCategory(categorySelected.id, value);
+    };
      
     return (
         <Box className='columnContainer'>
@@ -93,6 +111,16 @@ const RecommendedProducts = () => {
                 );
             })}
             </Grid>
+            <Box sx={{width: '100%', ...displayFlex}}>
+                <Stack spacing={2} style={{ margin: "0 auto", padding: "30px 0", width: '100%' }}>
+                    <MyPagination
+                        // count={totalPage}
+                        count={totalPage}
+                        page={page}
+                        onChange={handleChangePagination}
+                    />
+                </Stack>
+            </Box>
         </Box>
      )
 
@@ -107,7 +135,7 @@ const cardStyle = {
     justifyContent: 'center',
     alignItems: 'center',
     cursor:"pointer",
-    background: 'yellow'
+    // background: 'yellow'
 }
 
 const styles = {
@@ -117,7 +145,7 @@ const styles = {
         width: '100%',
         height: '300px',
         borderRadius: 5,
-        displayFlex,
+        ...displayFlex,
         overflow: 'hidden',
         bannerImage: {
             width: '100%',
