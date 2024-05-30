@@ -4,7 +4,7 @@ import { LoadingStatus } from "../../tools";
 export type RootState = ReturnType<typeof reducer>;
 
 export interface PaymentMethodState {
-    state: Data ;
+    state: PaymentMethods ;
     error: string | null | undefined;
     loadingStatus: LoadingStatus;
 }

@@ -18,13 +18,16 @@ import { useEffect, useState } from "react";
 import { selectAllUser } from "../../../store/modules/users/selectors/users.selector";
 import { CurrencyFormat } from "../../../utils/helpers";
 import SuccessAlert from "../../shared/modal/lottie.Alert";
+import LoginScreen from "../../user/login.screen";
 
 const ProductDetail = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showError, setShowError] = useState<boolean>(false);
   const [categoryName, setCategoryName] = useState<string>("");
-  const [quantity , setQuantity] = useState<number>(1);
-  const [isSuccess, setIsSuccess] =  useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [discount, setDiscount] = useState<number>(0);
+  const [openModal, setOpenModal] = useState(false);
 
   const product = useSelector(selectProductDetails);
   const user = useSelector(selectAllUser);
@@ -39,6 +42,10 @@ const ProductDetail = () => {
     setShowError(false);
   };
 
+  const handleClose = (isOpen: boolean) => {
+    setOpenModal(isOpen);
+  };
+
   const setCart = () => {
     const newProduct: Product = {
       quantity: quantity,
@@ -49,44 +56,51 @@ const ProductDetail = () => {
       image: product?.product.image || "",
       description: product?.product.description || "",
       category_id: product?.product.category_id || 0,
-      presentation:  product?.product.presentation
+      presentation: product?.product.presentation,
     };
     if (product) {
       addToCart(newProduct);
     }
-    if(!product?.isExchange){
-      
-      setIsSuccess(false)
-      setIsSuccess(true)
-      console.log(isSuccess)
+    if (!product?.isExchange) {
+      setIsSuccess(false);
+      setIsSuccess(true);
+      console.log(isSuccess);
     }
     setShowAlert(false);
   };
 
   const handleSave = () => {
-    if (product && product?.points <= user.points) {
-      setShowAlert(true);
-    } else {
-      setShowError(true);
+    if(Object.keys(user).length > 0){
+      if (product && product?.points <= user.points) {
+        setShowAlert(true);
+      } else {
+        setShowError(true);
+      }
+    }else{
+      setOpenModal(true)
     }
   };
 
   const onMinus = () => {
-    if(quantity !== 1){
-      setQuantity(quantity - 1)
+    if (quantity !== 1) {
+      setQuantity(quantity - 1);
     }
-  }
+  };
 
   const onPlus = () => {
-    setQuantity(quantity + 1)
-
-  }
+    setQuantity(quantity + 1);
+  };
 
   useEffect(() => {
     const categoryName = categories.find(
       (item: { id: any }) => item.id === product?.product.category_id
     );
     setCategoryName(categoryName.name);
+    if(product?.product.discount && product?.price){
+      const discountValue = product?.price - (product?.price * product?.product.discount / 100)  ;
+      setDiscount(discountValue)
+    }
+   
     console.log(product);
   }, [product]);
 
@@ -100,39 +114,63 @@ const ProductDetail = () => {
       }}
     >
       <Grid item xs={4} style={displayFlex}>
-        <img src={product?.product.image} alt="" width={350} height={350} />
+        <div style={{ position: "relative" }}>
+          {product?.product.discount && (
+            <div className="promotion">
+              <p style={{ fontSize: "33px", marginTop: "3px" }}>
+                {product.product.discount}
+              </p>
+              <p style={{ fontSize: "17px", marginTop: "5px" }}>% off</p>
+              <img src="icons/discount-detail.png" alt="" width="100px" />
+            </div>
+          )}
+          <img src={product?.product.image} alt="" width={350} height={350} />
+        </div>
       </Grid>
       <Grid item xs={8}>
-        {categoryName && (
+        {categoryName && !product?.isExchange && (
           <Typography style={style.category}>{categoryName}</Typography>
         )}
         <Typography style={style.name}>{product?.product.name}</Typography>
 
         {/* FEATURE SECTIONS */}
         <div style={style.containerFeatures}>
-        {product?.features?.map((item: any, index) => {
+          {product?.features?.map((item: any, index) => {
             return (
-                <Typography style={style.features} key={index}>{item}</Typography>
+              <Typography style={style.features} key={index}>
+                {item}
+              </Typography>
             );
           })}
         </div>
 
-        <Typography style={style.description} sx={{ mt: 2 }}>
+        <Typography style={style.description} sx={{ mt: 3 }}>
           {product?.product.description}
         </Typography>
         {product?.isExchange ? (
-          <Typography style={style.points}>{product?.points} J</Typography>
+          <Typography style={style.points} sx={{ mt: 3 }}>{product?.points} J</Typography>
         ) : (
-          <Typography style={style.points}>
-            {CurrencyFormat(product?.price)}
-          </Typography>
+          <>
+            {product?.product.discount ? (
+              <>
+                <span style={{ ...style.points, ...style.beforePrice }}>
+                  ANTES: <span style={{textDecoration: 'line-through'}}>{CurrencyFormat(discount)}</span>
+                </span>
+                <span style={style.points}>
+                  AHORA: {CurrencyFormat(product?.price)}  
+                </span>
+              </>
+            ) : (
+              <span style={style.points}>{CurrencyFormat(product?.price)}</span>
+            )}
+          </>
         )}
         {product?.isExchange ? (
           <>
-            <Typography style={style.quantity} sx={{ mt: 2, mb: 4 }}>
+            <Typography style={style.quantity} sx={{ mt: 3, mb: 4 }}>
               Disponibles: {product?.quantity}
             </Typography>
-            <Grid className="columnContainer" container spacing={0}>
+            <Grid className="" container spacing={0}>
               <Grid item xs={6}>
                 <ButtonComponent style={style.shareButton}>
                   COMPARTIR
@@ -145,25 +183,55 @@ const ProductDetail = () => {
               </Grid>
             </Grid>
           </>
-        ): 
-        <>
-        <Grid container spacing={0} style={{marginTop: '20px'}}>
-          <Grid item xs={4} style={{ alignItems: 'center', display: 'flex'}}>
-          <div  className="iconContainer" onClick={onMinus}  style={ quantity === 1 ?  minusDisabled : {width:"40px", height:"40px"} }>
-              <span className="icon" id="icono-menos" style={{fontSize: '50px', margin: '-13px 0px 0px -21px'}}>-</span>
-          </div>
-          <span className="normalText" style={{margin: '0px', fontSize:'18px', padding: '0px 20px'}}>{quantity}</span> 
-          <div  className="iconContainer" onClick={onPlus} style={{width:"40px", height:"40px"}}>
-              <span className="icon" id="icono-mas" style={{fontSize: '50px', margin: '-12px 0px 0px -35px'}}>+</span>
-          </div>
-          </Grid>
-          <Grid item xs={8}>
-            <ButtonComponent style={style.addButton} onClick={setCart}>
-              AGREGAR
-            </ButtonComponent>
-          </Grid>
-        </Grid>
-      </>}
+        ) : (
+          <>
+            <Grid container spacing={0} style={{ marginTop: "20px" }}>
+              <Grid
+                item
+                xs={4}
+                style={{ alignItems: "center", display: "flex" }}
+              >
+                <div
+                  className="iconContainer"
+                  onClick={onMinus}
+                  style={
+                    quantity === 1
+                      ? minusDisabled
+                      : { width: "40px", height: "40px" }
+                  }
+                >
+                  <span
+                    className="icon-detail-minus"
+                  >
+                    -
+                  </span>
+                </div>
+                <span
+                  className="normalText"
+                  style={{
+                    margin: "0px",
+                    fontSize: "18px",
+                    padding: "0px 20px",
+                  }}
+                >
+                  {quantity}
+                </span>
+                <div
+                  className="iconContainer"
+                  onClick={onPlus}
+                  style={{ width: "40px", height: "40px", display: 'flex' }}
+                >
+                  <span className="icon-detail">+</span>
+                </div>
+              </Grid>
+              <Grid item xs={8}>
+                <ButtonComponent style={style.addButton} onClick={setCart}>
+                  AGREGAR
+                </ButtonComponent>
+              </Grid>
+            </Grid>
+          </>
+        )}
       </Grid>
       <ModalAlertComponent
         handleClose={handleAlertClose}
@@ -172,7 +240,7 @@ const ProductDetail = () => {
         isCancellButton
         data={{
           title: `${product?.product.name}`,
-          content: `¿Quieres cajearlo por ${product?.points} J?`,
+          content: `¿Quieres canjearlo por ${product?.points} J?`,
           img: `${product?.product.image}`,
         }}
       />
@@ -188,7 +256,8 @@ const ProductDetail = () => {
         }}
       />
 
-      {isSuccess &&  <SuccessAlert setOpen={setIsSuccess}/>}
+      {isSuccess && <SuccessAlert setOpen={setIsSuccess} />}
+      <LoginScreen handleClose={() => handleClose(false)} modalOpen={openModal}/>
     </Grid>
   );
 };
@@ -207,25 +276,31 @@ const style = {
   },
   description: {
     ...weblysleekFontStyle,
-    fontSize: "22px",
+    fontSize: "17px",
     fontWeight: "300",
   },
-  containerFeatures:{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  containerFeatures: {
+    display: "flex",
+    alignItems: "center",
+    // justifyContent: "space-between",
+    gap: "20px"
   },
   features: {
     ...weblysleekFontStyle,
     fontSize: "22px",
     fontWeight: "300",
-    background: '#F5F5F5',
-    borderRadius: '15px',
-    padding: '10px'
+    background: "#F5F5F5",
+    borderRadius: "15px",
+    padding: "10px",
   },
   points: {
     ...hudsonNYFontStyle,
     fontSize: "45px",
+  },
+  beforePrice:{
+    color: '#BBBBBB',
+    fontSize: '35px',
+    marginRight: '10px',
   },
   quantity: {
     ...weblysleekFontStyle,
@@ -254,7 +329,7 @@ const style = {
     padding: "0 0 5px 0",
     cursor: "pointer",
   },
-  addButton:{
+  addButton: {
     ...hudsonNYFontStyle,
     color: "#FFFFFF",
     fontSize: "22px",
@@ -265,11 +340,11 @@ const style = {
     borderRadius: "5px",
     padding: "0 0 5px 0",
     cursor: "pointer",
-  }
+  },
 };
 
-const minusDisabled ={
-  background:"#fdbd0063",
-  width:"40px", 
-  height:"40px"
-}
+const minusDisabled = {
+  background: "#fdbd0063",
+  width: "40px",
+  height: "40px",
+};

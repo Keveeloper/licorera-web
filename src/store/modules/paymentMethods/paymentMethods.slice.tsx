@@ -10,17 +10,13 @@ export const initialState: PaymentMethodState = {
   loadingStatus: "loading",
   error: null,
   state: {
-    data:{
-      id_customer: '',
-      name: '',
-      created: '',
-      email: '',
-      phone: '',
-      address: '',
-      cards: [],
-    },
-    success:false,
-    message:''
+    id_customer: '',
+    name: '',
+    created: '',
+    email: '',
+    phone: '',
+    address: '',
+    cards: [],
   },
 };
 
@@ -32,7 +28,7 @@ export const paymentMethodsSlice = createSlice({
       // Clearing redux state and localForage happens in store.ts.
     },
     clearPersonalInfo: (status: PaymentMethodState) => {
-      status.state.data = {
+      status.state = {
         id_customer: '',
         name: '',
         created: '',
@@ -48,9 +44,9 @@ export const paymentMethodsSlice = createSlice({
       .addCase(getPaymentMethodsThunk.pending, reducers.paymentMethodsPending)
       .addCase(getPaymentMethodsThunk.fulfilled, reducers.paymentMethodsFulfilled)
       .addCase(getPaymentMethodsThunk.rejected, reducers.paymentMethodsRejected)
-      // .addCase(deletePaymentMethodsThunk.pending, reducers.removePending)
-      // .addCase(deletePaymentMethodsThunk.fulfilled, reducers.removeFulfilled)
-      // .addCase(deletePaymentMethodsThunk.rejected, reducers.removeRejected);
+      .addCase(deletePaymentMethodsThunk.pending, reducers.removePending)
+      .addCase(deletePaymentMethodsThunk.fulfilled, reducers.removeFulfilled)
+      .addCase(deletePaymentMethodsThunk.rejected, reducers.removeRejected);
   },
 });
 

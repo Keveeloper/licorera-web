@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FooterScreen from "../shared/footer/FooterScreen";
 import HeaderScreen from "../shared/header/HeaderScreen";
 import HighlightedCampaignContainer from "./components/HighlightedCampaignContainer";
@@ -13,6 +13,10 @@ const HighlightedCampaignScreen = () => {
     const dispatch = useAppDispatch();
     const location = useLocation();
     const highlightedCampaign = location?.state?.highlightedCampaign;
+    console.log('highlightedCampaign: ', highlightedCampaign);
+    // console.log('campaignProducts: ', campaignProducts);
+    
+    const [loading, setLoading] = useState<boolean>(true);
     const [ campaignProducts, setCampaignProducts ] = useState<Products[]>([{
         id: 0,
         campaigns_id: 0,
@@ -22,9 +26,7 @@ const HighlightedCampaignScreen = () => {
         deleted_at: '',
         store: null
     }]);
-    const [loading, setLoading] = useState<boolean>(true);
-
-    console.log('campaignProductsssssssss: ', campaignProducts);
+    
     
 
     const getCampaigns = useCallback(async () => {
@@ -59,9 +61,9 @@ const HighlightedCampaignScreen = () => {
     }, []);
 
     if (loading) {
-        // return <div>Cargando...</div>;
         return <Loader/>;
     }
+
     return (
         <>
             <HeaderScreen/>

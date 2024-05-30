@@ -26,6 +26,10 @@ const HighlightedScreen = React.lazy(
   () => import("../modules/highlightedCampaigns/HighlightedCampaignScreen")
 );
 
+const CheckOut = React.lazy(
+  () => import("../modules/checkout/checkout.screen")
+);
+
 const RootRouter = () => {
   return (
     <Routes>
@@ -34,6 +38,7 @@ const RootRouter = () => {
         element={
           <React.Suspense fallback={<LoaderScreen />}>
             <HomeScreen />
+            {/* <LoaderScreen /> */}
           </React.Suspense>
         }
       />
@@ -102,6 +107,15 @@ const RootRouter = () => {
         element={
           <React.Suspense fallback={<LoaderScreen />}>
             <HighlightedScreen />
+          </React.Suspense>
+        }
+      />
+
+      <Route
+        path="/checkout"
+        element={
+          <React.Suspense fallback={<LoaderScreen />}>
+            <CheckOut />
           </React.Suspense>
         }
       />

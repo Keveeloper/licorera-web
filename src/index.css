@@ -39,6 +39,8 @@ code {
 
 .MuiTabs-indicator{
   background-color: #99791C !important;
+  height: 3px !important;
+
 }
 
 .columnContainer {

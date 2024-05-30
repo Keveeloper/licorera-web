@@ -1,6 +1,6 @@
 export interface DeletePaymentMethod {
-    token: string;
-    franchise: string;
-    mask: string;
+    token: string,
+    franchise: string,
+    mask: string,
 }
   

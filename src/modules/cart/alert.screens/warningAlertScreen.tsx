@@ -3,38 +3,27 @@ import ButtonComponent from "../../shared/button/button.component";
 
 interface AlertProps{
     onClose: () => void;
-    onAccept: () => void;
     title:string;
-    img:string
+    Text:string;
 }
 
-const DeleteAlertScreen:React.FC<AlertProps> = ({onClose, onAccept, title, img}) => {
+const WarningAlertScreen:React.FC<AlertProps> = ({onClose, title, Text}) => {
   return (
     <Box sx={defaultStyle}>
-      <img src={img} alt="" style={{width:"100px"}} />
-      <Typography style={{ fontFamily: "HudsonNYSerif", marginBottom: '15px'}}>
+      <img src="icons/alert.png" alt="" style={{width:"100px"}} />
+      <Typography style={{ fontFamily: "HudsonNYSerif", marginBottom: '15px', fontSize:'20px'}}>
         {title}
       </Typography>
-      <Typography style={{ fontFamily: "weblysleekuil" }}>
-      ¿Deseas eliminar este producto de tu carrito de compras?
+      <Typography style={{ fontFamily: "weblysleekuil",  fontSize:'15px' }}>
+        {Text}
       </Typography>
       <Grid className="columnContainer" container spacing={1}>
-        <Grid item xs={6}>
-          <ButtonComponent style={defaultStyle.button} onClick={onAccept}>
-            <Typography
-              style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}
-            >
-              ACEPTAR
-            </Typography>
-          </ButtonComponent>
-        </Grid>
-
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <ButtonComponent style={defaultStyle.button} onClick={onClose}>
             <Typography
               style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}
             >
-              CANCELAR
+              ACEPTAR
             </Typography>
           </ButtonComponent>
         </Grid>
@@ -43,7 +32,7 @@ const DeleteAlertScreen:React.FC<AlertProps> = ({onClose, onAccept, title, img})
   );
 };
 
-export default DeleteAlertScreen
+export default WarningAlertScreen
 
 const defaultStyle = {
   bgcolor: "#FFFFFF",

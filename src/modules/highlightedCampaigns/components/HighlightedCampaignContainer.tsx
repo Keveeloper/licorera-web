@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, Button } from "@mui/material";
 import { displayFlex } from "../../shared/recursiveStyles/RecursiveStyles";
 import { displaySpaceBetweenColumn } from "../../shared/recursiveStyles/RecursiveStyles";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
     const navigate = useNavigate();
     const location = useLocation();
     const highlightedCampaign = location?.state?.highlightedCampaign;
-    const campaingDataredux = useSelector(selectAllCampaigns);
+    // const campaingDataredux = useSelector(selectAllCampaigns);
     const loadingStatus = useSelector(selectLoadingCampaigns);
     const { campaignProducts, setCampaignProducts } = props;
 
@@ -55,6 +55,13 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
         }
         dispatch(storeActions.setProductDetail(mappedProduct))
         navigate("/product-detail")
+    }
+
+    const goToStore = () => {
+        const categoryId = {
+            id: highlightedCampaign?.categoryId
+        }
+        navigate("/store", { state: { categoryId } });
     }
 
     return (
@@ -96,6 +103,17 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
                         
                     </Grid>
                 </Box>
+            )}
+            {highlightedCampaign.type === 2 && (
+                <Button
+                    sx={styles.productsButton}
+                    variant="outlined" 
+                    fullWidth 
+                    color="inherit"
+                    onClick={goToStore}
+                >
+                    Ver productos
+                </Button>
             )}
         </Box>
     );
@@ -182,6 +200,13 @@ const styles = {
                 }
             }
         }
+    },
+    productsButton: {
+        marginBottom: '100px', 
+        padding: '10px',
+        fontFamily: 'HudsonNYSerif',
+        fontSize: '20px',
+        // lineHeight: 1,
     }
 }
 

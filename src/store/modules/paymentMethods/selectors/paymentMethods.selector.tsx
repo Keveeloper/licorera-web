@@ -11,7 +11,7 @@ export const getPaymentMethodState = (rootState: RootState): PaymentMethodState 
 
 export const selectAllPaymentMethods = createSelector(
   getPaymentMethodState,
-  (payment) => payment.state.data.cards
+  (payment) => payment.state.cards
 );
 
 export const selectLoading = createSelector(

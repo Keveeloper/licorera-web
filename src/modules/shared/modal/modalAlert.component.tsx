@@ -83,7 +83,7 @@ const styleDefault = {
   title: {
     fontFamily: "HudsonNYSerif",
     fontWeight: "600",
-    fontSize: "20px",
+    fontSize: "28px",
     color: "#000000",
     padding: "10px",
   },
@@ -98,6 +98,7 @@ const styleDefault = {
     width: "120px",
   },
   button:{
+    background: "white",
     border:"1px solid",
     width: "95%",
     height: "43px",

@@ -36,6 +36,7 @@ const defaultStyle = {
   width: "280px",
   borderRadius: "50px",
   button: {
+    background: "white",
     border: "1px solid",
     width: "100%",
     height: "43px",

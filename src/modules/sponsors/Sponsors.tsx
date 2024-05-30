@@ -8,6 +8,8 @@ import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
 import { displayFlexColumn } from "../shared/recursiveStyles/RecursiveStyles";
 import { BorderRight, Padding } from "@mui/icons-material";
 
+import './Sponsors.css';
+
 const Sponsors = () => {
 
     const sponsorsDataredux = useSelector(selectAllSponsors);    
@@ -46,7 +48,7 @@ const Sponsors = () => {
                         {/* {(loadingStatus === 'loading') ? 
                                 <Skeleton sx={styles.swiperContainer.swiper.swiperSlide.skeleton} variant="rectangular" />
                             : */}
-                                <Box sx={styles.swiper.sponsorContainer}>
+                                <Box className={`${sponsorsDataredux?.length === (index + 1) ? '' : 'sponsor-container-line'}`} sx={sponsorsDataredux?.length === (index + 1) ? styles.swiper.sponsorContainer : styles.swiper.sponsorContainerLine}>
                                     <img height={"100px"} src={`${item.imageUrl}`} alt=""/>
                                     <Typography>
                                         {item.name}
@@ -68,11 +70,14 @@ const styles = {
         // width: '100%',
         // maxWidth: '1450px',
         height: '190px',
+        sponsorContainerLine: {
+            height: '100%',
+            ...displayFlexColumn,
+            // borderRight: '0.5px solid',
+        },
         sponsorContainer: {
             height: '100%',
             ...displayFlexColumn,
-            borderRight: '0.5px solid',
-            // background: 'blue',
         }
     }
 }

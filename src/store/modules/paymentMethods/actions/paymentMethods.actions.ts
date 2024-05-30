@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { DeletePaymentMethod } from "../../../../service/modules/paymentMethods/types";
 
 export const getPaymentMethodsThunk = createAsyncThunk(
-  "paymentMethods/fetch",
+  "getPayment/fetch",
   async (_, { rejectWithValue }) => {
     try {
       const response = await getPaymentMethods();
@@ -15,8 +15,8 @@ export const getPaymentMethodsThunk = createAsyncThunk(
 );
 
 export const deletePaymentMethodsThunk = createAsyncThunk(
-  "remove/fetch",
-  async ({ reqData }:{reqData: DeletePaymentMethod}, { rejectWithValue }) => {
+  "removePayment/fetch",
+  async ({reqData}: {reqData: DeletePaymentMethod}, { rejectWithValue }) => {
     try {
       const response = await deletePaymentMethods(reqData);
       return response;
