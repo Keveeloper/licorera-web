@@ -38,6 +38,7 @@ const RootRouter = () => {
         element={
           <React.Suspense fallback={<LoaderScreen />}>
             <HomeScreen />
+            {/* <LoaderScreen /> */}
           </React.Suspense>
         }
       />

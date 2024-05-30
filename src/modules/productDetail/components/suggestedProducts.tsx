@@ -75,7 +75,7 @@ const SuggestedProducts = () => {
             </>
 
           :
-            <Box sx={{width: '100%', ...displaySpaceBetween}}>
+            <Box sx={{width: '100%', ...displaySpaceBetween, alignItems: 'baseline'}}>
               <Typography sx={{margin: '50px 0 0 0', fontFamily: 'HudsonNYSerif', fontWeight: 600, fontSize: '25px',}}>
                 productos destacados
               </Typography>
