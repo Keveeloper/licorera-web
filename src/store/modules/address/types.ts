@@ -5,6 +5,7 @@ export type RootState = ReturnType<typeof reducer>;
 
 export interface AddressState {
     data: ResponsePersonalInfo ;
+    addressSelected?:any;
     error: string | null | undefined;
     loadingStatus: LoadingStatus;
 }

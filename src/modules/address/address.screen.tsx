@@ -22,11 +22,11 @@ const AddressScreen: React.FC<props> = () => {
   return (
     <>
       <div style={styles.img} className="mt-20">
-        <img src="/images/whiteLogo.png" alt="" width={250} />
+        <img src="/images/whiteLogo.png" alt="" width={200} />
       </div>
       <Routes>
         <Route path="/" element={<AddressSearch />} />
-        <Route path="/map" element={<AddressMap setStep={() => ChangeStep(2)}/>} />
+        <Route path="/map" element={<AddressMap/>} />
         <Route path="/form" element={<AddressForm />} />
       </Routes>
       <FooterScreen />

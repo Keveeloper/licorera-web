@@ -14,5 +14,10 @@ export const selectAllPersonalInfo = createSelector(
   (Address) => Address.data
 );
 
+export const selectAddressSelected = createSelector(
+  getPersonalInfoState,
+  (Address) => Address.addressSelected
+);
+
 
 

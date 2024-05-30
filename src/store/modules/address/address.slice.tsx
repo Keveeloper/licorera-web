@@ -8,6 +8,7 @@ export const ADDRESS_FEATURE_KEY = "address";
 
 export const initialState: AddressState = {
   loadingStatus: "loading",
+  addressSelected:"",
   error: null,
   data: {
     id: "",
@@ -23,6 +24,12 @@ export const addressSlice = createSlice({
   name: ADDRESS_FEATURE_KEY,
   initialState,
   reducers: {
+     setAddressSelected: (
+      state: any,
+      action: PayloadAction<any>
+    ) => {
+      state.addressSelected = action.payload;
+    },
     clearAddress: (status: AddressState) => {
       status.data = {};
     },

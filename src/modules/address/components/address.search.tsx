@@ -18,12 +18,15 @@ import React, { useState } from "react";
 import useAddress from "../hooks/useAddress";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from "react-router-dom";
+import useAddressHook from "../../shared/hooks/addressHook/useAddressHook";
 
 interface props {
 }
 const AddressSearch: React.FC<props> = () => {
   const { GetHookGoogleApi } = useAddress();
   const navigate = useNavigate();
+  const { addToAddress  } = useAddressHook();
+  
 
   const [googleAddress, setGoogleAddress] = useState<any[]>([]);
   const [myTimeout, setMyTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -55,6 +58,17 @@ const AddressSearch: React.FC<props> = () => {
 
   const goToMap = () => {
     navigate('map')
+  }
+  const setAddress = (address:any) => {
+    const newAddress = {
+      coords:{
+        latitude:address.geometry.location.lat,
+        longitude:address.geometry.location.lng
+      },
+      addressInput: address.formatted_address 
+    }
+    addToAddress(newAddress)
+    navigate('form')
   }
 
   return (
@@ -95,8 +109,9 @@ const AddressSearch: React.FC<props> = () => {
             googleAddress.map((item: any) => {
               return (
                 <>
-                  <ListItem alignItems="flex-start">
+                  <ListItem alignItems="flex-start" onClick={() => setAddress(item)}>
                     <ListItemText
+                      style={{cursor:"pointer"}}
                       className="searchTitle"
                       primary={item.name}
                       secondary={
