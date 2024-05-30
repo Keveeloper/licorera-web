@@ -30,6 +30,10 @@ const CheckOut = React.lazy(
   () => import("../modules/checkout/checkout.screen")
 );
 
+const RecommendedProducts = React.lazy(
+  () => import("../modules/recommendedProducts/RecommendedProductsScreen")
+);
+
 const RootRouter = () => {
   return (
     <Routes>
@@ -74,7 +78,6 @@ const RootRouter = () => {
           </React.Suspense>
         }
       />
-
       <Route
         path="/product-detail"
         element={
@@ -83,7 +86,6 @@ const RootRouter = () => {
           </React.Suspense>
         }
       />
-
       <Route
         path="/user-profile"
         element={
@@ -92,7 +94,6 @@ const RootRouter = () => {
           </React.Suspense>
         }
       />
-
       <Route
         path="/aboutus"
         element={
@@ -101,7 +102,6 @@ const RootRouter = () => {
           </React.Suspense>
         }
       />
-
       <Route
         path="/highlighted-campaigns"
         element={
@@ -110,7 +110,6 @@ const RootRouter = () => {
           </React.Suspense>
         }
       />
-
       <Route
         path="/checkout"
         element={
@@ -119,7 +118,14 @@ const RootRouter = () => {
           </React.Suspense>
         }
       />
-
+      <Route
+        path="/recommended-products"
+        element={
+          <React.Suspense fallback={<LoaderScreen />}>
+            <RecommendedProducts />
+          </React.Suspense>
+        }
+      />
       <Route path="*" element={<h1>Not found</h1>} />
     </Routes>
   );

@@ -16,14 +16,47 @@ export interface Data {
 }
 
 export interface Promotion {
-    id: number;
-    price: number;
-    bannerImage: string;
-    product: Product;
+    // id: number;
+    // price: number;
+    // bannerImage: string;
+    id: number,
+    product_id: number,
+    quantity: number,
+    price: number,
+    status: boolean,
+    start_date: string,
+    end_date: string,
+    store_type: number,
+    points: number,
+    created_at: string,
+    updated_at: string,
+    deleted_at: string,
+    ranking: string,
+    recommended: boolean,
+    newproduct: boolean,
+    ean: string,
+    trademark: string,
+    maker: string,
+    presentation: string,
+    bannerImage: string,
+    discount: number,
+    product: Product,
+    features: string[],
 }
 
 interface Product {
-    id: string;
-    name: string;
-    description: string;
+    // id: string;
+    // name: string;
+    // description: string;
+    id: number,
+    name: string,
+    serial: string,
+    lot: string,
+    image: string,
+    description: string,
+    category_id: number,
+    created_at: string,
+    updated_at: string,
+    deleted_at: string,
+    url: string,
 }

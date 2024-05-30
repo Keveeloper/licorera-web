@@ -57,7 +57,7 @@ const SearchedResult = (props: SearchInterface) => {
         }
         dispatch(storeActions.setProductDetail(mappedProduct))
         navigate("/product-detail")
-      }
+    }
     
     return (
         // <h1>Hola mundo</h1>
