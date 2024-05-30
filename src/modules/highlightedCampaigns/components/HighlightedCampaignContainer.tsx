@@ -106,7 +106,7 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
             )}
             {highlightedCampaign.type === 2 && (
                 <Button
-                    sx={{marginBottom: '100px', padding: '10px'}}
+                    sx={styles.productsButton}
                     variant="outlined" 
                     fullWidth 
                     color="inherit"
@@ -200,6 +200,13 @@ const styles = {
                 }
             }
         }
+    },
+    productsButton: {
+        marginBottom: '100px', 
+        padding: '10px',
+        fontFamily: 'HudsonNYSerif',
+        fontSize: '20px',
+        // lineHeight: 1,
     }
 }
 
