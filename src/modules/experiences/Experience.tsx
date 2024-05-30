@@ -68,8 +68,8 @@ const Experience = () => {
         <Box className='columnContainer' sx={styles.experiencesContainer}>
             <Typography sx={styles.experiencesContainer.subtitle}>las mejores experiencias</Typography>
             <Box sx={styles.experiencesContainer.imageContainer}>
-                {campaignProducts.map((item: PromotionCampaign, index: any) => (
-                    <figure style={styles.experiencesContainer.imageContainer.imageFigure}>
+                {campaignProducts?.map((item: PromotionCampaign, index: any) => (
+                    <figure key={index} style={styles.experiencesContainer.imageContainer.imageFigure}>
                         <img onClick={() => handleClick(item)} key={index} style={styles.experiencesContainer.imageContainer.imageFigure.image}  src={item.mainImageUrl} alt={`Campaign: ${index}`} />
                     </figure>
                 ))}

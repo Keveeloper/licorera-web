@@ -46,7 +46,7 @@ const Sponsors = () => {
                         {/* {(loadingStatus === 'loading') ? 
                                 <Skeleton sx={styles.swiperContainer.swiper.swiperSlide.skeleton} variant="rectangular" />
                             : */}
-                                <Box sx={styles.swiper.sponsorContainer}>
+                                <Box sx={sponsorsDataredux?.length === (index + 1) ? styles.swiper.sponsorContainer : styles.swiper.sponsorContainerLine}>
                                     <img height={"100px"} src={`${item.imageUrl}`} alt=""/>
                                     <Typography>
                                         {item.name}
@@ -68,11 +68,15 @@ const styles = {
         // width: '100%',
         // maxWidth: '1450px',
         height: '190px',
-        sponsorContainer: {
+        sponsorContainerLine: {
             height: '100%',
             ...displayFlexColumn,
             borderRight: '0.5px solid',
             // background: 'blue',
+        },
+        sponsorContainer: {
+            height: '100%',
+            ...displayFlexColumn,
         }
     }
 }

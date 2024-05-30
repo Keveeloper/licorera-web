@@ -28,24 +28,24 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         loaderBackground: {
-            position: 'absolute' as 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
+            // position: 'absolute' as 'absolute',
+            // top: '50%',
+            // left: '50%',
+            // transform: 'translate(-50%, -50%)',
         },
         loaderSpinner: {
             position: 'absolute' as 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
+            // top: '50%',
+            // left: '50%',
+            // transform: 'translate(-50%, -50%)',
             animation: 'rotateMobile360 1s linear infinite',
         },
         '@keyframes rotateMobile360': {
             '0%': {
-                transform: 'translate(-50%, -50%) rotate(0deg)',
+                transform: 'rotate(0deg)',
             },                    
             '100%': {
-                transform: 'translate(-50%, -50%) rotate(360deg)',
+                transform: 'rotate(360deg)',
             }
         }
         
