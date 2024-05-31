@@ -7,23 +7,21 @@ import { useAppDispatch } from "../../../store/store";
 import { getSuggestedProductThunk } from "../../../store/modules/suggestedProducts/actions/suggested.actions";
 import { useSelector } from "react-redux";
 import { selectAllSuggested } from "../../../store/modules/suggestedProducts/selectors/suggested.selector";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { displaySpaceBetween } from "../../shared/recursiveStyles/RecursiveStyles";
 import NumberFormat from "../../shared/hooks/numberFormater/NumberFormat";
+import { Promotion } from "../../../store/modules/suggestedProducts/types";
+import { productExchange } from "../../exchangeProducts/types";
+import { storeActions } from "../../../store/modules/store";
 
 const SuggestedProducts = () => {
 
     const location = useLocation();
-
-    const [products, setProducts] = React.useState<any>([]);
-    
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const suggested = useSelector(selectAllSuggested);
 
-    const dispatch = useAppDispatch();
-    
-    const handleLink = () => {
-        alert("here")
-    }
+    const [products, setProducts] = React.useState<any>([]);
 
     const getSuggestedProducts = async () =>{
       const {response} = await dispatch(
@@ -49,7 +47,40 @@ const SuggestedProducts = () => {
       if(suggested.length === 0){
         getSuggestedProducts()
       }
-    },[suggested])
+    },[suggested]);
+
+    const handleProduct = (product: Promotion) => {
+      const mappedProduct: productExchange = {
+        id: product.id,
+        quantity: product.quantity,
+        points: product.points || 0,
+        price: product.price,
+        status: product.status,
+        start_date: product.start_date || "",
+        end_date: product.end_date || "",
+        isExchange: false,
+        product_id: product.id,
+        features: product.features_string,
+        product: {
+          id: product.product.id,
+          name: product.product.name,
+          serial: product.product.serial,
+          lot: product.product.lot,
+          image: product.product.image,
+          quantity: 1,
+          points: product.points || undefined,
+          description: product.product.description,
+          category_id: product.product.category_id,
+          created_at: product.product.created_at,
+          updated_at: product.product.updated_at,
+          deleted_at: product.product.deleted_at,
+          presentation: product.presentation,
+          discount: product.discount
+        }
+      }
+        dispatch(storeActions.setProductDetail(mappedProduct))
+        navigate("/product-detail")
+  }
     
     return(
         <Grid
@@ -90,28 +121,30 @@ const SuggestedProducts = () => {
             return (
               <Grid key={item.id} item xs={2.4} style={{ textAlign: "center" }}>
                 <CardComponent
-                  style={{ padding: "20px", borderRadius: "10px" }}
+                  style={{ padding: "20px", borderRadius: "10px", cursor: 'pointer' }}
                 >
-                  {item.discount > 0 && (
-                    <div className="promotion">
-                      <p>{item.discount}</p>
-                      <p>% off</p>
-                      <img src="icons/discount-icon.png" alt="" width={50}/>
-                    </div>
-                  )}
-                  <img src={item.product.image} alt="" width={200} height={200} />
-                  <Typography style={styles.card.title}>
-                    {item.product.name}
-                  </Typography>
-                  <Typography style={styles.card.subtitle}>
-                    {item.presentation}
-                  </Typography>
-                  <Typography style={styles.card.content}>
-                    {item.product.description.slice(0, 50)}
-                  </Typography>
-                  <Typography style={styles.card.price}>
-                    $ {NumberFormat(item.price)}
-                  </Typography>
+                  <Box onClick={() => handleProduct(item)}>
+                    {item.discount > 0 && (
+                      <div className="promotion">
+                        <p>{item.discount}</p>
+                        <p>% off</p>
+                        <img src="icons/discount-icon.png" alt="" width={50}/>
+                      </div>
+                    )}
+                    <img src={item.product.image} alt="" width={200} height={200} />
+                    <Typography style={styles.card.title}>
+                      {item.product.name}
+                    </Typography>
+                    <Typography style={styles.card.subtitle}>
+                      {item.presentation}
+                    </Typography>
+                    <Typography style={styles.card.content}>
+                      {item.product.description.slice(0, 50)}
+                    </Typography>
+                    <Typography style={styles.card.price}>
+                      $ {NumberFormat(item.price)}
+                    </Typography>
+                  </Box>
                 </CardComponent>
               </Grid>
             );
