@@ -12,48 +12,54 @@ import CardComponent from "../../shared/card/card.component";
 import { CurrencyFormat } from "../../../utils/helpers";
 import { Pagination as MyPagination } from "@mui/material";
 import './RecommendedProducts.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Promotion } from "../../../store/modules/suggestedProducts/types";
 
 const RecommendedProducts = () => {
 
+    const itemsPerView = 10;
     const suggestedRedux = useSelector(selectAllSuggested);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [totalPage, setTotalPage] = useState<number>(Math.ceil(suggestedRedux.length / 10));
+    const [totalPage, setTotalPage] = useState<number>(Math.ceil(suggestedRedux.length / itemsPerView));
+    const [products, setProducts] = useState<Promotion[]>(suggestedRedux.slice(0, itemsPerView));
     
-    console.log('page: ', page);
-    console.log('suggestedRedux: ', suggestedRedux.length);
-    console.log('totalPage: ', totalPage);
-    
+    useEffect(() => {
+        setProducts(suggestedRedux.slice((page - 1) * itemsPerView, page * itemsPerView));
+    }, [suggestedRedux, page]);
 
-    const handleProduct = (product:Product) => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
+
+    const handleProduct = (product:Promotion) => {
         const mappedProduct: productExchange = {
           id: product.id,
-          quantity: product.store.quantity,
-          points: product.store.points || 0,
-          price: product.store.price,
-          status: product.store.status,
-          start_date: product.store.start_date || "",
-          end_date: product?.store?.end_date || "",
+          quantity: product.quantity,
+          points: product.points || 0,
+          price: product.price,
+          status: product.status,
+          start_date: product.start_date || "",
+          end_date: product.end_date || "",
           isExchange: false,
-          product_id: product.store.id,
-          features: product.store.features_string,
+          product_id: product.id,
+          features: product.features_string,
           product: {
-            id: product.store.id,
-            name: product.name,
-            serial: product.serial,
-            lot: product.lot,
-            image: product.image,
-            quantity: product.store.quantity,
-            points: product.store.points || undefined,
-            description: product.description,
-            category_id: product.category_id,
-            created_at: product.created_at,
-            updated_at: product.updated_at,
-            deleted_at: product.deleted_at,
-            presentation: product.store.presentation,
-            discount: product.store.discount
+            id: product.product.id,
+            name: product.product.name,
+            serial: product.product.serial,
+            lot: product.product.lot,
+            image: product.product.image,
+            quantity: 1,
+            points: product.points || undefined,
+            description: product.product.description,
+            category_id: product.product.category_id,
+            created_at: product.product.created_at,
+            updated_at: product.product.updated_at,
+            deleted_at: product.product.deleted_at,
+            presentation: product.presentation,
+            discount: product.discount
           }
         }
           dispatch(storeActions.setProductDetail(mappedProduct))
@@ -65,7 +71,6 @@ const RecommendedProducts = () => {
         value: number
       ) => {
         setPage(value);
-        // handleCategory(categorySelected.id, value);
     };
      
     return (
@@ -78,23 +83,23 @@ const RecommendedProducts = () => {
                 <img style={styles.banner.bannerImage} src="images/background-recommended-products.png" alt="banner recommended products" />
             </Box>
             <Grid container spacing={2}>
-            {suggestedRedux?.map((item: any) => {
+            {products?.map((item: any) => {
                 return (
                 <Grid item xs={2.4} style={{ textAlign: "center" }}>
                     {item.discount > 0 && (
                         <div className="promotion">
                         <p>{item.discount}</p>
                         <p>%  off</p>
-                        <img src="icons/discount.png" alt="" width={50}/>
+                        <img src="icons/discount-icon.png" alt="" width={50}/>
                         </div>
                     )}
                     <CardComponent
                         style={cardStyle}
                     >
-                        <Box onClick={() => handleProduct(item)}>
+                        <Box sx={{width: '100%', height: '100%', ...displayFlexColumn, justifyContent: 'space-between'}} onClick={() => handleProduct(item)}>
                             <img src={item.product.image} alt="" width={200} height={200}  style={{maxWidth: "100%"}}/>
                             <Typography style={styles.card.title}>
-                                {item.name}
+                                {item.product.name}
                             </Typography>
                             <Typography style={styles.card.subtitle}>
                                 {item.presentation}
@@ -112,9 +117,8 @@ const RecommendedProducts = () => {
             })}
             </Grid>
             <Box sx={{width: '100%', ...displayFlex}}>
-                <Stack spacing={2} style={{ margin: "0 auto", padding: "30px 0", width: '100%' }}>
+                <Stack spacing={2} style={{ margin: "0 auto", padding: "30px 0" }}>
                     <MyPagination
-                        // count={totalPage}
                         count={totalPage}
                         page={page}
                         onChange={handleChangePagination}
@@ -135,7 +139,6 @@ const cardStyle = {
     justifyContent: 'center',
     alignItems: 'center',
     cursor:"pointer",
-    // background: 'yellow'
 }
 
 const styles = {
@@ -160,7 +163,6 @@ const styles = {
             ...displayFlexColumn,
             alignItems: 'start',
             background: 'rgb(0,0,0,0.6)',
-            // zIndex: 2,
             title: {
                 fontFamily: 'HudsonNYSerif',
                 color: 'white',

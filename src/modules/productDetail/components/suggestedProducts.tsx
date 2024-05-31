@@ -67,9 +67,10 @@ const SuggestedProducts = () => {
               </Grid>
               {/* <Grid item xs={12}  style={styles.link} > */}
               <div  style={{width: "100%"}}>
-                  <a href="#" className="link" onClick={handleLink}>
+                  {/* <a href="#" className="link" onClick={handleLink}>
                       Ver todos
-                  </a>
+                  </a> */}
+                  <Link className="link" to={'/recommended-products'}>Ver todos</Link>
               </div>
               {/* </Grid> */}
             </>
@@ -79,7 +80,7 @@ const SuggestedProducts = () => {
               <Typography sx={{margin: '50px 0 0 0', fontFamily: 'HudsonNYSerif', fontWeight: 600, fontSize: '25px',}}>
                 productos destacados
               </Typography>
-              <Link className="link" to={'/store'}>Ver todos</Link>
+              <Link className="link" to={'/recommended-products'}>Ver todos</Link>
             </Box>
           }
 
@@ -95,7 +96,7 @@ const SuggestedProducts = () => {
                     <div className="promotion">
                       <p>{item.discount}</p>
                       <p>% off</p>
-                      <img src="icons/discount.png" alt="" width={50}/>
+                      <img src="icons/discount-icon.png" alt="" width={50}/>
                     </div>
                   )}
                   <img src={item.product.image} alt="" width={200} height={200} />
