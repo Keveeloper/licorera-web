@@ -20,24 +20,26 @@ import DeleteAlertScreen from "../alert.screens/deleteAlertScreen";
 import "./cart.component.css";
 import { useNavigate } from "react-router-dom";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import useHelperHook from "../../shared/hooks/helper/useHelper";
 
 interface customProps {
   isCheckout?: boolean;
   onClick?:() => void;
   isFormValid?:boolean;
+  delivery?:number;
 }
 
-const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid }) => {
+const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid, delivery }) => {
   const products = useSelector(selectCartProducts);
   const user = useSelector(selectAllUser);
   const Info = useSelector(selectAllInfo);
   const navigate = useNavigate();
 
   const { removeCartItem, updateCartItem } = useCartHook();
+  const { calculateTotal } = useHelperHook();
 
   const [total, setTotal] = useState<number>(0);
   const [subTotal, setSubTotal] = useState<number>(0);
-  const [delivery, setDelivery] = useState<number>(0);
   const [points, setPoints] = useState<number>(0);
   const [product, setProduct] = useState<Product>();
   const [showWarningAlert, setShoWarningAlert] = useState<boolean>(false);
@@ -91,16 +93,17 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
   };
 
   useEffect(() => {
-    let newtotal = 0;
-    products.forEach((item) => {
-      if (item.price) {
-        newtotal += item.quantity * item.price;
-      }
-    });
+    const newtotal = calculateTotal(products)
     setSubTotal(newtotal)
-    setTotal(newtotal + delivery);
+    console.log(delivery);
+    if(delivery){
+      console.log(delivery);
+      setTotal(newtotal + delivery);
+    }else{
+      setTotal(newtotal);
+    }
     setPoints(newtotal / Info?.data?.minimumAmountForPoints || 0);
-  }, [products]);
+  }, [products, delivery]);
 
   return (
     <>
@@ -271,20 +274,23 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
       </div>
 
       {/* Modal Delete*/}
-      <CustomModal
-        modalStyle="cartModal"
-        modalContentStyle="cartModalContent"
-        open={showDeleteAlert}
-        onClose={handleDeleteClose}
-      >
-        <DeleteAlertScreen
-          img={product?.image || ""}
-          title={product?.name || ""}
+      { showDeleteAlert &&
+        <Box style={{ position: 'relative'}}>
+        <CustomModal
+          modalStyle="cartModal"
+          modalContentStyle="cartModalContent"
+          open={showDeleteAlert}
           onClose={handleDeleteClose}
-          onAccept={() => removeProduct(product?.id || 0)}
-        />
-      </CustomModal>
-
+        >
+          <DeleteAlertScreen
+            img={product?.image || ""}
+            title={product?.name || ""}
+            onClose={handleDeleteClose}
+            onAccept={() => removeProduct(product?.id || 0)}
+          />
+        </CustomModal>
+        </Box>
+      }
       {/* Modal Warning*/}
       <CustomModal
         modalStyle="cartModal"

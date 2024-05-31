@@ -12,7 +12,8 @@ interface ModalArletCustomProps {
     content: string;
     img: string;
   };
-  isCancellButton?:boolean
+  isCancellButton?: boolean;
+  withSchedule?:boolean
 }
 
 const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
@@ -21,9 +22,9 @@ const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
   open,
   style,
   data,
-  isCancellButton
+  isCancellButton,
+  withSchedule
 }) => {
-
   return (
     <ModalComponent
       style={styleDefault}
@@ -37,34 +38,39 @@ const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
       <Typography className="inputCustom" style={styleDefault.content}>
         {data.content}
       </Typography>
-    
-       
-        <Grid
-            className="columnContainer"
-            container
-            spacing={0}
-        >
-          <Grid item xs={isCancellButton ? 6 : 12}>
-              <ButtonComponent
-                style={styleDefault.button}
+      {withSchedule &&
+        <Typography className="inputCustom" style={styleDefault.schedule}>
+          9:00 AM - 1:00 AM
+        </Typography>
+      }
+        
+
+      
+
+      <Grid className="columnContainer" container spacing={0}>
+        <Grid item xs={isCancellButton ? 6 : 12}>
+          <ButtonComponent style={styleDefault.button}>
+            <Typography
+              onClick={handleSave}
+              style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}
+            >
+              ACEPTAR
+            </Typography>
+          </ButtonComponent>
+        </Grid>
+        {isCancellButton && (
+          <Grid item xs={6}>
+            <ButtonComponent style={styleDefault.button}>
+              <Typography
+                onClick={handleClose}
+                style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}
               >
-              <Typography onClick={handleSave} style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}>
-                ACEPTAR
+                CANCELAR
               </Typography>
             </ButtonComponent>
           </Grid>
-          {isCancellButton && 
-            <Grid item xs={6}>
-                <ButtonComponent
-                    style={styleDefault.button}
-                  >
-                <Typography onClick={handleClose} style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}>
-                  CANCELAR
-                </Typography>
-              </ButtonComponent>
-            </Grid>}
-        </Grid>
-      
+        )}
+      </Grid>
     </ModalComponent>
   );
 };
@@ -94,20 +100,27 @@ const styleDefault = {
     color: "#000000",
     padding: "10px",
   },
+  schedule: {
+    fontFamily: "weblysleekuisb",
+    fontWeight: "600",
+    fontSize: "16px",
+    color: "#000000",
+    padding: "10px",
+  },
   img: {
     width: "120px",
   },
-  button:{
+  button: {
     background: "white",
-    border:"1px solid",
+    border: "1px solid",
     width: "95%",
     height: "43px",
     borderRadius: "5px",
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
-    '&:hover': {
-      cursor: 'pointer'
-    }
-  }
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
 };

@@ -2,12 +2,12 @@ import { PayloadAction } from '@reduxjs/toolkit';
 
 import { AddressState } from '../types';
 
-export const GoogleApiPending = (state: AddressState) => {
+export const LocationsPending = (state: AddressState) => {
   state.loadingStatus = 'loading';
   state.error = undefined;
 };
 
-export const GoogleApiFulfilled = (
+export const LocationsFulfilled = (
   state: AddressState,
   action: PayloadAction<any>
 ) => {
@@ -15,7 +15,7 @@ export const GoogleApiFulfilled = (
   state.loadingStatus = 'loaded';
 };
 
-export const GoogleApiRejected = (
+export const LocationsRejected = (
   state: AddressState,
   action: any
 ) => {

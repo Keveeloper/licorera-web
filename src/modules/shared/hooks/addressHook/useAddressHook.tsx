@@ -6,11 +6,12 @@ import { addressActions } from "../../../../store/modules/address";
 import { selectAddressSelected } from "../../../../store/modules/address/selectors/address.selector";
 
 export interface  AddressSelected{
-  coords:{
+  coords?:{
     latitude:number,
     longitude:number
   },
   addressInput: string
+  detail?: string
 }
 
 const useAddressHook = () => {
@@ -27,7 +28,7 @@ const useAddressHook = () => {
   };
 
   const updateAddressItem = (updatedProduct: AddressSelected) => {
-    const newCart = {...cart, updatedProduct};
+    const newCart = {...cart, detail: updatedProduct.detail};
     dispatch(addressActions.setAddressSelected(newCart))
   };
 

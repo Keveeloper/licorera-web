@@ -14,3 +14,15 @@ export const getInfo = async (): Promise<ApiResponse<Data>> => {
     return handleSubModuleError(error);
   }
 };
+
+export const getIsActive = async (): Promise<ApiResponse<Data>> => {
+  try {
+    const  {data}  = await base.get<Data>(
+      `/mobile/isActive`
+      );
+    return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};

@@ -1,4 +1,5 @@
-import { getGoogleApi, getGoogleReverseApi } from "../../../service/modules/address/address";
+import { getGoogleApi, getGoogleReverseApi, postLocation } from "../../../service/modules/address/address";
+import { CreateLocationRequest } from "../../../service/modules/address/type";
 
 const useAddress = () => {
 
@@ -32,9 +33,27 @@ const useAddress = () => {
         } finally {
     
         }
-      };
+    };
+
+    const PostHookLocation = async (payload:CreateLocationRequest) => {
+        try {
+          const response = await postLocation(payload);
+          console.log(response)
+          if (response.success && response.response) {
+            return response.response;
+          } else {
+            throw { error: 'Failed to fetch data', success: response.success };
+          }
+        } catch (error) {
+          return error as Error;
+        } finally {
     
-    return { GetHookGoogleApi , GetHookGoogleReverseApi};
+        }
+    };
+
+    
+    
+    return { GetHookGoogleApi , GetHookGoogleReverseApi, PostHookLocation};
   };
   
   export default useAddress;

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { AddressState, ResponsePersonalInfo } from "./types";
-import {  GoogleApithunks } from "./actions/address.actions";
+import {  getLocationsThunk, GoogleApithunks } from "./actions/address.actions";
 import * as reducers from "./reducers/address.reducers";
 
 export const ADDRESS_FEATURE_KEY = "address";
@@ -36,9 +36,9 @@ export const addressSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(GoogleApithunks.pending, reducers.GoogleApiPending)
-      .addCase(GoogleApithunks.fulfilled, reducers.GoogleApiFulfilled)
-      .addCase(GoogleApithunks.rejected, reducers.GoogleApiRejected)
+      .addCase(getLocationsThunk.pending, reducers.LocationsPending)
+      .addCase(getLocationsThunk.fulfilled, reducers.LocationsFulfilled)
+      .addCase(getLocationsThunk.rejected, reducers.LocationsRejected)
   },
 });
 

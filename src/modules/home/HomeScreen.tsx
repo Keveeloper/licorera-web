@@ -35,12 +35,16 @@ import { selectLoadingCampaigns } from "../../store/modules/campaigns/selectors/
 import Loader from "../shared/Loader/components/Loader";
 import { getInfoThunk } from "../../store/modules/users/actions/users.actions";
 import { selectAllInfo } from "../../store/modules/users/selectors/users.selector";
+import ModalAlertComponent from "../shared/modal/modalAlert.component";
+import useHomeHook from "./hooks/useHomeHook";
+
 
 
 const HomeScreen = () => {
 
   const { searching } = useContext(searchContext);
   const dispatch = useAppDispatch();
+  const { isActiveApi } = useHomeHook()
   
   const loadingStatus = useSelector(selectLoading);
   const loadingCampaigns = useSelector(selectLoadingCampaigns);
@@ -49,6 +53,7 @@ const HomeScreen = () => {
 
   const [value, setValue] = useState("1");
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [closeAlert, setCloseAlert] = useState<boolean>(false);
   const [tabs, setTabs] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -79,8 +84,22 @@ const HomeScreen = () => {
   // const handleDisabled = (tab: string) => {
   //   console.log('Fuera del timeOut');
   // }
+
+  const isActive = () => {
+    isActiveApi()
+    .then((res)=>{
+      if(res.success && !res.data.active){
+        setCloseAlert(true)
+      }
+    })
+  }
+
+  const alertClose = () => {
+    setCloseAlert(false)
+  }
   
   useEffect(() => {
+    isActive()
     getCategories();
     getSponsors();
     if(!loadInfo || !loadInfo.success){
@@ -206,6 +225,17 @@ const HomeScreen = () => {
         <Sponsors/>
         <FooterScreen />
       </Box>
+      <ModalAlertComponent
+        handleClose={alertClose}
+        handleSave={alertClose}
+        open={closeAlert}
+        withSchedule
+        data={{
+          title: "INFORMACIÓN",
+          content: `No podemos despachar tu pedido. Nuestros horarios de atención`,
+          img: "/icons/alert.png",
+        }}
+      />
     </>
   );
 };
