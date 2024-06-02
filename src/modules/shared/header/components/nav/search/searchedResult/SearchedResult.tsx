@@ -24,19 +24,21 @@ const SearchedResult = (props: SearchInterface) => {
     const { searchedText } = props;
     const searchedDataredux = useSelector(selectSearched);
     const suggestedProductsDataredux = useSelector(selectAllSuggested);
-    console.log('suggestedProductsDataredux: ', suggestedProductsDataredux);
+    // console.log('suggestedProductsDataredux: ', suggestedProductsDataredux);
     
 
     const handleProduct = (item: Promotion) => {
+        console.log('item.points: ', item.points);
+        
         const mappedProduct: productExchange = {
           id: item.id,
           quantity: item.quantity,
           points: item.points || 0,
-          price: item.price,
+          price: item.points ? item.points : item.price,
           status: item.status,
           start_date: item.start_date || "",
           end_date: item?.end_date || "",
-          isExchange: false,
+          isExchange: item.points ? true : false,
           product_id: item.product.id,
           features: item.features_string,
           product: {

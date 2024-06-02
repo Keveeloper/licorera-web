@@ -16,6 +16,7 @@ const Footer: React.FC<footerInterface> = ({children}) => {
 
 const styles = {
     footerContainer: {
+        marginTop: '120px',
         with: '100vw',
         height: '350px',
         borderTop: 'solid 1px',

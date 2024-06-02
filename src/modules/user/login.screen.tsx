@@ -199,6 +199,7 @@ const style = {
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
+    cursor: 'pointer',
   },
   Button: {
     width: "100%",
@@ -210,6 +211,7 @@ const style = {
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
+    cursor: 'pointer',
   },
   recoveryPassword: {
     color: "#99791C",
