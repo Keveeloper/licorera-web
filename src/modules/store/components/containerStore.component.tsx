@@ -167,6 +167,7 @@ const ContainerStore = () => {
         spacing={2}
         style={{
           // padding: "30px 5%",
+          
         }}
       >
         {/* CATEGORY SECTION */}

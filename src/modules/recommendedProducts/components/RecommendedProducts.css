@@ -1,0 +1,24 @@
+.promotion{
+    position: absolute;
+    margin: 20px 0 0 20px;
+}
+
+.promotion p{
+  position: absolute;
+  margin: 0;
+  color: white;
+}
+.promotion p:first-child{
+  top: 50%;
+  transform: translate(-55%, -90%);
+  left: 50%;
+  font-weight: 400;
+  font-size: 16px;
+  font-family: 'HudsonNYSerif';
+}
+.promotion p:nth-child(2){
+  top: 47%;
+  transform: translate(-50%, 0%);
+  left: 50%;
+  font-size: 6px;
+}

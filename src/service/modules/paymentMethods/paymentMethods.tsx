@@ -34,3 +34,17 @@ export const deletePaymentMethods = async (reqData: DeletePaymentMethod): Promis
   }
 };
 
+// export const deletePaymentMethods = async (reqData: DeletePaymentMethod): Promise<ApiResponse<Data>> => {
+//   try {
+//     const  {data}  = await base.post<Data>(
+//       '/v2/me/paymentMethods/remove',
+//       reqData,
+//       {},
+//       );
+//       return { response: data, success: !!Object.keys(data).length };
+    
+//   } catch (error) {
+//     return handleSubModuleError(error);
+//   }
+// };
+

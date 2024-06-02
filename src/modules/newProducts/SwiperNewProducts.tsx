@@ -11,9 +11,15 @@ import { Promotion } from '../../store/modules/newProducts/types';
 import NumberFormat from '../shared/hooks/numberFormater/NumberFormat';
 import { useMemo } from 'react';
 import { selectAllNewProducts } from '../../store/modules/newProducts';
+import { productExchange } from '../exchangeProducts/types';
+import { useAppDispatch } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
+import { storeActions } from '../../store/modules/store';
 
 const SwiperNewProducts = (props: swiperType) => { 
     
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const { modules, slidesPerView, loadingStatus, bannerType } = props;
     const newProductsDataredux = useSelector(selectAllNewProducts);
       
@@ -21,6 +27,38 @@ const SwiperNewProducts = (props: swiperType) => {
         () => newProductsDataredux?.map((item: Promotion) => NumberFormat(item.price)),
         [newProductsDataredux]
     );
+
+    const handleClick = (item: Promotion) => {
+        const mappedProduct: productExchange = {
+            id: item.id,
+            quantity: item.quantity,
+            points: item.points || 0,
+            price: item.price,
+            status: item.status,
+            start_date: item.start_date || "",
+            end_date: item?.end_date || "",
+            isExchange: false,
+            product_id: item.product.id,
+            features: item.features,
+            product: {
+              id: item.product.id,
+              name: item.product.name,
+              serial: item.product.serial,
+              lot: item.product.lot,
+              image: item.product.image,
+              quantity: item.quantity,
+              points: item.points || undefined,
+              description: item.product.description,
+              category_id: item.product.category_id,
+              created_at: item.product.created_at,
+              updated_at: item.product.updated_at,
+              deleted_at: item.product.deleted_at,
+              presentation: item.presentation,
+            }
+          }
+          dispatch(storeActions.setProductDetail(mappedProduct))
+          navigate("/product-detail")
+    }
 
     return(
         <Swiper style={styles.swiper}
@@ -43,7 +81,7 @@ const SwiperNewProducts = (props: swiperType) => {
                             {loadingStatus === 'loading' ? 
                                 <Skeleton sx={styles.swiper.swiperSlide.skeleton} variant="rectangular" height={'90%'} />
                             :
-                                <Box sx={styles.swiper.swiperSlide.promotionContainer}>
+                                <Box sx={styles.swiper.swiperSlide.promotionContainer} onClick={() => handleClick(item)}>
                                     <img style={styles.swiper.swiperSlide.promotionContainer.image} src={item.bannerImage} alt={item.product.name} />
                                     <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer}>
                                         <Box sx={styles.swiper.swiperSlide.promotionContainer.descriptionContainer.header}>

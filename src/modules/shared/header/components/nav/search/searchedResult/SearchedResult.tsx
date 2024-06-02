@@ -51,12 +51,13 @@ const SearchedResult = (props: SearchInterface) => {
             category_id: item.product.category_id,
             created_at: item.product.created_at,
             updated_at: item.product.updated_at,
-            deleted_at: item.product.deleted_at
+            deleted_at: item.product.deleted_at,
+            presentation: item.presentation,
           }
         }
         dispatch(storeActions.setProductDetail(mappedProduct))
         navigate("/product-detail")
-      }
+    }
     
     return (
         // <h1>Hola mundo</h1>

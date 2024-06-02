@@ -5,6 +5,7 @@ import { selectAllCampaigns } from "../../store/modules/campaigns";
 import { useEffect, useState } from "react";
 import { PromotionCampaign } from "../../store/modules/campaigns/types";
 import { useNavigate } from "react-router-dom";
+import { Margin } from "@mui/icons-material";
 
 const Experience = () => {
 
@@ -67,8 +68,10 @@ const Experience = () => {
         <Box className='columnContainer' sx={styles.experiencesContainer}>
             <Typography sx={styles.experiencesContainer.subtitle}>las mejores experiencias</Typography>
             <Box sx={styles.experiencesContainer.imageContainer}>
-                {campaignProducts.map((item: PromotionCampaign, index: any) => (
-                    <img onClick={() => handleClick(item)} key={index} style={styles.experiencesContainer.imageContainer.image}  src={item.mainImageUrl} alt={`Campaign: ${index}`} />
+                {campaignProducts?.map((item: PromotionCampaign, index: any) => (
+                    <figure key={index} style={styles.experiencesContainer.imageContainer.imageFigure}>
+                        <img onClick={() => handleClick(item)} key={index} style={styles.experiencesContainer.imageContainer.imageFigure.image}  src={item.mainImageUrl} alt={`Campaign: ${index}`} />
+                    </figure>
                 ))}
             </Box>
         </Box>
@@ -85,11 +88,23 @@ const styles = {
         },
         imageContainer: {
             width: '100%',
+            height: '415px',
             ...displaySpaceBetween,
-            image: {
+            // background: 'yellow',
+            imageFigure: {
+                margin: 0,
+                padding: 0,
                 width: '49%',
+                height: '100%',
                 borderRadius: 20,
                 cursor: 'pointer',
+                overflow: 'hidden',
+                image: {
+                    // width: '49%',
+                    height: '100%',
+                    width: '100%',
+                    objectFit: 'cover' as 'cover',
+                }
             }
         }
     }
