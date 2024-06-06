@@ -74,12 +74,15 @@ const PromotionDetailScreen = () => {
                 {/* <div  style={{margin:'0 32px'}} >  */}
                     <Grid container spacing={2}>
                         <Grid item  xs={3} sx={{padding: '0 !important', mt: 2, mb:2, display: 'flex', alignItems: 'center'}}>
-                            <Box sx={{ width: '50px', height: '50px', borderRadius: '50%', background: '#fdbd00', ...displayFlex, cursor: 'pointer'}} onClick={onMinus} style={count === 1 ?  minusDisabled : {} }>
-                                <Typography sx={{fontSize: '50px', color: 'white', transform: 'translateY(-3px)', userSelect: 'none'}}>-</Typography>
+                            {/* <Box sx={{ width: '50px', height: '50px', borderRadius: '50%', ...displayFlex, cursor: 'pointer'}} onClick={onMinus} style={count === 1 ?  minusDisabled : {} }> */}
+                            <Box sx={{ width: '50px', height: '50px', borderRadius: '50%', ...displayFlex}} onClick={onMinus}>
+                                {/* <Typography sx={{fontSize: '50px', color: 'white', transform: 'translateY(-3px)', userSelect: 'none'}}>-</Typography> */}
+                                <img style={count === 1 ? {width: '120%', opacity: 0.4, cursor: 'no-drop'} : {width: '120%', cursor: 'pointer'}} src="/icons/Minus.png" alt="minus sign" />
                             </Box>
                             <span className="normalText"> {count} </span> 
-                            <Box sx={{width: '50px', height: '50px', borderRadius: '50%', background: '#fdbd00', ...displayFlex, cursor: 'pointer'}} onClick={onPlus}>
-                                <Typography sx={{fontSize: '50px', color: 'white', userSelect: 'none'}}>+</Typography>
+                            <Box sx={{width: '50px', height: '50px', borderRadius: '50%', ...displayFlex, cursor: 'pointer'}} onClick={onPlus}>
+                                {/* <Typography sx={{fontSize: '50px', color: 'white', userSelect: 'none'}}>+</Typography> */}
+                                <img style={{width: '120%'}} src="/icons/Plus.png" alt="minus sign" />
                             </Box>
                         </Grid>
                         <Grid item  xs={9} sx={{padding: '0 !important', mt: 2, mb:2, display: 'flex', alignItems: 'center'}}>
