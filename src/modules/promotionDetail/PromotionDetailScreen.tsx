@@ -9,6 +9,7 @@ import { Product } from "../exchangeProducts/types";
 import useCartHook from "../shared/hooks/cartHook/useCartHook";
 import SuccessAlert from "../shared/modal/lottie.Alert";
 import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
+import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 
 const PromotionDetailScreen = () => {
 
@@ -77,12 +78,14 @@ const PromotionDetailScreen = () => {
                             {/* <Box sx={{ width: '50px', height: '50px', borderRadius: '50%', ...displayFlex, cursor: 'pointer'}} onClick={onMinus} style={count === 1 ?  minusDisabled : {} }> */}
                             <Box sx={{ width: '50px', height: '50px', borderRadius: '50%', ...displayFlex}} onClick={onMinus}>
                                 {/* <Typography sx={{fontSize: '50px', color: 'white', transform: 'translateY(-3px)', userSelect: 'none'}}>-</Typography> */}
-                                <img style={count === 1 ? {width: '120%', opacity: 0.4, cursor: 'no-drop'} : {width: '120%', cursor: 'pointer'}} src="/icons/Minus.png" alt="minus sign" />
+                                {/* <img style={count === 1 ? {width: '120%', opacity: 0.4, cursor: 'no-drop'} : {width: '120%', cursor: 'pointer'}} src="/icons/Minus.png" alt="minus sign" /> */}
+                                <FaMinusCircle style={count === 1 ? {width: '100%', height: '100%', color:'#fdbd0063', fontSize: '20px', cursor:'no-drop'} : {width: '100%', height: '100%', color:'#fdbd00', fontSize: '20px', cursor:'pointer'}}/>
                             </Box>
                             <span className="normalText"> {count} </span> 
                             <Box sx={{width: '50px', height: '50px', borderRadius: '50%', ...displayFlex, cursor: 'pointer'}} onClick={onPlus}>
                                 {/* <Typography sx={{fontSize: '50px', color: 'white', userSelect: 'none'}}>+</Typography> */}
-                                <img style={{width: '120%'}} src="/icons/Plus.png" alt="minus sign" />
+                                {/* <img style={{width: '120%'}} src="/icons/Plus.png" alt="minus sign" /> */}
+                                <FaPlusCircle style={{width: '100%', height: '100%', color:'#fdbd00', fontSize: '20px', cursor:'pointer'}}/>
                             </Box>
                         </Grid>
                         <Grid item  xs={9} sx={{padding: '0 !important', mt: 2, mb:2, display: 'flex', alignItems: 'center'}}>
