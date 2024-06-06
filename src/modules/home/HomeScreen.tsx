@@ -11,9 +11,6 @@ import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
 import { getPromotionsThunk } from "../../store/modules/promotions/actions/promotion.actions";
-import {
-  selectAllPromotion,
-} from "../../store/modules/promotions";
 import { selectLoading } from "../../store/modules/promotions/selectors/promotion.selector";
 
 // Material UI
@@ -29,16 +26,12 @@ import { getNewProductsThunk } from "../../store/modules/newProducts/actions/new
 import SwiperNewProducts from "../newProducts/SwiperNewProducts";
 import { selectNewProductsLoading } from "../../store/modules/newProducts/selectors/newProducts.selector";
 import { Box } from "@mui/material";
-import zIndex from "@mui/material/styles/zIndex";
 import { searchContext } from "../../context/searchContext";
-import { selectLoadingCampaigns } from "../../store/modules/campaigns/selectors/campaigns.selector";
 import Loader from "../shared/Loader/components/Loader";
 import { getInfoThunk } from "../../store/modules/users/actions/users.actions";
 import { selectAllInfo } from "../../store/modules/users/selectors/users.selector";
 import ModalAlertComponent from "../shared/modal/modalAlert.component";
 import useHomeHook from "./hooks/useHomeHook";
-
-
 
 const HomeScreen = () => {
 
@@ -47,7 +40,6 @@ const HomeScreen = () => {
   const { isActiveApi } = useHomeHook()
   
   const loadingStatus = useSelector(selectLoading);
-  const loadingCampaigns = useSelector(selectLoadingCampaigns);
   const loadingNewProducts = useSelector(selectNewProductsLoading);
   const loadInfo = useSelector(selectAllInfo);
 
@@ -81,10 +73,6 @@ const HomeScreen = () => {
     await dispatch(getInfoThunk()).unwrap();     
   }, []);
 
-  // const handleDisabled = (tab: string) => {
-  //   console.log('Fuera del timeOut');
-  // }
-
   const isActive = () => {
     isActiveApi()
     .then((res)=>{
@@ -108,7 +96,6 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
-
     switch (value) {
       case "1":
         getAsynPromotion();
@@ -122,7 +109,6 @@ const HomeScreen = () => {
       default:
         break;
     }
-
   }, [value]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -131,48 +117,35 @@ const HomeScreen = () => {
       setDisabled(false);
     }, 2000);
     setDisabled(true);
-    
   };
 
-  // Carga la primera vez que renderiza el componente y espera el consumo a la API para traer las
-  // tabs que tengan contenido en la API
   useEffect(() => {
     const fetchData = async () => {
       let responsePromotions: any;
       let responseCampaigns: any;
       let responseNewProducts: any;
       try {
-        // Hacer las solicitudes a las APIs
-        await Promise.all([
-          dispatch(getPromotionsThunk()).unwrap().then((response: any) => {
-            responsePromotions = response.response.data;
-          }),
-          dispatch(getCampaignsThunk('')).unwrap().then((response: any) => {
-            responseCampaigns = response.response.data;
-          }),
-          dispatch(getNewProductsThunk()).unwrap().then((response: any) => {
-            responseNewProducts = response.response.data;
-          })
-        ]);
-        
-        // Determinar qué pestañas deben mostrarse
-        const loadedTabs: string [] = [];
-        if (loadingStatus === 'loaded' && responsePromotions.length > 0) loadedTabs.push("PROMOCIONES");
-        if (loadingCampaigns === 'loaded' && responseCampaigns.length > 0) loadedTabs.push("DESTACADOS");
-        if (loadingNewProducts === 'loaded' && responseNewProducts.length > 0) loadedTabs.push("PRODUCTOS NUEVOS");
-
-        setTabs(loadedTabs);
-        setLoading(false);
+        await dispatch(getPromotionsThunk()).unwrap().then((response: any) => {
+          responsePromotions = response.response.data;
+          if (responsePromotions.length > 0) setTabs(oldTabs => [...oldTabs, 'PROMOCIONES']);
+        });
+        await dispatch(getCampaignsThunk('')).unwrap().then((response: any) => {
+          responseCampaigns = response.response.data;
+          if (responseCampaigns.length > 0) setTabs(oldTabs => [...oldTabs, 'DESTACADOS']);
+        });
+        await dispatch(getNewProductsThunk()).unwrap().then((response: any) => {
+          responseNewProducts = response.response.data;
+          if (responseNewProducts.length > 0) setTabs(oldTabs => [...oldTabs, 'PRODUCTOS NUEVOS']);
+        })
+        await setLoading(false);
       } catch (error) {
         console.error('Error al cargar datos:', error);
       }
     };
-
     fetchData();
   }, []);
 
   if (loading) {
-    // return <div>Cargando...</div>;
     return <Loader/>;
   }
 
@@ -182,7 +155,6 @@ const HomeScreen = () => {
       <Box sx={styles.mainContainer}>
         {searching && (<Box sx={styles.mainContainer.backdrop}/>)}
         <TabComponent
-          // tabsArray={["PROMOCIONES", "DESTACADOS", "PRODUCTOS NUEVOS"]}
           tabsArray={tabs}
           value={value}
           setValue={setValue}
@@ -243,7 +215,6 @@ const HomeScreen = () => {
 const styles = {
   mainContainer: {
     position: 'relative',
-    // width: '100%',
     backdrop: {
       position: 'absolute',
       width: '100%',
