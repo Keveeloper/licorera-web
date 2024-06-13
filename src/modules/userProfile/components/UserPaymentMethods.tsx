@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { DeletePaymentMethod } from "../../../service/modules/paymentMethods/types";
 import { useAppDispatch } from "../../../store/store";
 import { deletePaymentMethodsThunk } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
+import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 
 const UserPaymentMethods = ({ items, onItemDelete }: any) => {
 
@@ -17,11 +18,12 @@ const UserPaymentMethods = ({ items, onItemDelete }: any) => {
   
   const user = useSelector(selectAllUser);
   const dispatch = useAppDispatch();
+  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [itemToRemove, setItemToRemove ] = useState<DeletePaymentMethod>({
     token: "",
     franchise: "",
     mask: ""
-  })
+  });
 
   useEffect(() => {
     if(itemToRemove.token !== '' && itemToRemove.franchise !== '' && itemToRemove.mask !== '') {
@@ -29,8 +31,11 @@ const UserPaymentMethods = ({ items, onItemDelete }: any) => {
     }
   }, [itemToRemove]);
 
+  const handleShowAlert = () => {
+    setShowAlert(true);
+  }
+
   const handleRemove = (item: DeletePaymentMethod) => {
-    console.log(item);
     const newItemToRemove = {
       token: item.token,
       franchise: item.franchise,
@@ -39,11 +44,15 @@ const UserPaymentMethods = ({ items, onItemDelete }: any) => {
     setItemToRemove(newItemToRemove);
   }
 
+  const handleAlertClose = () => {
+    setShowAlert(false);
+  };
+
   return (
     
     <Box sx={{width: '100%', height: '100%'}}>
       <Box sx={{padding: '60px 5%', width: '100%', height: '88%', overflow: 'auto'}}>
-          {paymentMethodsRedux?.length > 0 ? paymentMethodsRedux.map((item: any, index: any) => (
+          {paymentMethodsRedux?.length > 0 ? paymentMethodsRedux?.map((item: any, index: any) => (
             <Box key={item.token} sx={{marginTop: '30px', padding: '0 0 20px 0', width: '100%', height: '25%', ...displayFlex, borderBottom: '1px solid gray' }}>
               <figure style={{width: '10%', height: '100%', ...displayFlex}}>
                 <img style={{height: '50%'}} src="/icons/credit-card-color.png" alt="credit card color icon" />
@@ -53,8 +62,19 @@ const UserPaymentMethods = ({ items, onItemDelete }: any) => {
                 <Typography sx={{fontFamily: 'weblysleekuil', fontSize: '16px'}}>{user.name} {user.last_name}</Typography>
               </Box>
               <figure style={{width: '10%', height: '100%', ...displayFlex}}>
-                <img style={{height: '40%'}} src="/icons/trash.png" alt="credit card color icon" onClick={(() => handleRemove(item))}/>
+                {/* <img style={{height: '40%'}} src="/icons/trash.png" alt="credit card color icon" onClick={(() => handleRemove(item))}/> */}
+                <img style={{height: '40%', cursor: 'pointer'}} src="/icons/trash.png" alt="credit card color icon" onClick={handleShowAlert}/>
               </figure>
+              <ModalAlertComponent
+                handleClose={handleAlertClose}
+                handleSave={() => handleRemove(item)}
+                open={showAlert}
+                isCancellButton={true}
+                data={{
+                  title: item.mask,
+                  content:`¿Seguro que quieres eliminar esta tarjeta?`,
+                  img:`/icons/alert.png`
+              }}/>
             </Box>
           ))
           :

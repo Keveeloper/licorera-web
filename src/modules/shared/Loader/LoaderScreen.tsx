@@ -4,7 +4,9 @@ import Loader from "./components/Loader";
 const LoaderScreen = () => {
 
     return(
-        <Loader/>
+        // <Loader/>
+        <>
+        </>
     );
 
 }

@@ -48,7 +48,6 @@ const UserInfo = () => {
     const handleClick = async () => {
         setEdit(!edit); 
         if (edit) {
-            
             const updateUserRequest: putUserRequest = {
                 name: userFirstName,
                 last_name: userLastName,

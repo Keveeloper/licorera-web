@@ -1,6 +1,12 @@
 import { Box } from "@mui/material"
 
-const Loader = () => {
+interface LoaderInterface {
+    screenLoader: boolean;
+}
+const Loader = (props: LoaderInterface) => {
+
+    const { screenLoader } = props;
+    const styles = loaderStyles(screenLoader);
 
     return(
         <Box sx={styles.loaderContainer}>
@@ -20,10 +26,12 @@ const Loader = () => {
     );
 }
 
-const styles = {
+const loaderStyles = (screenLoader: boolean) => ({
     loaderContainer: {
-        width: '100vw',
-        height: '100vh',
+        // width: '100vw',
+        width: screenLoader ? '100vw' : '100%',
+        // height: '100vh',
+        height: screenLoader ? '100vh' : '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -50,6 +58,6 @@ const styles = {
         }
         
     }
-}
+});
 
 export default Loader;
