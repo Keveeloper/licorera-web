@@ -67,7 +67,7 @@ const UserPaymentMethods = ({ items, onItemDelete }: any) => {
       </Box>
       <Button 
           // sx={styles.button}
-          sx={{height: '12%'}}
+          sx={{height: '12%', fontFamily: 'HudsonNYSerif', fontSize: '18px'}}
           variant="outlined" 
           fullWidth 
           color="inherit" 

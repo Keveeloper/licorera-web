@@ -22,6 +22,8 @@ const UserInfo = () => {
 
     const dispatch = useAppDispatch();
     const user = useSelector(selectAllUser);
+    console.log('user name: ', user?.name);
+    
     
     const {
         register,
@@ -110,7 +112,7 @@ const UserInfo = () => {
                     placeholder="Email"
                     // value={user?.email}
                     value={userEmail}
-                    disabled={edit ? false : true}
+                    disabled={true}
                     // endAdornment
                     {...register("email", {
                         required: "Este campo es obligatorio",
@@ -209,6 +211,7 @@ const stylesMethod = (edit: boolean) => ({
         margin: '50px 0 0 0', 
         padding: 2,
         fontFamily: 'HudsonNYSerif',
+        fontSize: '18px',
         background: `${edit ? paletteColors.gold : 'none'}`,
         color: `${edit ? paletteColors.white : paletteColors.black}`,
         '&:hover': {

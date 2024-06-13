@@ -2,9 +2,15 @@ import { Typography } from "@mui/material";
 import { displayFlex, hudsonNYFontStyle, weblysleekFontStyle } from "../shared/recursiveStyles/RecursiveStyles";
 import HeaderScreen from "../shared/header/HeaderScreen";
 import FooterScreen from "../shared/footer/FooterScreen";
+import { useEffect } from "react";
 
 interface props {}
 const AboutUs: React.FC<props> = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <HeaderScreen />

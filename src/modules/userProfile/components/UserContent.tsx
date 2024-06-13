@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TabPanel } from "@mui/lab";
 
 // Custom components
@@ -8,9 +8,17 @@ import TabComponent from "../../shared/tabComponent/TabComponent";
 import { Box } from "@mui/material";
 import UserInfo from "./UserInfo";
 import UserPaymentMethods from "./UserPaymentMethods";
+import { useAppDispatch } from "../../../store/store";
+import { getMe } from "../../../store/modules/users/actions/users.actions";
+import { useSelector } from "react-redux";
+import { selectAllPersonalInfo } from "../../../store/modules/users";
 
 const UserContent = () => {
 
+    const dispatch = useAppDispatch();
+    const personalInfo: any = useSelector(selectAllPersonalInfo);
+    console.log('Personal info from user: ', personalInfo);
+    
     const [value, setValue] = useState<string>("1");
     const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -21,6 +29,12 @@ const UserContent = () => {
         }, 2000);
         setDisabled(true);    
     };
+
+    useEffect(() => {
+        console.log('Consultando usuario');
+        
+        dispatch(getMe(personalInfo.token)).unwrap();
+    }, [value])
 
     return (
         <Box sx={styles.contentContainer}>
