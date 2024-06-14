@@ -4,23 +4,27 @@ import { useSelector } from "react-redux";
 import { personalInfoActions, selectAllUser } from "../../../store/modules/users";
 import { useState } from "react";
 import { useAppDispatch } from "../../../store/store";
-import { selectIsWelcome } from "../../../store/modules/users/selectors/users.selector";
+import { selectAllPersonalInfo, selectIsWelcome } from "../../../store/modules/users/selectors/users.selector";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
+import { getInfoThunk, getMe } from "../../../store/modules/users/actions/users.actions";
 
 const UserBanner = () => {
 
     const user = useSelector(selectAllUser);
     const dispatch = useAppDispatch();
     const isWelcome = useSelector(selectIsWelcome);
+    const personalInfo: any = useSelector(selectAllPersonalInfo);
     const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const handleShowAlert = () => setShowAlert(true);
 
     const handleAlertClose = () => setShowAlert(false);
 
-    const logout = () =>{
-        dispatch(personalInfoActions.clearUserState(isWelcome));
-        setShowAlert(false);
+    const logout = async () =>{
+        await dispatch(personalInfoActions.clearUserState(isWelcome));
+        await dispatch(getMe(personalInfo.token)).unwrap();
+        await dispatch(getInfoThunk()).unwrap();
+        await setShowAlert(false);
     }
 
     return(
@@ -28,7 +32,7 @@ const UserBanner = () => {
             <Box sx={styles.bannerContainer.boxLeft}>
                 <Box sx={styles.bannerContainer.boxLeft.userIcon}>
                     {/* <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/account-icon.png" width={100} alt="" /> */}
-                    <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/user.png" width={100} alt="" onClick={handleShowAlert}/>
+                    <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/user.png" width={100} alt=""/>
                 </Box>
                 <ModalAlertComponent
                     handleClose={handleAlertClose}
@@ -47,7 +51,7 @@ const UserBanner = () => {
                 </Box>
             </Box>
             <Box sx={styles.bannerContainer.boxRight}>
-                <img src="/icons/logout-icon.png" width={30} alt="" />
+                <img style={{cursor: 'pointer'}} src="/icons/logout-icon.png" width={30} alt="" onClick={handleShowAlert}/>
                 <Box sx={styles.bannerContainer.boxRight.circle}>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.order_quantity}</Typography>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>Pedidos</Typography>
