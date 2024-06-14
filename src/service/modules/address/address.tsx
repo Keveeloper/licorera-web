@@ -67,3 +67,18 @@ export const postDelivery= async (request:any): Promise<ApiResponse<Data>> => {
   }
 };
 
+export const postDisccount= async (request:any): Promise<ApiResponse<Data>> => {
+  try {
+    const  {data}  = await base.post<Data>(
+      `mobile/searchCode`,
+      request
+      );
+    return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+
+

@@ -21,23 +21,37 @@ import useAddressHook from "../../shared/hooks/addressHook/useAddressHook";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../store/store";
 import { getLocationsThunk } from "../../../store/modules/address/actions/address.actions";
-import { postDelivery } from "../../../service/modules/address/address";
+import {
+  postDelivery,
+  postDisccount,
+} from "../../../service/modules/address/address";
 import { DeliveryRequest } from "../../../service/modules/address/type";
 import { useSelector } from "react-redux";
 import { selectCartProducts } from "../../../store/modules/cart/selectors/cart.selector";
 import useHelperHook from "../../shared/hooks/helper/useHelper";
+import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 
+type disccount = {
+  title?: string;
+  content?: string;
+  img?: string;
+};
 const CheckoutComponent = () => {
   const products = useSelector(selectCartProducts);
   const [locationList, setLocationList] = useState<any>([]);
   const [location, setLocation] = useState("");
-  const [coords, setCoords] = useState<{latitude:number, longitude:number}>();
+  const [coords, setCoords] = useState<{
+    latitude: number;
+    longitude: number;
+  }>();
   const [isFormValid, setIsFormValid] = useState(false);
   const [delivery, setDelivery] = useState<number>(0);
-  
+  const [alertDisccount, setAlertDisccount] = useState(false);
+  const [disccountResult, setDisccountResult] = useState<disccount>();
+
   const { getAddress } = useAddressHook();
   const { calculateTotal } = useHelperHook();
-  
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -59,8 +73,13 @@ const CheckoutComponent = () => {
 
   const handleChange = (event: SelectChangeEvent) => {
     const addressSelected = event.target.value;
-    const addressFind = locationList.find((item:any)=> item.id === addressSelected)
-    setCoords({latitude: addressFind.latitude, longitude: addressFind.longitude})
+    const addressFind = locationList.find(
+      (item: any) => item.id === addressSelected
+    );
+    setCoords({
+      latitude: addressFind.latitude,
+      longitude: addressFind.longitude,
+    });
     setValue("address", addressFind.name, { shouldValidate: true });
     setValue("detail", addressFind.detail, { shouldValidate: true });
   };
@@ -80,40 +99,70 @@ const CheckoutComponent = () => {
       });
   };
 
-  const calculateDelivery = async () => {
-    if(coords?.latitude && coords?.longitude){
-      const request:DeliveryRequest={
-        latitude:coords?.latitude,
-        longitude:coords?.longitude,
-        orderValue: calculateTotal(products)
+  const getDisccount = async () => {
+    const { disccount } = getValues();
+    const request = {
+      code: disccount,
+    };
+    const res = await postDisccount(request);
+    if (res.success) {
+      if (res.response.data.length > 0) {
+        setDisccountResult({
+          title: "¡FELICITACIONES!",
+          content: `Recibirás ${res.response.data[0].discount}% de descuento sobre tu pedido`,
+          img:"/icons/success-icon.png"
+        });
+        setAlertDisccount(true)
+      } else {
+        setDisccountResult({
+          title: "LO SENTIMOS",
+          content: "El codigo que ingresaste no es valido. Revísalo e intenta nuevamente.",
+          img:"/icons/alert.png"
+        });
+        setAlertDisccount(true)
       }
+    } else {
+      throw { error: "Failed to fetch data", success: res.success };
+    }
+  };
+
+  const alertDiscountClose = () => {
+    setAlertDisccount(false)
+  };
+
+  const calculateDelivery = async () => {
+    if (coords?.latitude && coords?.longitude) {
+      const request: DeliveryRequest = {
+        latitude: coords?.latitude,
+        longitude: coords?.longitude,
+        orderValue: calculateTotal(products),
+      };
       try {
         const response = await postDelivery(request);
         if (response.success) {
-          console.log(response)
+          console.log(response);
           setDelivery(parseInt(response.response.data));
         } else {
-          throw { error: 'Failed to fetch data', success: response.success };
+          throw { error: "Failed to fetch data", success: response.success };
         }
       } catch (error) {
         return error as Error;
       } finally {
-  
       }
     }
-  }
+  };
 
   useEffect(() => {
-    if(coords && coords.latitude){
-      calculateDelivery()
+    if (coords && coords.latitude) {
+      calculateDelivery();
     }
   }, [coords]);
 
   useEffect(() => {
     getLocations();
     const address = getAddress();
-    if(address && address.detail){
-      setCoords(address.coords)
+    if (address && address.detail) {
+      setCoords(address.coords);
       setValue("address", address.addressInput, { shouldValidate: true });
       setValue("detail", address.detail, { shouldValidate: true });
     }
@@ -191,7 +240,6 @@ const CheckoutComponent = () => {
               }}
             />
             <TextField
-              onClick={goToAddress}
               error={!!errors.detail}
               helperText={
                 errors.detail ? errors.detail.message?.toString() : ""
@@ -238,7 +286,7 @@ const CheckoutComponent = () => {
               style={{ minWidth: "100%" }}
               sx={{ mt: 2 }}
               id="standard-basic"
-              label="315 310 33 52"
+              label="315 352 19 66"
               variant="standard"
             />
           </Grid>
@@ -287,10 +335,15 @@ const CheckoutComponent = () => {
                   id="standard-basic"
                   label="Ej: DESCTRESJOTAS"
                   variant="standard"
+                  {...register("disccount", {})}
                 />
               </Grid>
               <Grid item xs={3} sx={{ mt: 0 }}>
-                <ButtonComponent disabled={false} style={style.form.button}>
+                <ButtonComponent
+                  disabled={false}
+                  style={style.form.button}
+                  onClick={getDisccount}
+                >
                   APLICAR
                 </ButtonComponent>
               </Grid>
@@ -306,6 +359,17 @@ const CheckoutComponent = () => {
           />
         </Grid>
       </Grid>
+      {/* modal to disccount ok */}
+      <ModalAlertComponent
+        handleClose={alertDiscountClose}
+        handleSave={alertDiscountClose}
+        open={alertDisccount}
+        data={{
+          title: disccountResult?.title || '',
+          content: disccountResult?.content || '',
+          img: disccountResult?.img || '',
+        }}
+      />
     </Box>
   );
 };
@@ -336,6 +400,7 @@ const style = {
       fontSize: "20px",
       margin: "0 0 2px 2px",
       border: "none",
+      cursor: "pointer"
     },
   },
 };
