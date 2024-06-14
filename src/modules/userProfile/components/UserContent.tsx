@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TabPanel } from "@mui/lab";
 
 // Custom components
@@ -8,11 +8,22 @@ import TabComponent from "../../shared/tabComponent/TabComponent";
 import { Box } from "@mui/material";
 import UserInfo from "./UserInfo";
 import UserPaymentMethods from "./UserPaymentMethods";
+import { useAppDispatch } from "../../../store/store";
+import { getMe } from "../../../store/modules/users/actions/users.actions";
+import { useSelector } from "react-redux";
+import { selectAllPersonalInfo } from "../../../store/modules/users";
+import { getPaymentMethodsThunk } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
+import Loader from "../../shared/Loader/components/Loader";
 
 const UserContent = () => {
 
+    const dispatch = useAppDispatch();
+    const personalInfo: any = useSelector(selectAllPersonalInfo);
+    console.log('Personal info from user: ', personalInfo);
+    
     const [value, setValue] = useState<string>("1");
     const [disabled, setDisabled] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -21,6 +32,25 @@ const UserContent = () => {
         }, 2000);
         setDisabled(true);    
     };
+
+    useEffect(()  => {
+        setLoading(true);
+        const fetchData = async () => {
+            if (value === "1") await dispatch(getMe(personalInfo.token)).unwrap();
+            if (value === "2") await dispatch(getPaymentMethodsThunk()).unwrap();
+
+            await setLoading(false);
+        }
+        fetchData();
+    }, [value]);
+
+    if (loading) {
+        return (
+            <Box sx={styles.contentContainer}>
+                <Loader screenLoader={false}/>
+            </Box>
+        );
+    }
 
     return (
         <Box sx={styles.contentContainer}>

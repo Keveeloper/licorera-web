@@ -20,12 +20,13 @@ const UserProfileScreen = () => {
     }, []);
     
     return (
-        <>
+        <Box sx={{width: '100%'}}>
             <HeaderScreen />
             <UserBanner />
             <UserContent />
             <FooterScreen />
-        </>
+        </Box>
+        
     );
 
 }

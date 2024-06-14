@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import LoaderScreen from "../modules/shared/Loader/LoaderScreen";
+import Loader from "../modules/shared/Loader/components/Loader";
 import ProductDetailScreen from "../modules/productDetail/productDetail.screen";
 import AboutUs from "../modules/aboutUs/aboutUs.screen";
 
@@ -44,16 +44,16 @@ const RootRouter = () => {
       <Route
         path="/"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <HomeScreen />
-            {/* <LoaderScreen /> */}
+            {/* <Loader /> */}
           </React.Suspense>
         }
       />
       <Route
         path="/home"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <HomeScreen />
           </React.Suspense>
         }
@@ -61,7 +61,7 @@ const RootRouter = () => {
       <Route
         path="/promotion-detail"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <PromotionDetailScreen />
           </React.Suspense>
         }
@@ -69,7 +69,7 @@ const RootRouter = () => {
       <Route
         path="/store"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <StoreScreen />
           </React.Suspense>
         }
@@ -77,7 +77,7 @@ const RootRouter = () => {
       <Route
         path="/exchange-products"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <ExchangeScreen />
           </React.Suspense>
         }
@@ -85,7 +85,7 @@ const RootRouter = () => {
       <Route
         path="/product-detail"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <ProductDetailScreen />
           </React.Suspense>
         }
@@ -93,7 +93,7 @@ const RootRouter = () => {
       <Route
         path="/user-profile"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <UserProfileScreen />
           </React.Suspense>
         }
@@ -101,7 +101,7 @@ const RootRouter = () => {
       <Route
         path="/aboutus"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <AboutUs />
           </React.Suspense>
         }
@@ -109,7 +109,7 @@ const RootRouter = () => {
       <Route
         path="/highlighted-campaigns"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <HighlightedScreen />
           </React.Suspense>
         }
@@ -117,7 +117,7 @@ const RootRouter = () => {
       <Route
         path="/checkout"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <CheckOut />
           </React.Suspense>
         }
@@ -126,7 +126,7 @@ const RootRouter = () => {
       <Route
         path="/address/*"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <Address />
           </React.Suspense>
         }
@@ -135,7 +135,7 @@ const RootRouter = () => {
       <Route
         path="/recommended-products"
         element={
-          <React.Suspense fallback={<LoaderScreen />}>
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
             <RecommendedProducts />
           </React.Suspense>
         }

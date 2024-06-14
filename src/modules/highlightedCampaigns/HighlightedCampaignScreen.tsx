@@ -61,7 +61,7 @@ const HighlightedCampaignScreen = () => {
     }, []);
 
     if (loading) {
-        return <Loader/>;
+        return <Loader screenLoader={true}/>;
     }
 
     return (

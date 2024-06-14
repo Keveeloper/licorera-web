@@ -20,13 +20,17 @@ import { Anchor } from "@mui/icons-material";
 import Cart from "../../../../../cart/cart.screen";
 import { selectCartProducts } from "../../../../../../store/modules/cart/selectors/cart.selector";
 import { useNavigate } from "react-router-dom";
+import ModalAlertComponent from "../../../../modal/modalAlert.component";
 
-const Icons = () => {
+const  Icons = () => {
 
     const navigation = useNavigate();
     const [isLogin, setIslogin] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    console.log(showAlert);
+    
 
     const user = useSelector(selectAllUser);
     const isWelcome = useSelector(selectIsWelcome);
@@ -41,8 +45,19 @@ const Icons = () => {
 
     };
 
+    const handleShowAlert = () => {
+        // setTimeout(() => {
+            setShowAlert(true);
+        // }, 500);
+    }
+
+    const handleAlertClose = () => {
+        setShowAlert(false);
+    };
+
     const logout = () =>{
         dispatch(personalInfoActions.clearUserState(isWelcome));
+        setShowAlert(false);
     }
 
     const toggleDrawer = (open: boolean) => {
@@ -77,8 +92,18 @@ const Icons = () => {
                             </Box>
                             <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={() => navigation('/user-profile')}>Perfil</MenuItem>
                             <MenuItem sx={styles.iconsContainer.menu.menuitem}>Mis Pedidos</MenuItem>
-                            <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={logout}>Cerrar Sesión</MenuItem>
+                            <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={handleShowAlert}>Cerrar Sesión</MenuItem>
                         </Menu>
+                        <ModalAlertComponent
+                            handleClose={handleAlertClose}
+                            handleSave={logout}
+                            open={showAlert}
+                            isCancellButton={true}
+                            data={{
+                            title: `información`,
+                            content:`¿Seguro que quieres cerrar sesión?`,
+                            img:`/icons/logout-modal-icon.png`
+                        }}/>
                 </Dropdown>
             )}
             <Badge sx={styles.iconsContainer.badge} badgeContent={products?.length}>
