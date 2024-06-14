@@ -1,19 +1,46 @@
 import { Box, Typography } from "@mui/material";
 import { displayFlex, displayFlexColumn } from "../../shared/recursiveStyles/RecursiveStyles";
 import { useSelector } from "react-redux";
-import { selectAllUser } from "../../../store/modules/users";
+import { personalInfoActions, selectAllUser } from "../../../store/modules/users";
+import { useState } from "react";
+import { useAppDispatch } from "../../../store/store";
+import { selectIsWelcome } from "../../../store/modules/users/selectors/users.selector";
+import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 
 const UserBanner = () => {
 
     const user = useSelector(selectAllUser);
+    const dispatch = useAppDispatch();
+    const isWelcome = useSelector(selectIsWelcome);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+
+    const handleShowAlert = () => setShowAlert(true);
+
+    const handleAlertClose = () => setShowAlert(false);
+
+    const logout = () =>{
+        dispatch(personalInfoActions.clearUserState(isWelcome));
+        setShowAlert(false);
+    }
 
     return(
         <Box sx={styles.bannerContainer}>
             <Box sx={styles.bannerContainer.boxLeft}>
                 <Box sx={styles.bannerContainer.boxLeft.userIcon}>
                     {/* <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/account-icon.png" width={100} alt="" /> */}
-                    <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/user.png" width={100} alt="" />
+                    <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/user.png" width={100} alt="" onClick={handleShowAlert}/>
                 </Box>
+                <ModalAlertComponent
+                    handleClose={handleAlertClose}
+                    handleSave={logout}
+                    open={showAlert}
+                    isCancellButton={true}
+                    data={{
+                        title: `información`,
+                        content:`¿Seguro que quieres cerrar sesión?`,
+                        img:`/icons/logout-modal-icon.png`
+                    }}
+                />
                 <Box sx={styles.bannerContainer.boxLeft.userName}>
                     <Typography sx={styles.bannerContainer.boxLeft.userName.name}>{user?.name} {user?.last_name}</Typography>
                     <Typography sx={styles.bannerContainer.boxLeft.userName.jotas}>{user?.points} Jotas</Typography>
