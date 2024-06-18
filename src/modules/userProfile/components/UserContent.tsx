@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { selectAllPersonalInfo } from "../../../store/modules/users";
 import { getPaymentMethodsThunk } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
 import Loader from "../../shared/Loader/components/Loader";
+import UserAddPayment from "./UserAddPayment";
 
 const UserContent = () => {
 
@@ -24,6 +25,7 @@ const UserContent = () => {
     const [value, setValue] = useState<string>("1");
     const [disabled, setDisabled] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
+    const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(true);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -54,21 +56,25 @@ const UserContent = () => {
 
     return (
         <Box sx={styles.contentContainer}>
-            <TabComponent
-                tabsArray={["INFORMACIÓN", "MÉTODOS DE PAGO", "DIRECCIONES"]}
-                // tabsArray={}
-                value={value}
-                setValue={setValue}
-                handleChange={handleChange}
-                disabled={disabled}
-            >
-                <TabPanel sx={{padding: 0}} value="1">
-                    <UserInfo />
-                </TabPanel>
-                <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="2">
-                    <UserPaymentMethods/>
-                </TabPanel>
-            </TabComponent>
+            {paymentMethodsOpen ? 
+                <UserAddPayment />
+            :
+                <TabComponent
+                    tabsArray={["INFORMACIÓN", "MÉTODOS DE PAGO", "DIRECCIONES"]}
+                    // tabsArray={}
+                    value={value}
+                    setValue={setValue}
+                    handleChange={handleChange}
+                    disabled={disabled}
+                >
+                    <TabPanel sx={{padding: 0}} value="1">
+                        <UserInfo />
+                    </TabPanel>
+                    <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="2">
+                        <UserPaymentMethods/>
+                    </TabPanel>
+                </TabComponent>
+            }
         </Box>
     );
 
