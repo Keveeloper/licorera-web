@@ -47,6 +47,7 @@ const HomeScreen = () => {
   const [disabled, setDisabled] = useState<boolean>(false);
   const [closeAlert, setCloseAlert] = useState<boolean>(false);
   const [tabs, setTabs] = useState<string[]>([]);
+  const [schedule, setSchedule] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const getAsynPromotion = useCallback(async () => {
@@ -76,7 +77,11 @@ const HomeScreen = () => {
   const isActive = () => {
     isActiveApi()
     .then((res)=>{
-      if(res.success && !res.data.active){
+      if(res.success && res.data.active){
+        let newArray=[];
+        newArray.push(res.data.open.split(" ")[1])
+        newArray.push(res.data.close.split(" ")[1])
+        setSchedule(newArray)
         setCloseAlert(true)
       }
     })
@@ -202,6 +207,7 @@ const HomeScreen = () => {
         handleSave={alertClose}
         open={closeAlert}
         withSchedule
+        schedule={schedule}
         data={{
           title: "INFORMACIÓN",
           content: `No podemos despachar tu pedido. Nuestros horarios de atención`,

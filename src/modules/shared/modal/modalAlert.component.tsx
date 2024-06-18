@@ -13,7 +13,8 @@ interface ModalArletCustomProps {
     img: string;
   };
   isCancellButton?: boolean;
-  withSchedule?:boolean
+  withSchedule?:boolean;
+  schedule?:string[]
 }
 
 const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
@@ -23,8 +24,18 @@ const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
   style,
   data,
   isCancellButton,
-  withSchedule
+  withSchedule,
+  schedule
 }) => {
+
+  const formatTime = (time24: string): string => {
+    const [hours, minutes] = time24.split(':');
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const adjustedHour = hour % 12 || 12;
+    return `${adjustedHour}:${minutes} ${ampm}`;
+  };
+
   return (
     <ModalComponent
       style={styleDefault}
@@ -40,7 +51,7 @@ const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
       </Typography>
       {withSchedule &&
         <Typography className="inputCustom" style={styleDefault.schedule}>
-          9:00 AM - 1:00 AM
+          {schedule?.length === 2 && `${formatTime(schedule[0])} - ${formatTime(schedule[1])}`}
         </Typography>
       }
         
