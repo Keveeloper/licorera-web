@@ -49,6 +49,7 @@ const  Icons = () => {
     const logout = () =>{
         dispatch(personalInfoActions.clearUserState(isWelcome));
         setShowAlert(false);
+        navigation('/');
     }
 
     const toggleDrawer = (open: boolean) => {

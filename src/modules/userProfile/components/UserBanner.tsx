@@ -7,24 +7,29 @@ import { useAppDispatch } from "../../../store/store";
 import { selectAllPersonalInfo, selectIsWelcome } from "../../../store/modules/users/selectors/users.selector";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import { getInfoThunk, getMe } from "../../../store/modules/users/actions/users.actions";
+import { useNavigate } from "react-router-dom";
 
 const UserBanner = () => {
 
     const user = useSelector(selectAllUser);
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const isWelcome = useSelector(selectIsWelcome);
     const personalInfo: any = useSelector(selectAllPersonalInfo);
     const [showAlert, setShowAlert] = useState<boolean>(false);
 
-    const handleShowAlert = () => setShowAlert(true);
+    const handleShowAlert = () => {
+        setShowAlert(true);
+    }
 
     const handleAlertClose = () => setShowAlert(false);
 
-    const logout = async () =>{
-        await dispatch(personalInfoActions.clearUserState(isWelcome));
-        await dispatch(getMe(personalInfo.token)).unwrap();
-        await dispatch(getInfoThunk()).unwrap();
-        await setShowAlert(false);
+    const logout = () =>{
+        dispatch(personalInfoActions.clearUserState(isWelcome));
+        // await dispatch(getMe(personalInfo.token)).unwrap();
+        // await dispatch(getInfoThunk()).unwrap();
+        setShowAlert(false);
+        navigate('/');
     }
 
     return(
