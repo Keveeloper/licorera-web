@@ -27,6 +27,8 @@ const UserContent = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(true);
 
+    const styles = stylesUserContent(value);
+
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
         setTimeout(() => {
@@ -80,13 +82,13 @@ const UserContent = () => {
 
 }
 
-const styles = {
+const stylesUserContent = (value: string) => ({
     contentContainer: {
         margin: '90px auto',
         width: '60%',
-        height: '500px',
+        height: value === '2' ? '500px' : '',
         // background: 'orange'
     }
-}
+});
 
 export default UserContent;
