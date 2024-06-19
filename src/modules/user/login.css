@@ -6,6 +6,10 @@
     width:100%;
 }
 
+.inputCustom:focus {
+    outline: none;
+}
+
 .inputCustom input{
     background: white;
 }
