@@ -8,6 +8,7 @@ import { useForm, Controller } from "react-hook-form";
 import InputMask from "react-input-mask";
 import './UserAddPayment.css';
 import { FaAlignJustify } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 const digitsOnlyMask: MaskitoOptions = {
     mask: [
@@ -23,6 +24,9 @@ const digitsOnlyMask: MaskitoOptions = {
 
 const UserAddPayment = () => {
 
+    const [isDisabled, setIsDisabled] = useState<boolean>(true);
+    const [firstTime, setFirstTime] = useState<boolean>(true);
+
     let cardNumberRef = useMaskito({options: digitsOnlyMask});
 
     const {
@@ -34,8 +38,9 @@ const UserAddPayment = () => {
     } = useForm({
         mode: "onChange",
     });
+    
 
-    const styles = stylesAddPayment(errors);
+    const styles = stylesAddPayment(errors, isValid);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -168,24 +173,27 @@ const UserAddPayment = () => {
                 <Box sx={styles.formContainer.nameContainer}>
                     <Typography sx={styles.formContainer.cardNumberLabel}>Nombre en la tarjeta</Typography>
                     <TextField
-                        label="Correo electrónico"
+                        // label="Correo electrónico"
+                        sx={styles.formContainer.nameContainer.nameInput}
+                        placeholder="Pepito Perez"
                         variant="filled"
-                        error={!!errors.email}
-                        helperText={
-                        errors.email ? errors.email.message?.toString() : ""
-                        }
-                        {...register("email", {
-                        required: "Este campo es obligatorio",
-                        pattern: {
-                            value: /^\S+@\S+$/i,
-                            message: "Formato de correo no válido",
-                        },
+                        error={!!errors.name}
+                        // helperText={
+                        //     errors.name ? errors.name.message?.toString() : ""
+                        // }
+                        {...register("name", {
+                            required: "Este campo es obligatorio",
+                            minLength: {
+                                value: 6,
+                                message: "El mínimo de caracteres permitidos son 6",
+                            },
                         })}
-                        name="email"
+                        name="name"
                         // type="email"
-                        className="inputCustom"
+                        // className="card-input-payment"
                     />
                 </Box>
+                <Typography color={'red'}>{errors.name ? errors.name.message?.toString() : ""}</Typography>
                 <Box sx={styles.formContainer.ePaycoContainer}>
                     <img style={styles.formContainer.ePaycoContainer.padlock} src="/icons/padlock-icon.png" alt="" />
                     <Typography sx={styles.formContainer.ePaycoContainer.text}>Pago seguro con ePayco</Typography>
@@ -195,6 +203,8 @@ const UserAddPayment = () => {
                     variant="outlined" 
                     fullWidth 
                     color="inherit" 
+                    // disabled={Object.keys(errors).length === 0 && errors.constructor === Object ? false : true}
+                    disabled={!isValid}
                     // onClick={handleClick}
                 >
                     Agregar
@@ -205,7 +215,7 @@ const UserAddPayment = () => {
 
 }
 
-const stylesAddPayment = (errors: any) => ({
+const stylesAddPayment = (errors: any, isValid: boolean) => ({
     titleContainer: {
         width: '100%',
         height: '70px',
@@ -292,7 +302,18 @@ const stylesAddPayment = (errors: any) => ({
             }
         },
         nameContainer: {
-            mt: 4
+            mt: 4,
+            nameInput: {
+                width:'100%',
+                fontFamily: 'weblysleekuil',
+                fontSize: '16px',
+                fontWeight: 300,
+                color: '#000000',
+                '& input': {
+                    paddingBottom: '20px',
+                    background: 'white',
+                }
+            },
         },
         ePaycoContainer: {
             m: '40px auto 0 auto',
@@ -312,10 +333,9 @@ const stylesAddPayment = (errors: any) => ({
             padding: 2,
             fontFamily: 'HudsonNYSerif',
             fontSize: '18px',
-            // background: `${edit ? paletteColors.gold : 'none'}`,
-            background: 'none',
-            // color: `${edit ? paletteColors.white : paletteColors.black}`,
-            color: paletteColors.black,
+            background: isValid ? paletteColors.gold : '#D1D1D1',
+            color: 'white !important',
+            border: 'none !important',
             // '&:hover': {
             //     background: `${edit ? paletteColors.gold : 'transparent'}`,
             // },
