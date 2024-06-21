@@ -1,6 +1,6 @@
-import { deletePaymentMethods, getPaymentMethods } from "../../../../service/modules/paymentMethods/paymentMethods";
+import { addPaymentMethods, deletePaymentMethods, getPaymentMethods } from "../../../../service/modules/paymentMethods/paymentMethods";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { DeletePaymentMethod } from "../../../../service/modules/paymentMethods/types";
+import { AddPaymentMethod, DeletePaymentMethod } from "../../../../service/modules/paymentMethods/types";
 
 export const getPaymentMethodsThunk = createAsyncThunk(
   "getPayment/fetch",
@@ -19,6 +19,18 @@ export const deletePaymentMethodsThunk = createAsyncThunk(
   async ({reqData}: {reqData: DeletePaymentMethod}, { rejectWithValue }) => {
     try {
       const response = await deletePaymentMethods(reqData);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(error.message); // Enviar el mensaje de error
+    }
+  }
+);
+
+export const addPaymentMethodsThunk = createAsyncThunk(
+  "addPayment/fetch",
+  async ({reqData}: {reqData: AddPaymentMethod}, { rejectWithValue }) => {
+    try {
+      const response = await addPaymentMethods(reqData);
       return response;
     } catch (error: any) {
       return rejectWithValue(error.message); // Enviar el mensaje de error

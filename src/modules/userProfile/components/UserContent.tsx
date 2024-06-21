@@ -27,7 +27,7 @@ const UserContent = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(true);
 
-    const styles = stylesUserContent(value);
+    const styles = stylesUserContent(value, paymentMethodsOpen);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -59,7 +59,7 @@ const UserContent = () => {
     return (
         <Box sx={styles.contentContainer}>
             {paymentMethodsOpen ? 
-                <UserAddPayment />
+                <UserAddPayment setPaymentMethodsOpen={setPaymentMethodsOpen}/>
             :
                 <TabComponent
                     tabsArray={["INFORMACIÓN", "MÉTODOS DE PAGO", "DIRECCIONES"]}
@@ -73,7 +73,7 @@ const UserContent = () => {
                         <UserInfo />
                     </TabPanel>
                     <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="2">
-                        <UserPaymentMethods/>
+                        <UserPaymentMethods setPaymentMethodsOpen={setPaymentMethodsOpen}/>
                     </TabPanel>
                 </TabComponent>
             }
@@ -82,11 +82,11 @@ const UserContent = () => {
 
 }
 
-const stylesUserContent = (value: string) => ({
+const stylesUserContent = (value: string, paymentMethodsOpen: boolean) => ({
     contentContainer: {
         margin: '90px auto',
         width: '60%',
-        height: value === '2' ? '500px' : '',
+        height: value === '2' && !paymentMethodsOpen ? '500px' : '',
         // background: 'orange'
     }
 });

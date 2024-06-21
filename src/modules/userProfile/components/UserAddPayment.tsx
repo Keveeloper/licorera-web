@@ -1,33 +1,24 @@
 import { Box } from "@mui/joy";
 import { Button, TextField, Typography } from "@mui/material";
-// import { useForm } from "react-hook-form";
 import { paletteColors } from "../../../paletteColors/paletteColors";
-import type {MaskitoOptions} from '@maskito/core';
-import {useMaskito} from '@maskito/react';
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import InputMask from "react-input-mask";
 import './UserAddPayment.css';
-import { FaAlignJustify } from "react-icons/fa";
+import { AddPaymentInterface } from "./types";
+import { AddPaymentMethod } from "../../../service/modules/paymentMethods/types";
+import { useAppDispatch } from "../../../store/store";
+import { addPaymentMethodsThunk, getPaymentMethodsThunk } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
 import { useEffect, useState } from "react";
+import Loader from "../../shared/Loader/components/Loader";
+import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 
-const digitsOnlyMask: MaskitoOptions = {
-    mask: [
-        ...new Array(4).fill(/\d/),
-        ' ',
-        ...new Array(4).fill(/\d/),
-        ' ',
-        ...new Array(4).fill(/\d/),
-        ' ',
-        ...new Array(4).fill(/\d/),
-    ],
-};
+const UserAddPayment = (props: AddPaymentInterface) => {
 
-const UserAddPayment = () => {
+    const { setPaymentMethodsOpen } = props;
+    const [loading, setLoading] = useState<boolean>(false);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
 
-    const [isDisabled, setIsDisabled] = useState<boolean>(true);
-    const [firstTime, setFirstTime] = useState<boolean>(true);
-
-    let cardNumberRef = useMaskito({options: digitsOnlyMask});
+    const dispatch = useAppDispatch();
 
     const {
         register,
@@ -44,26 +35,38 @@ const UserAddPayment = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const { email, password, year } = getValues();
-        // const loginRequest: LoginRequest = {
-        //   email,
-        //   password,
-        // };
-        // try{
-        //   const postLogin = await dispatch(userLogin(loginRequest)).unwrap();
-        //   if (postLogin.success) {
-        //     dispatch(getMe(postLogin?.response?.token)).unwrap();
-        //     modalOpen = false;
-        //     handleClose();
-        //   } else {
-        //     setShowAlert(true);
-        //   }
-        // } catch (error){
-        //   console.log(error);
-        //   setShowAlert(true);
-        // }
+        // setShowAlert(true);
+        setLoading(true);
+        const { cardnumber, expiryDate, ccvnumber, name } = getValues();
+        const addPaymenteRequest: AddPaymentMethod = {
+            number: cardnumber.replaceAll(' ', ''),
+            cvv: ccvnumber,
+            name: name,
+            favorite: false,
+            exp_month: expiryDate.split('/')[0],
+            exp_year: `20${expiryDate.split('/')[1]}`
+        };
+        try{
+            const postAddPayment = await dispatch(addPaymentMethodsThunk({reqData: addPaymenteRequest })).unwrap();
+            
+            if (postAddPayment.success) {
+                const getPayments = await dispatch(getPaymentMethodsThunk()).unwrap();
+                // if (getPayments.success) {
+                    // setPaymentMethodsOpen(false);
+                    setLoading(false);
+                    setShowAlert(true);
+                // }
+            } else {
+                // setShowAlert(true);
+            }
+        } catch (error){
+            console.log(error);
+            //setShowAlert(true);
+        }
         
     };
+
+    const handleBack = () => setPaymentMethodsOpen(false);
 
     const validateExpirationDate = (value: any) => {
         const [month, year] = value.split('/').map(Number);
@@ -83,11 +86,31 @@ const UserAddPayment = () => {
         }
         return true;
     };
+
+    const handleAlertClose = () => {
+        setShowAlert(false);
+    };
+
+    const handleSave = async () => {
+        setLoading(true);
+        const getPayments = await dispatch(getPaymentMethodsThunk()).unwrap();
+        if (getPayments.success) {
+            setPaymentMethodsOpen(false);
+        }
+    }
+
+    if (loading) {
+        return (
+            <Box sx={{height: '600px'}}>
+                <Loader screenLoader={false}/>
+            </Box>
+        );
+    }
     
     return (
         <>
             <Box sx={styles.titleContainer}>
-                <img style={styles.titleContainer.arrowImage} src="/icons/Keyboard-arrow-left.png" alt="" />
+                <img style={styles.titleContainer.arrowImage} src="/icons/Keyboard-arrow-left.png" alt="" onClick={handleBack}/>
                 <Typography sx={styles.titleContainer.title}>agregar método de pago</Typography>
             </Box>
             <Box component="form" sx={styles.formContainer} onSubmit={handleSubmit} noValidate autoComplete="off">
@@ -173,7 +196,6 @@ const UserAddPayment = () => {
                 <Box sx={styles.formContainer.nameContainer}>
                     <Typography sx={styles.formContainer.cardNumberLabel}>Nombre en la tarjeta</Typography>
                     <TextField
-                        // label="Correo electrónico"
                         sx={styles.formContainer.nameContainer.nameInput}
                         placeholder="Pepito Perez"
                         variant="filled"
@@ -189,8 +211,6 @@ const UserAddPayment = () => {
                             },
                         })}
                         name="name"
-                        // type="email"
-                        // className="card-input-payment"
                     />
                 </Box>
                 <Typography color={'red'}>{errors.name ? errors.name.message?.toString() : ""}</Typography>
@@ -203,13 +223,22 @@ const UserAddPayment = () => {
                     variant="outlined" 
                     fullWidth 
                     color="inherit" 
-                    // disabled={Object.keys(errors).length === 0 && errors.constructor === Object ? false : true}
+                    type="submit"
                     disabled={!isValid}
-                    // onClick={handleClick}
                 >
                     Agregar
                 </Button>
             </Box>
+            <ModalAlertComponent
+                handleClose={handleAlertClose}
+                handleSave={handleSave}
+                open={showAlert}
+                isCancellButton={false}
+                data={{
+                    title: '¡felicitaciones!',
+                    content:`La tarjeta fue agregada exitosamente.`,
+                    img:`/icons/checkIcon.png`
+            }}/>
         </>
     );
 
@@ -223,6 +252,7 @@ const stylesAddPayment = (errors: any, isValid: boolean) => ({
         alignItems: 'center',
         arrowImage: {
             height: '100%',
+            cursor: 'pointer',
         },
         title: {
             margin: '0 auto',

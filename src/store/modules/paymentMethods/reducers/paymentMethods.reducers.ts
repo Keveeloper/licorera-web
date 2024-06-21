@@ -47,3 +47,27 @@ export const removeRejected = (
   state.error = action.payload || action.error;
 };
 
+
+//////////////////////////// Add ////////////////////////////////////////////////////
+export const addPending = (state: PaymentMethodState) => {
+  state.loadingStatus = 'loading';
+  state.error = undefined;
+};
+
+export const addFulfilled = (
+  state: PaymentMethodState,
+  action: PayloadAction<any>
+) => {
+  state.state = action.payload.response;
+  state.loadingStatus = 'loaded';
+  // state.loadingStatus = 'loading';
+};
+
+export const addRejected = (
+  state: PaymentMethodState,
+  action: any
+) => {
+  state.loadingStatus = 'error';
+  state.error = action.payload || action.error;
+};
+
