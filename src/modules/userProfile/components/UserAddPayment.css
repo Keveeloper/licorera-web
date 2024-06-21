@@ -1,0 +1,8 @@
+
+.card-input-payment:focus {
+    outline: none;
+}
+
+.card-input-payment::placeholder {
+    opacity: 0.5; /* Firefox */
+  }

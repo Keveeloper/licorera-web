@@ -28,9 +28,7 @@ const  Icons = () => {
     const [isLogin, setIslogin] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [showAlert, setShowAlert] = useState<boolean>(false);
-    console.log(showAlert);
-    
+    const [showAlert, setShowAlert] = useState<boolean>(false);    
 
     const user = useSelector(selectAllUser);
     const isWelcome = useSelector(selectIsWelcome);
@@ -42,22 +40,16 @@ const  Icons = () => {
     }
     const handleClose = (isOpen: boolean) => {
         setOpenModal(isOpen);
-
     };
 
-    const handleShowAlert = () => {
-        // setTimeout(() => {
-            setShowAlert(true);
-        // }, 500);
-    }
+    const handleShowAlert = () => setShowAlert(true);
 
-    const handleAlertClose = () => {
-        setShowAlert(false);
-    };
+    const handleAlertClose = () => setShowAlert(false);
 
     const logout = () =>{
         dispatch(personalInfoActions.clearUserState(isWelcome));
         setShowAlert(false);
+        navigation('/');
     }
 
     const toggleDrawer = (open: boolean) => {

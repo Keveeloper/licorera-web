@@ -1,26 +1,62 @@
 import { Box, Typography } from "@mui/material";
 import { displayFlex, displayFlexColumn } from "../../shared/recursiveStyles/RecursiveStyles";
 import { useSelector } from "react-redux";
-import { selectAllUser } from "../../../store/modules/users";
+import { personalInfoActions, selectAllUser } from "../../../store/modules/users";
+import { useState } from "react";
+import { useAppDispatch } from "../../../store/store";
+import { selectAllPersonalInfo, selectIsWelcome } from "../../../store/modules/users/selectors/users.selector";
+import ModalAlertComponent from "../../shared/modal/modalAlert.component";
+import { getInfoThunk, getMe } from "../../../store/modules/users/actions/users.actions";
+import { useNavigate } from "react-router-dom";
 
 const UserBanner = () => {
 
     const user = useSelector(selectAllUser);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const isWelcome = useSelector(selectIsWelcome);
+    const personalInfo: any = useSelector(selectAllPersonalInfo);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+    }
+
+    const handleAlertClose = () => setShowAlert(false);
+
+    const logout = () =>{
+        dispatch(personalInfoActions.clearUserState(isWelcome));
+        // await dispatch(getMe(personalInfo.token)).unwrap();
+        // await dispatch(getInfoThunk()).unwrap();
+        setShowAlert(false);
+        navigate('/');
+    }
 
     return(
         <Box sx={styles.bannerContainer}>
             <Box sx={styles.bannerContainer.boxLeft}>
                 <Box sx={styles.bannerContainer.boxLeft.userIcon}>
                     {/* <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/account-icon.png" width={100} alt="" /> */}
-                    <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/user.png" width={100} alt="" />
+                    <img style={styles.bannerContainer.boxLeft.userIcon.userImage} src="/icons/user.png" width={100} alt=""/>
                 </Box>
+                <ModalAlertComponent
+                    handleClose={handleAlertClose}
+                    handleSave={logout}
+                    open={showAlert}
+                    isCancellButton={true}
+                    data={{
+                        title: `información`,
+                        content:`¿Seguro que quieres cerrar sesión?`,
+                        img:`/icons/logout-modal-icon.png`
+                    }}
+                />
                 <Box sx={styles.bannerContainer.boxLeft.userName}>
                     <Typography sx={styles.bannerContainer.boxLeft.userName.name}>{user?.name} {user?.last_name}</Typography>
                     <Typography sx={styles.bannerContainer.boxLeft.userName.jotas}>{user?.points} Jotas</Typography>
                 </Box>
             </Box>
             <Box sx={styles.bannerContainer.boxRight}>
-                <img src="/icons/logout-icon.png" width={30} alt="" />
+                <img style={{cursor: 'pointer'}} src="/icons/logout-icon.png" width={30} alt="" onClick={handleShowAlert}/>
                 <Box sx={styles.bannerContainer.boxRight.circle}>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.order_quantity}</Typography>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>Pedidos</Typography>

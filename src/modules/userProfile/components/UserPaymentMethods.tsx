@@ -10,10 +10,13 @@ import { DeletePaymentMethod } from "../../../service/modules/paymentMethods/typ
 import { useAppDispatch } from "../../../store/store";
 import { deletePaymentMethodsThunk } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
+import { AddPaymentInterface } from "./types";
 
-const UserPaymentMethods = ({ items, onItemDelete }: any) => {
+const UserPaymentMethods = (props: AddPaymentInterface) => {
 
-  const paymentMethodsRedux = useSelector(selectAllPaymentMethods);  
+  const { setPaymentMethodsOpen } = props;
+
+  const paymentMethodsRedux = useSelector(selectAllPaymentMethods); 
   console.log('paymentMethodsRedux: ', paymentMethodsRedux);
   
   const user = useSelector(selectAllUser);
@@ -47,6 +50,8 @@ const UserPaymentMethods = ({ items, onItemDelete }: any) => {
   const handleAlertClose = () => {
     setShowAlert(false);
   };
+
+  const handleClick = () => setPaymentMethodsOpen(true);
 
   return (
     
@@ -91,7 +96,7 @@ const UserPaymentMethods = ({ items, onItemDelete }: any) => {
           variant="outlined" 
           fullWidth 
           color="inherit" 
-          // onClick={handleClick}
+          onClick={handleClick}
       >
           {/* {edit ? 'Guardar' : 'Editar'} */}
           Agregar

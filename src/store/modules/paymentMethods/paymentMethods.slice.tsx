@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { PaymentMethodState } from "./types";
 import * as reducers from "./reducers/paymentMethods.reducers";
-import { deletePaymentMethodsThunk, getPaymentMethodsThunk } from "./actions/paymentMethods.actions";
+import { deletePaymentMethodsThunk, getPaymentMethodsThunk, addPaymentMethodsThunk } from "./actions/paymentMethods.actions";
 
 export const PAYMENT_METHODS_FEATURE_KEY = "paymentMethods";
 
@@ -46,7 +46,10 @@ export const paymentMethodsSlice = createSlice({
       .addCase(getPaymentMethodsThunk.rejected, reducers.paymentMethodsRejected)
       .addCase(deletePaymentMethodsThunk.pending, reducers.removePending)
       .addCase(deletePaymentMethodsThunk.fulfilled, reducers.removeFulfilled)
-      .addCase(deletePaymentMethodsThunk.rejected, reducers.removeRejected);
+      .addCase(deletePaymentMethodsThunk.rejected, reducers.removeRejected)
+      .addCase(addPaymentMethodsThunk.pending, reducers.addPending)
+      .addCase(addPaymentMethodsThunk.fulfilled, reducers.addFulfilled)
+      .addCase(addPaymentMethodsThunk.rejected, reducers.addRejected);
   },
 });
 
