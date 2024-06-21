@@ -28,7 +28,7 @@ const useAddressHook = () => {
   };
 
   const updateAddressItem = (updatedProduct: AddressSelected) => {
-    const newCart = {...cart, detail: updatedProduct.detail};
+    const newCart = {...cart, ...updatedProduct};
     dispatch(addressActions.setAddressSelected(newCart))
   };
 

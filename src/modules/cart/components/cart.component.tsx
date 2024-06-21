@@ -21,15 +21,15 @@ import "./cart.component.css";
 import { useNavigate } from "react-router-dom";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import useHelperHook from "../../shared/hooks/helper/useHelper";
+import useAddressHook from "../../shared/hooks/addressHook/useAddressHook";
 
 interface customProps {
   isCheckout?: boolean;
   onClick?:() => void;
   isFormValid?:boolean;
-  delivery?:number;
 }
 
-const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid, delivery }) => {
+const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid }) => {
   const products = useSelector(selectCartProducts);
   const user = useSelector(selectAllUser);
   const Info = useSelector(selectAllInfo);
@@ -37,8 +37,10 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
 
   const { removeCartItem, updateCartItem } = useCartHook();
   const { calculateTotal } = useHelperHook();
+  const { getAddress } = useAddressHook();
 
   const [total, setTotal] = useState<number>(0);
+  const [delivery, setDelivery] = useState<number>(0);
   const [subTotal, setSubTotal] = useState<number>(0);
   const [points, setPoints] = useState<number>(0);
   const [product, setProduct] = useState<Product>();
@@ -92,18 +94,22 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
     setShowDeleteAlert(true);
   };
 
-  useEffect(() => {
-    const newtotal = calculateTotal(products)
-    setSubTotal(newtotal)
-    console.log(delivery);
-    if(delivery){
-      console.log(delivery);
-      setTotal(newtotal + delivery);
+  const getTotal = async () => {
+    const newtotal = await calculateTotal(products)
+    setSubTotal(newtotal[0])
+    setDelivery(newtotal[1])
+    console.log(newtotal[1]);
+    if(newtotal[1]){
+      setTotal(newtotal[0] + newtotal[1]);
     }else{
-      setTotal(newtotal);
+      setTotal(newtotal[0]);
     }
-    setPoints(newtotal / Info?.data?.minimumAmountForPoints || 0);
-  }, [products, delivery]);
+    setPoints(newtotal[0] / Info?.data?.minimumAmountForPoints || 0);
+  }
+
+  useEffect(() => {
+    getTotal()
+  }, [products, getAddress().detail]);
 
   return (
     <>
@@ -239,7 +245,7 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
                   fontSize: "14px",
                 }}
               >
-                {CurrencyFormat(delivery)}
+                {delivery && delivery > 0 ? CurrencyFormat(delivery): "--"}
               </Grid>
             </>
           )}

@@ -17,7 +17,9 @@ import {
 } from "../../shared/recursiveStyles/RecursiveStyles";
 import { useEffect, useState } from "react";
 import ButtonComponent from "../../shared/button/button.component";
-import useAddressHook from "../../shared/hooks/addressHook/useAddressHook";
+import useAddressHook, {
+  AddressSelected,
+} from "../../shared/hooks/addressHook/useAddressHook";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../store/store";
 import { getLocationsThunk } from "../../../store/modules/address/actions/address.actions";
@@ -49,8 +51,7 @@ const CheckoutComponent = () => {
   const [alertDisccount, setAlertDisccount] = useState(false);
   const [disccountResult, setDisccountResult] = useState<disccount>();
 
-  const { getAddress } = useAddressHook();
-  const { calculateTotal } = useHelperHook();
+  const { getAddress, updateAddressItem } = useAddressHook();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -80,6 +81,16 @@ const CheckoutComponent = () => {
       latitude: addressFind.latitude,
       longitude: addressFind.longitude,
     });
+    console.log(addressFind);
+    const newAddress: AddressSelected = {
+      coords: {
+        latitude: addressFind.latitude,
+        longitude: addressFind.longitude,
+      },
+      addressInput: addressFind.address,
+      detail: addressFind.detail,
+    };
+    updateAddressItem(newAddress);
     setValue("address", addressFind.name, { shouldValidate: true });
     setValue("detail", addressFind.detail, { shouldValidate: true });
   };
@@ -110,16 +121,17 @@ const CheckoutComponent = () => {
         setDisccountResult({
           title: "¡FELICITACIONES!",
           content: `Recibirás ${res.response.data[0].discount}% de descuento sobre tu pedido`,
-          img:"/icons/success-icon.png"
+          img: "/icons/success-icon.png",
         });
-        setAlertDisccount(true)
+        setAlertDisccount(true);
       } else {
         setDisccountResult({
           title: "LO SENTIMOS",
-          content: "El codigo que ingresaste no es valido. Revísalo e intenta nuevamente.",
-          img:"/icons/alert.png"
+          content:
+            "El codigo que ingresaste no es valido. Revísalo e intenta nuevamente.",
+          img: "/icons/alert.png",
         });
-        setAlertDisccount(true)
+        setAlertDisccount(true);
       }
     } else {
       throw { error: "Failed to fetch data", success: res.success };
@@ -127,36 +139,8 @@ const CheckoutComponent = () => {
   };
 
   const alertDiscountClose = () => {
-    setAlertDisccount(false)
+    setAlertDisccount(false);
   };
-
-  const calculateDelivery = async () => {
-    if (coords?.latitude && coords?.longitude) {
-      const request: DeliveryRequest = {
-        latitude: coords?.latitude,
-        longitude: coords?.longitude,
-        orderValue: calculateTotal(products),
-      };
-      try {
-        const response = await postDelivery(request);
-        if (response.success) {
-          console.log(response);
-          setDelivery(parseInt(response.response.data));
-        } else {
-          throw { error: "Failed to fetch data", success: response.success };
-        }
-      } catch (error) {
-        return error as Error;
-      } finally {
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (coords && coords.latitude) {
-      calculateDelivery();
-    }
-  }, [coords]);
 
   useEffect(() => {
     getLocations();
@@ -252,9 +236,9 @@ const CheckoutComponent = () => {
               id="standard-basic"
               label="Torre / Apto / Casa / Detalles"
               variant="standard"
-              InputProps={{
-                readOnly: true,
-              }}
+              // InputProps={{
+              //   readOnly: true,
+              // }}
             />
           </Grid>
           {/* contact section */}
@@ -355,7 +339,6 @@ const CheckoutComponent = () => {
             isCheckout
             onClick={handleSubmit}
             isFormValid={isValid}
-            delivery={delivery}
           />
         </Grid>
       </Grid>
@@ -365,9 +348,9 @@ const CheckoutComponent = () => {
         handleSave={alertDiscountClose}
         open={alertDisccount}
         data={{
-          title: disccountResult?.title || '',
-          content: disccountResult?.content || '',
-          img: disccountResult?.img || '',
+          title: disccountResult?.title || "",
+          content: disccountResult?.content || "",
+          img: disccountResult?.img || "",
         }}
       />
     </Box>
@@ -400,7 +383,7 @@ const style = {
       fontSize: "20px",
       margin: "0 0 2px 2px",
       border: "none",
-      cursor: "pointer"
+      cursor: "pointer",
     },
   },
 };
