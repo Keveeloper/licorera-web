@@ -31,7 +31,9 @@ export const addPaymentMethodsThunk = createAsyncThunk(
   async ({reqData}: {reqData: AddPaymentMethod}, { rejectWithValue }) => {
     try {
       const response = await addPaymentMethods(reqData);
-      return response;
+      console.log('Response en el addPaymentMethodsThunk: ', response.response);
+      
+      return response.response;
     } catch (error: any) {
       return rejectWithValue(error.message); // Enviar el mensaje de error
     }

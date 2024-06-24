@@ -22,7 +22,7 @@ const UserInfo = () => {
 
     const dispatch = useAppDispatch();
     const user = useSelector(selectAllUser);
-    console.log('user name: ', user?.name);
+    // console.log('user name: ', user?.name);
     
     
     const {

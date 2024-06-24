@@ -4,6 +4,8 @@ import { LoadingStatus } from "../../tools";
 export type RootState = ReturnType<typeof reducer>;
 
 export interface PaymentMethodState {
+    success:boolean;
+    message:string;
     state: PaymentMethods ;
     error: string | null | undefined;
     loadingStatus: LoadingStatus;
@@ -31,4 +33,17 @@ export interface Card {
     mask: string;
     created: string;
     default: boolean;
+}
+
+export interface AddPaymentResponse {
+    success: boolean,
+    data: AddPaymentData,
+    message: string,
+}
+
+interface AddPaymentData {
+    exp_month: string,
+    exp_year: string,
+    name: string,
+    mask: string,
 }
