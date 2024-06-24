@@ -22,6 +22,9 @@ import { useNavigate } from "react-router-dom";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import useHelperHook from "../../shared/hooks/helper/useHelper";
 import useAddressHook from "../../shared/hooks/addressHook/useAddressHook";
+import { useAppDispatch } from "../../../store/store";
+import { postOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
+import { requestOrder } from "../../../service/modules/orders/order";
 
 interface customProps {
   isCheckout?: boolean;
@@ -34,10 +37,12 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
   const user = useSelector(selectAllUser);
   const Info = useSelector(selectAllInfo);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const { removeCartItem, updateCartItem } = useCartHook();
+  const { removeCartItem, updateCartItem, updateOrder, updateTotal } = useCartHook();
   const { calculateTotal } = useHelperHook();
   const { getAddress } = useAddressHook();
+  
 
   const [total, setTotal] = useState<number>(0);
   const [delivery, setDelivery] = useState<number>(0);
@@ -78,8 +83,31 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
   };
 
   const handleAlertOpen = () => {
-    navigate('/checkout')
+    postOrder();
   };
+
+  const postOrder = async () => {
+    if(products.length > 0){
+      const resultado = products.reduce((acumulador:any, producto:any) => {
+        if (acumulador !== '') {
+          acumulador += ',';
+        }
+        acumulador += `${producto.id}:${producto.quantity}`;
+        return acumulador;
+      }, '');
+      const request:requestOrder = {
+        products:resultado,
+        amount:total,
+        instructions:"test",
+        source:"Web"
+      }
+      const Payment = await dispatch(postOrderThunk({reqData: request })).unwrap();
+      if(Payment.success && Payment.response.success){
+        updateOrder(Payment.response.data.id)
+        navigate('/checkout')
+      }
+    }
+  }
 
   const handleDeleteClose = () => {
     setShowDeleteAlert(false);
@@ -105,6 +133,7 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
       setTotal(newtotal[0]);
     }
     setPoints(newtotal[0] / Info?.data?.minimumAmountForPoints || 0);
+    updateTotal(newtotal[0])
   }
 
   useEffect(() => {

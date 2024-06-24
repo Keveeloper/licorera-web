@@ -5,6 +5,7 @@ export type RootState = ReturnType<typeof reducer>;
 
 export interface PaymentMethodState {
     state: PaymentMethods ;
+    paymentSelected: any,
     error: string | null | undefined;
     loadingStatus: LoadingStatus;
 }

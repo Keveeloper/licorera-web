@@ -1,17 +1,43 @@
-import { useSelector } from "react-redux";
-import { selectAllPaymentMethods } from "../../../../store/modules/paymentMethods";
+import { useDispatch, useSelector } from "react-redux";
+
+
+
+import { selectAllPaymentSeleted } from "../../../../store/modules/paymentMethods/selectors/paymentMethods.selector";
+import { paymentMethodsActions } from "../../../../store/modules/paymentMethods";
+
+export interface  PaymentSelected{
+  type:string,
+  payment:string
+}
 
 const usePaymentHook = () => {
+  const dispatch = useDispatch();
+  const payment = useSelector(selectAllPaymentSeleted);
 
-    const paymentMethodsRedux = useSelector(selectAllPaymentMethods); 
-  
-    const getPaymentMethods = () => {
-        return paymentMethodsRedux;
-    };
-  
-    return {
-        paymentMethodsRedux,
-    };
+  const getPayment = () => {
+    return payment;
   };
-  
-  export default usePaymentHook;
+
+  const addToPayment = (payment: PaymentSelected) => {;
+    dispatch(paymentMethodsActions.setPaymentSelected(payment))
+  };
+
+  const updatePaymentItem = (updatedpayment: PaymentSelected) => {
+    const newPayment = {...payment, ...updatedpayment};
+    dispatch(paymentMethodsActions.setPaymentSelected(newPayment))
+  };
+
+  const removePaymentItem = (productId: number) => {
+    dispatch(paymentMethodsActions.setPaymentSelected({}))
+  };
+
+  return {
+    getPayment,
+    addToPayment,
+    updatePaymentItem,
+    removePaymentItem
+  };
+};
+
+export default usePaymentHook;
+

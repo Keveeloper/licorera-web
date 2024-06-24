@@ -48,3 +48,36 @@ export const addPaymentMethods = async (reqData: AddPaymentMethod): Promise<ApiR
   }
 };
 
+export const getPaymentBanks = async (): Promise<ApiResponse<Data>> => {
+  try {
+   
+    const {data} = await base.get<Data>(
+      '/v2/payments/banks',
+      {}
+      );
+      
+      return { response: data.data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+export const posPaymentPse  = async (reqData: AddPaymentMethod): Promise<ApiResponse<Data>> => {
+  try {
+   
+    const {data} = await base.post<Data>(
+      '/v2/payments/pse',
+      reqData,
+      {}
+      );
+      
+      return { response: data.data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+
+

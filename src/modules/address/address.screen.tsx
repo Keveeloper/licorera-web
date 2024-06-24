@@ -12,12 +12,7 @@ import './components/address.css'
 import { Route, Routes } from "react-router-dom";
 
 interface props {}
-const AddressScreen: React.FC<props> = () => {
-  const [step, setStep] = useState<number>(1);
-
- const ChangeStep = (nextStep:number) =>{
-    setStep(nextStep)
- }
+  const AddressScreen: React.FC<props> = () => {
 
   return (
     <>

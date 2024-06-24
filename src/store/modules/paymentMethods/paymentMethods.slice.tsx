@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { PaymentMethodState } from "./types";
 import * as reducers from "./reducers/paymentMethods.reducers";
@@ -9,6 +9,7 @@ export const PAYMENT_METHODS_FEATURE_KEY = "paymentMethods";
 export const initialState: PaymentMethodState = {
   loadingStatus: "loading",
   error: null,
+  paymentSelected:"",
   state: {
     id_customer: '',
     name: '',
@@ -24,6 +25,12 @@ export const paymentMethodsSlice = createSlice({
   name: PAYMENT_METHODS_FEATURE_KEY,
   initialState,
   reducers: {
+    setPaymentSelected: (
+      state: any,
+      action: PayloadAction<any>
+    ) => {
+      state.paymentSelected = action.payload;
+    },
     clearState: () => {
       // Clearing redux state and localForage happens in store.ts.
     },

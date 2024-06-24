@@ -47,7 +47,7 @@ const ModalAlertComponent: React.FC<ModalArletCustomProps> = ({
         {data.title}
       </Typography>
       <Typography className="inputCustom" style={styleDefault.content}>
-        {data.content}
+        <div dangerouslySetInnerHTML={{ __html: data.content }} />
       </Typography>
       {withSchedule &&
         <Typography className="inputCustom" style={styleDefault.schedule}>

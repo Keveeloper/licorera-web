@@ -24,14 +24,18 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../store/store";
 import { getLocationsThunk } from "../../../store/modules/address/actions/address.actions";
 import {
-  postDelivery,
   postDisccount,
 } from "../../../service/modules/address/address";
-import { DeliveryRequest } from "../../../service/modules/address/type";
 import { useSelector } from "react-redux";
-import { selectCartProducts } from "../../../store/modules/cart/selectors/cart.selector";
-import useHelperHook from "../../shared/hooks/helper/useHelper";
+import {
+  selectAllCart,
+} from "../../../store/modules/cart/selectors/cart.selector";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
+import usePaymentHook from "../../shared/hooks/paymentHook/usePaymentHook";
+import { updateOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
+import { requestUpdateOrder } from "../../../service/modules/orders/order";
+import NumberFormat from "../../shared/hooks/numberFormater/NumberFormat";
+import { cartActions } from "../../../store/modules/cart";
 
 type disccount = {
   title?: string;
@@ -39,19 +43,19 @@ type disccount = {
   img?: string;
 };
 const CheckoutComponent = () => {
-  const products = useSelector(selectCartProducts);
+  const cartStore = useSelector(selectAllCart);
   const [locationList, setLocationList] = useState<any>([]);
-  const [location, setLocation] = useState("");
   const [coords, setCoords] = useState<{
     latitude: number;
     longitude: number;
   }>();
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [delivery, setDelivery] = useState<number>(0);
   const [alertDisccount, setAlertDisccount] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
   const [disccountResult, setDisccountResult] = useState<disccount>();
+  const [successData, setSuccessData] = useState<any>();
 
   const { getAddress, updateAddressItem } = useAddressHook();
+  const { getPayment } = usePaymentHook();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -67,9 +71,41 @@ const CheckoutComponent = () => {
   });
 
   const handleSubmit = async () => {
-    const { location1, password, year } = getValues();
+    const { disccount, detail, address, phone } = getValues();
 
-    alert(isValid);
+    const addressHook = getAddress();
+    const payment = getPayment();
+
+    const requestUpdate: requestUpdateOrder = {
+      latitude: addressHook.coords.latitude,
+      longitude: addressHook.coords.longitude,
+      address: address,
+      addressDetails: detail,
+      paymentMethod: payment.type,
+      pay_method: payment.type,
+      amount: cartStore.total,
+      phone: phone,
+      discountCode: disccount,
+      instructions: "",
+      description: "",
+      transactionId: "",
+    };
+    const updateOrder = await dispatch(
+      updateOrderThunk({ id: cartStore.order, reqData: requestUpdate })
+    ).unwrap();
+    if (updateOrder.success) {
+      console.log(updateOrder);
+      if (updateOrder.response && updateOrder.response.success) {
+        const data = updateOrder.response.data;
+        const total = parseInt(data.delivery) + parseInt(data.value);
+        setSuccessData({
+          time: data.time,
+          value: NumberFormat(total),
+        });
+        setSuccessAlert(true);
+        dispatch(cartActions.clearState())
+      }
+    }
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -99,6 +135,14 @@ const CheckoutComponent = () => {
     navigate("/address");
   };
 
+  const goToPaymentMethods = () => {
+    navigate("/paymentMethods");
+  };
+
+  const goToHome = () => {
+    navigate("/home");
+  };
+
   const getLocations = async () => {
     await dispatch(getLocationsThunk())
       .unwrap()
@@ -117,7 +161,7 @@ const CheckoutComponent = () => {
     };
     const res = await postDisccount(request);
     if (res.success) {
-      if (res.response.data.length > 0) {
+      if (res?.response?.data?.length > 0) {
         setDisccountResult({
           title: "¡FELICITACIONES!",
           content: `Recibirás ${res.response.data[0].discount}% de descuento sobre tu pedido`,
@@ -142,6 +186,10 @@ const CheckoutComponent = () => {
     setAlertDisccount(false);
   };
 
+  const successClose = () => {
+    setSuccessAlert(false);
+  };
+
   useEffect(() => {
     getLocations();
     const address = getAddress();
@@ -149,6 +197,11 @@ const CheckoutComponent = () => {
       setCoords(address.coords);
       setValue("address", address.addressInput, { shouldValidate: true });
       setValue("detail", address.detail, { shouldValidate: true });
+    }
+    const payment = getPayment();
+
+    if (payment && payment.type) {
+      setValue("paymentSelect", payment.type, { shouldValidate: true });
     }
   }, []);
 
@@ -180,14 +233,12 @@ const CheckoutComponent = () => {
               <Select
                 placeholder="Seleccionar"
                 label="labelLocation"
-                {...register("addresSelect", {
-                  required: "Este campo es obligatorio",
-                })}
+                {...register("addresSelect", {})}
                 labelId="dlocation"
                 style={{ width: "100%", textAlign: "left" }}
                 onChange={handleChange}
               >
-                {locationList.length > 0 &&
+                {locationList?.length > 0 &&
                   locationList.map((item: any) => {
                     return (
                       <MenuItem value={item.id} key={item.id}>
@@ -236,9 +287,6 @@ const CheckoutComponent = () => {
               id="standard-basic"
               label="Torre / Apto / Casa / Detalles"
               variant="standard"
-              // InputProps={{
-              //   readOnly: true,
-              // }}
             />
           </Grid>
           {/* contact section */}
@@ -287,21 +335,23 @@ const CheckoutComponent = () => {
               Forma de pago
             </Typography>
             <FormControl variant="standard" sx={{ mt: 2, minWidth: "100%" }}>
-              <InputLabel style={{ ...style.form.label }} id="labelLocation">
-                Selecciona un método de pago
-              </InputLabel>
-              <Select
-                placeholder="Seleccionar"
-                label="labelLocation"
-                // variant="standard"
-                id="location"
-                labelId="dlocation"
-                style={{ width: "100%", textAlign: "left" }}
-              >
-                <MenuItem value={10}>PAGO PSE</MenuItem>
-                <MenuItem value={20}>T. CREDITO</MenuItem>
-                <MenuItem value={30}>EN CASA</MenuItem>
-              </Select>
+              <TextField
+                error={!!errors.paymentSelect}
+                helperText={
+                  errors.paymentSelect
+                    ? errors.paymentSelect.message?.toString()
+                    : ""
+                }
+                {...register("paymentSelect", {
+                  required: "Este campo es obligatorio",
+                })}
+                style={{ minWidth: "100%" }}
+                sx={{ mt: 2 }}
+                id="labelLocation"
+                label="Seleccionar Metodo de pago"
+                variant="standard"
+                onClick={goToPaymentMethods}
+              />
             </FormControl>
           </Grid>
           {/* discount section */}
@@ -351,6 +401,17 @@ const CheckoutComponent = () => {
           title: disccountResult?.title || "",
           content: disccountResult?.content || "",
           img: disccountResult?.img || "",
+        }}
+      />
+      {/* modal already submit done */}
+      <ModalAlertComponent
+        handleClose={successClose}
+        handleSave={goToHome}
+        open={successAlert}
+        data={{
+          title: `PEDIDO RECIBIDO`,
+          content: `Gracias por tu pedido lo recibiras en <b>${successData?.time} min aprox <br/><br/> Total: $${successData?.value}</b>`,
+          img: `icons/SuccessCheckout.png`,
         }}
       />
     </Box>

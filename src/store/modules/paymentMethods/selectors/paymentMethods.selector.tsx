@@ -18,3 +18,8 @@ export const selectLoading = createSelector(
   getPaymentMethodState,
   (payment) => payment.loadingStatus
 );
+
+export const selectAllPaymentSeleted = createSelector(
+  getPaymentMethodState,
+  (payment) => payment.paymentSelected
+);

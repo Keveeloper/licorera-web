@@ -77,7 +77,7 @@ const HomeScreen = () => {
   const isActive = () => {
     isActiveApi()
     .then((res)=>{
-      if(res.success && res.data.active){
+      if(res.success && !res.data.active){
         let newArray=[];
         newArray.push(res.data.open.split(" ")[1])
         newArray.push(res.data.close.split(" ")[1])

@@ -10,6 +10,8 @@ export const initialState: CartState = {
   error: null,
   state: {
     products:[],
+    order:0,
+    total:0,
   },
 };
 
@@ -23,8 +25,22 @@ export const cartSlice = createSlice({
     ) => {
       state.state.products = action.payload;
     },
-    clearState: () => {
-      // Clearing redux state and localForage happens in store.ts.
+    setCartOrder: (
+      state: CartState,
+      action: PayloadAction<any>
+    ) => {
+      state.state.order = action.payload;
+    },
+    setCartTotal: (
+      state: CartState,
+      action: PayloadAction<any>
+    ) => {
+      state.state.total = action.payload;
+    },
+    clearState: ( state: CartState,) => {
+      state.state.products = []
+      state.state.order = 0
+      state.state.total = 0
     },
   },
   extraReducers: (builder) => {

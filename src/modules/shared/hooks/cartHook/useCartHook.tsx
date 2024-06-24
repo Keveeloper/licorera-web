@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../../../store/modules/cart/cart.slice";
-import { selectAllCart, selectCartProducts } from "../../../../store/modules/cart/selectors/cart.selector";
+import { selectCartProducts } from "../../../../store/modules/cart/selectors/cart.selector";
 import { Product } from "../../../exchangeProducts/types";
 
 
@@ -32,6 +32,14 @@ const useCartHook = () => {
     dispatch(cartActions.setCartProducts(updatedCart));
   };
 
+  const updateOrder = (order: number) => {
+    dispatch(cartActions.setCartOrder(order));
+  };
+
+  const updateTotal = (total: number) => {
+    dispatch(cartActions.setCartTotal(total));
+  };
+
   const removeCartItem = (productId: number) => {
     const updatedCart = cart.filter(item => item.id !== productId);
     dispatch(cartActions.setCartProducts(updatedCart))
@@ -41,7 +49,9 @@ const useCartHook = () => {
     getCart,
     addToCart,
     updateCartItem,
-    removeCartItem
+    removeCartItem,
+    updateOrder,
+    updateTotal
   };
 };
 

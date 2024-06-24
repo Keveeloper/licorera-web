@@ -38,6 +38,10 @@ const RecommendedProducts = React.lazy(
   () => import("../modules/recommendedProducts/RecommendedProductsScreen")
 );
 
+const PaymentMethods = React.lazy(
+   () => import("../modules/paymentMethods/paymentMethods.screen")
+);
+
 const RootRouter = () => {
   return (
     <Routes>
@@ -131,7 +135,6 @@ const RootRouter = () => {
           </React.Suspense>
         }
       />
-
       <Route
         path="/recommended-products"
         element={
@@ -140,6 +143,15 @@ const RootRouter = () => {
           </React.Suspense>
         }
       />
+      <Route
+        path="/paymentMethods"
+        element={
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
+            <PaymentMethods />
+          </React.Suspense>
+        }
+      />
+      
       <Route path="*" element={<h1>Not found</h1>} />
     </Routes>
   );

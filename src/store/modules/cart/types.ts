@@ -11,6 +11,8 @@ export interface CartState {
 
 export interface Data {
     products:Products[];
+    order:number;
+    total:number;
 }
 
 export interface Products {

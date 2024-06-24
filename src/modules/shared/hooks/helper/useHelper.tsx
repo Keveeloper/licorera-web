@@ -5,8 +5,6 @@ import useAddressHook from "../addressHook/useAddressHook";
 const useHelperHook = () => {
     const { getAddress } = useAddressHook();
 
-   
-
     const calculateTotal = async (products:any) => {
         let newtotal = 0;
         products.forEach((item:any) => {
