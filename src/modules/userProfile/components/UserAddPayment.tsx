@@ -59,6 +59,8 @@ const UserAddPayment = (props: AddPaymentInterface) => {
             }
         } catch (error){
             console.log(error);
+            setLoading(false);
+            setShowAlertWarning(true);
             //setShowAlert(true);
         }
         
