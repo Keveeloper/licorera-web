@@ -17,6 +17,7 @@ const UserAddPayment = (props: AddPaymentInterface) => {
     const { setPaymentMethodsOpen } = props;
     const [loading, setLoading] = useState<boolean>(false);
     const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [showAlertWarning, setShowAlertWarning] = useState<boolean>(false);
 
     const dispatch = useAppDispatch();
 
@@ -50,17 +51,16 @@ const UserAddPayment = (props: AddPaymentInterface) => {
             const postAddPayment = await dispatch(addPaymentMethodsThunk({reqData: addPaymenteRequest })).unwrap();
             
             if (postAddPayment.success) {
-                const getPayments = await dispatch(getPaymentMethodsThunk()).unwrap();
-                // if (getPayments.success) {
-                    // setPaymentMethodsOpen(false);
-                    setLoading(false);
-                    setShowAlert(true);
-                // }
+                setLoading(false);
+                setShowAlert(true);
             } else {
-                // setShowAlert(true);
+                setLoading(false);
+                setShowAlertWarning(true);
             }
         } catch (error){
             console.log(error);
+            setLoading(false);
+            setShowAlertWarning(true);
             //setShowAlert(true);
         }
         
@@ -91,12 +91,21 @@ const UserAddPayment = (props: AddPaymentInterface) => {
         setShowAlert(false);
     };
 
+    const handleAlertCloseWarning = () => {
+        setShowAlertWarning(false);
+    };
+
     const handleSave = async () => {
         setLoading(true);
         const getPayments = await dispatch(getPaymentMethodsThunk()).unwrap();
         if (getPayments.success) {
             setPaymentMethodsOpen(false);
         }
+    }
+
+    const handleSaveWarning = async () => {
+        // setLoading(true);
+        setShowAlertWarning(false);
     }
 
     if (loading) {
@@ -235,9 +244,19 @@ const UserAddPayment = (props: AddPaymentInterface) => {
                 open={showAlert}
                 isCancellButton={false}
                 data={{
-                    title: '¡felicitaciones!',
+                    title: 'informaCión',
                     content:`La tarjeta fue agregada exitosamente.`,
                     img:`/icons/checkIcon.png`
+            }}/>
+            <ModalAlertComponent
+                handleClose={handleAlertCloseWarning}
+                handleSave={handleSaveWarning}
+                open={showAlertWarning}
+                isCancellButton={false}
+                data={{
+                    title: 'informaCión',
+                    content:`Los datos son erroneos o son requeridos por favor compruebe.`,
+                    img:`/icons/alert.png`
             }}/>
         </>
     );

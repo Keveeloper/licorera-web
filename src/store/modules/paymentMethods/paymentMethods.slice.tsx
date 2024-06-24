@@ -7,6 +7,8 @@ import { deletePaymentMethodsThunk, getPaymentMethodsThunk, addPaymentMethodsThu
 export const PAYMENT_METHODS_FEATURE_KEY = "paymentMethods";
 
 export const initialState: PaymentMethodState = {
+  success: false,
+  message: "",
   loadingStatus: "loading",
   error: null,
   paymentSelected:"",

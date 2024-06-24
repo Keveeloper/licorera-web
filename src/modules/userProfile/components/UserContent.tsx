@@ -20,12 +20,12 @@ const UserContent = () => {
 
     const dispatch = useAppDispatch();
     const personalInfo: any = useSelector(selectAllPersonalInfo);
-    console.log('Personal info from user: ', personalInfo);
+    // console.log('Personal info from user: ', personalInfo);
     
     const [value, setValue] = useState<string>("1");
     const [disabled, setDisabled] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
-    const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(true);
+    const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(false);
 
     const styles = stylesUserContent(value, paymentMethodsOpen);
 

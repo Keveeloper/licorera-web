@@ -1,4 +1,4 @@
-import { Data } from '../../../store/modules/paymentMethods/types';
+import { AddPaymentResponse, Data } from '../../../store/modules/paymentMethods/types';
 import { base } from '../../base-api/base';
 import { handleSubModuleError } from '../../tools/apiError';
 import { ApiResponse } from '../../tools/types';
@@ -11,7 +11,7 @@ export const getPaymentMethods = async (): Promise<ApiResponse<Data>> => {
       '/v2/me/paymentMethods',
       {}
       );
-      console.log('Data service: ',data.data);
+      // console.log('Data service: ',data.data);
       
       return { response: data.data, success: !!Object.keys(data).length };
     
@@ -34,13 +34,17 @@ export const deletePaymentMethods = async (reqData: DeletePaymentMethod): Promis
   }
 };
 
-export const addPaymentMethods = async (reqData: AddPaymentMethod): Promise<ApiResponse<Data>> => {
+// export const addPaymentMethods = async (reqData: AddPaymentMethod): Promise<ApiResponse<Data>> => {
+export const addPaymentMethods = async (reqData: AddPaymentMethod): Promise<ApiResponse<AddPaymentResponse>> => {
   try {
-    const {data} = await base.post<Data>(
+    // const {data} = await base.post<Data>(
+    const {data} = await base.post<AddPaymentResponse>(
       '/v2/me/paymentMethods/add',
       reqData,
       {}
       );
+      console.log('data en el servicio: ', data);
+      
       return { response: data, success: !!Object.keys(data).length };
     
   } catch (error) {

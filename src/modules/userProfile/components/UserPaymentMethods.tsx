@@ -17,7 +17,7 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
   const { setPaymentMethodsOpen } = props;
 
   const paymentMethodsRedux = useSelector(selectAllPaymentMethods); 
-  console.log('paymentMethodsRedux: ', paymentMethodsRedux);
+  // console.log('paymentMethodsRedux: ', paymentMethodsRedux);
   
   const user = useSelector(selectAllUser);
   const dispatch = useAppDispatch();
