@@ -15,6 +15,7 @@ import { selectAllPersonalInfo } from "../../../store/modules/users";
 import { getPaymentMethodsThunk } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
 import Loader from "../../shared/Loader/components/Loader";
 import UserAddPayment from "./UserAddPayment";
+import UserAddress from "./UserAddress";
 
 const UserContent = () => {
 
@@ -75,6 +76,9 @@ const UserContent = () => {
                     <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="2">
                         <UserPaymentMethods setPaymentMethodsOpen={setPaymentMethodsOpen}/>
                     </TabPanel>
+                    <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="3">
+                        <UserAddress />
+                    </TabPanel>
                 </TabComponent>
             }
         </Box>
@@ -86,7 +90,7 @@ const stylesUserContent = (value: string, paymentMethodsOpen: boolean) => ({
     contentContainer: {
         margin: '90px auto',
         width: '60%',
-        height: value === '2' && !paymentMethodsOpen ? '500px' : '',
+        height: value === '2' || value === '3' && !paymentMethodsOpen ? '500px' : '',
         // background: 'orange'
     }
 });
