@@ -95,8 +95,6 @@ const UserAddress = () => {
                   <Typography sx={{fontFamily: 'weblysleekuil', fontSize: '16px'}}>{item.address} </Typography>
                 </Box>
                 <figure style={{width: '10%', height: '100%', ...displayFlex}}>
-                  {/* <img style={{height: '40%'}} src="/icons/trash.png" alt="credit card color icon" onClick={(() => handleRemove(item))}/> */}
-                  {/* <img style={{height: '40%', cursor: 'pointer'}} src="/icons/trash.png" alt="credit card color icon" onClick={handleShowAlert}/> */}
                   <img style={{height: '40%', cursor: 'pointer'}} src="/icons/trash.png" alt="credit card color icon"/>
                 </figure>
                 {/* <ModalAlertComponent
