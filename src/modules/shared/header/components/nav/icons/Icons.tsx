@@ -28,6 +28,7 @@ const  Icons = () => {
     const [isLogin, setIslogin] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isCurrentOder, setIsCurrentOder] = useState(false);
     const [showAlert, setShowAlert] = useState<boolean>(false);    
 
     const user = useSelector(selectAllUser);
@@ -55,6 +56,11 @@ const  Icons = () => {
     const toggleDrawer = (open: boolean) => {
         setIsDrawerOpen(open);
     };
+
+    const toggleCurrentOrder = (open: boolean) => {
+        setIsCurrentOder(open);
+    };
+
 
     useEffect(() => {
         if(user?.id && user?.name){
@@ -101,8 +107,9 @@ const  Icons = () => {
             <Badge sx={styles.iconsContainer.badge} badgeContent={products?.length}>
                 <img style={{width: '100%'}} src="/icons/web-shopping-cart-icon.png" alt="" onClick={() => toggleDrawer(true)}/>
             </Badge>
-            <img src="/icons/delivery-icon.png" alt="" />
+            <img src="/icons/delivery-icon.png" alt=""  onClick={() => toggleCurrentOrder(true)}/>
             <Cart open={isDrawerOpen}  toggleDrawer={toggleDrawer} />
+            <Cart open={isCurrentOder}  toggleDrawer={toggleCurrentOrder} isCurrentOrder/>
         </Box>
     );
 

@@ -26,7 +26,7 @@ import { useAppDispatch } from "../../../store/store";
 import { getLocationsThunk } from "../../../store/modules/address/actions/address.actions";
 import { postDisccount } from "../../../service/modules/address/address";
 import { useSelector } from "react-redux";
-import { selectAllCart } from "../../../store/modules/cart/selectors/cart.selector";
+import { selectAllCart, selectCartProducts } from "../../../store/modules/cart/selectors/cart.selector";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import usePaymentHook from "../../shared/hooks/paymentHook/usePaymentHook";
 import { updateOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
@@ -42,6 +42,8 @@ type disccount = {
 };
 const CheckoutComponent = () => {
   const cartStore = useSelector(selectAllCart);
+  const products = useSelector(selectCartProducts);
+
   const [locationList, setLocationList] = useState<any>([]);
   const [coords, setCoords] = useState<{
     latitude: number;
@@ -411,11 +413,12 @@ const CheckoutComponent = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={4} sx={{}} style={{ background: "#F5F5F5" }}>
+        <Grid item xs={4} sx={{}} style={{ background: "#F5F5F5", position: 'relative' }}>
           <CartComponent
             isCheckout
             onClick={handleSubmit}
             isFormValid={isValid}
+            products={products}
           />
         </Grid>
       </Grid>

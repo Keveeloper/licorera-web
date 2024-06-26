@@ -23,6 +23,34 @@ export type requestUpdateOrder = {
     transactionId:string
 }
 
+export const getCurrentOrder= async (): Promise<ApiResponse<any>> => {
+  try {
+    const  {data}  = await base.get<any>(
+      `/v2/clients/orders/current`,
+      {}
+      );
+      return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+export const cancelCurrentOrder= async (): Promise<ApiResponse<any>> => {
+  try {
+    const  {data}  = await base.get<any>(
+      `/v2/clients/orders/current/cancel`,
+      {}
+      );
+      return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+
+
 export const postOrder= async (request:requestOrder): Promise<ApiResponse<any>> => {
     try {
       const  {data}  = await base.post<requestOrder>(

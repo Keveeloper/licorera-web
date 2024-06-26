@@ -9,36 +9,86 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCartProducts } from "../../store/modules/cart/selectors/cart.selector";
 import CartComponent from "./components/cart.component";
+import { getCurrentOrderThunk } from "../../store/modules/cart/actions/cart.actions";
+import { useAppDispatch } from "../../store/store";
 
 interface cartInterface {
   open: boolean;
   toggleDrawer: (open: boolean) => void;
+  isCurrentOrder?: boolean;
 }
 
-const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
+const Cart: React.FC<cartInterface> = ({
+  open,
+  toggleDrawer,
+  isCurrentOrder,
+}) => {
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
-  const products = useSelector(selectCartProducts);
+  const [products, setProducts] = useState<any>([]);
+  const [currentOrder, setCurrentOrder] = useState<any>({});
+  const productsSelector = useSelector(selectCartProducts);
+
+  const dispatch = useAppDispatch();
+
+  const getCurrentOrder = async () => {
+    const currentOrders = await dispatch(getCurrentOrderThunk()).unwrap();
+    if(currentOrders.response.data === null){
+      setProducts([]);
+      setIsEmpty(true)
+      return;
+    }
+    if (currentOrders.success && currentOrders.response) {
+      setIsEmpty(false)
+      const responseProducts = currentOrders.response.data.products;
+      const mappedData = responseProducts.map((item: any) => ({
+        quantity: item.quantity,
+        points: Number(item.points),
+        price: Number(item.price),
+        name: item.store.product.name,
+        id: item.store.id,
+        image: item.store.product.image,
+        description: item.store.product.description,
+        category_id: item.store.product.category_id,
+        presentation: item.store.presentation,
+      }));
+      setCurrentOrder({
+        total: currentOrders.response.data.total,
+        amount: currentOrders.response.data.amount,
+        delivery: currentOrders.response.data.delivery_value
+      });
+      setProducts(mappedData);
+      console.log(products);
+    }
+  };
 
   useEffect(() => {
-    if (products.length === 0) {
+    if (isCurrentOrder) {
+      getCurrentOrder();
+    }
+    if (productsSelector.length === 0) {
       setIsEmpty(true);
     } else {
+      setProducts(productsSelector);
       setIsEmpty(false);
     }
-  }, [products]);
+  }, [productsSelector, isCurrentOrder]);
 
   return (
     <DrawerComponent open={open} anchor="right" toggleDrawer={toggleDrawer}>
       <Box
-        sx={{ width: 350, textAlign: "center" }}
+        sx={{ width: 350, textAlign: "center", height: '100%'}}
         role="presentation"
         id="cart-screen"
       >
         {isEmpty && (
           <>
-            <Typography style={style.emptyCart.title}>TU CARRITO</Typography>
+            <Typography style={style.emptyCart.title}>
+              {isCurrentOrder ? "PEDIDO EN CURSO" : "TU CARRITO"}
+            </Typography>
             <Typography style={style.emptyCart.subTitle}>
-              tu carrito está vacio
+              {isCurrentOrder
+                ? "¿que esperas para hacer tu pedido?"
+                : "tu carrito está vacio"}
             </Typography>
             <img src="/images/empty_phone.png" alt="" width={100} />
             <Typography style={style.emptyCart.text}>
@@ -47,10 +97,9 @@ const Cart: React.FC<cartInterface> = ({ open, toggleDrawer }) => {
           </>
         )}
         {!isEmpty && (
-         <CartComponent/>
+          <CartComponent products={products} isCurrentOrder={isCurrentOrder} currentOrder={currentOrder}/>
         )}
       </Box>
-
     </DrawerComponent>
   );
 };
@@ -74,6 +123,5 @@ const style: React.CSSProperties | any = {
       padding: "20px 0",
       fontSize: "12px",
     },
-  }
+  },
 };
-

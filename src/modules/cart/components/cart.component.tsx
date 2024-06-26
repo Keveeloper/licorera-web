@@ -23,26 +23,36 @@ import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import useHelperHook from "../../shared/hooks/helper/useHelper";
 import useAddressHook from "../../shared/hooks/addressHook/useAddressHook";
 import { useAppDispatch } from "../../../store/store";
-import { postOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
+import { cancelCurrentOrderThunk, postOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
 import { requestOrder } from "../../../service/modules/orders/order";
+import CancelAlertScreen from "../alert.screens/cancelAlertScreen";
 
 interface customProps {
   isCheckout?: boolean;
-  onClick?:() => void;
-  isFormValid?:boolean;
+  isCurrentOrder?: boolean;
+  onClick?: () => void;
+  isFormValid?: boolean;
+  products: any;
+  currentOrder?:any;
 }
 
-const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid }) => {
-  const products = useSelector(selectCartProducts);
+const CartComponent: React.FC<customProps> = ({
+  products,
+  isCheckout,
+  isCurrentOrder,
+  onClick,
+  isFormValid,
+  currentOrder
+}) => {
   const user = useSelector(selectAllUser);
   const Info = useSelector(selectAllInfo);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { removeCartItem, updateCartItem, updateOrder, updateTotal } = useCartHook();
+  const { removeCartItem, updateCartItem, updateOrder, updateTotal } =
+    useCartHook();
   const { calculateTotal } = useHelperHook();
   const { getAddress } = useAddressHook();
-  
 
   const [total, setTotal] = useState<number>(0);
   const [delivery, setDelivery] = useState<number>(0);
@@ -50,6 +60,8 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
   const [points, setPoints] = useState<number>(0);
   const [product, setProduct] = useState<Product>();
   const [showWarningAlert, setShoWarningAlert] = useState<boolean>(false);
+  const [showCancelCurrentOrder, setShowCancelCurrentOrder] = useState<boolean>(false);
+  const [showSuccessCurrentOrder, setShowSuccessCurrentOrder] = useState<boolean>(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
 
   const onMinus = (product: Product) => {
@@ -87,27 +99,29 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
   };
 
   const postOrder = async () => {
-    if(products.length > 0){
-      const resultado = products.reduce((acumulador:any, producto:any) => {
-        if (acumulador !== '') {
-          acumulador += ',';
+    if (products.length > 0) {
+      const resultado = products.reduce((acumulador: any, producto: any) => {
+        if (acumulador !== "") {
+          acumulador += ",";
         }
         acumulador += `${producto.id}:${producto.quantity}`;
         return acumulador;
-      }, '');
-      const request:requestOrder = {
-        products:resultado,
-        amount:total,
-        instructions:"test",
-        source:"Web"
-      }
-      const Payment = await dispatch(postOrderThunk({reqData: request })).unwrap();
-      if(Payment.success && Payment.response.success){
-        updateOrder(Payment.response.data.id)
-        navigate('/checkout')
+      }, "");
+      const request: requestOrder = {
+        products: resultado,
+        amount: total,
+        instructions: "test",
+        source: "Web",
+      };
+      const Payment = await dispatch(
+        postOrderThunk({ reqData: request })
+      ).unwrap();
+      if (Payment.success && Payment.response.success) {
+        updateOrder(Payment.response.data.id);
+        navigate("/checkout");
       }
     }
-  }
+  };
 
   const handleDeleteClose = () => {
     setShowDeleteAlert(false);
@@ -117,27 +131,45 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
     setShoWarningAlert(false);
   };
 
+  const handleShowCancelCurrentClose = () => {
+    setShowCancelCurrentOrder(false);
+  };
+
+  const handleShowSuccessCurrentClose = () => {
+    setShowSuccessCurrentOrder(false);
+    navigate("/home");
+  };
+  
+
   const handleDeleteOpen = (item: Product) => {
     setProduct(item);
     setShowDeleteAlert(true);
   };
 
   const getTotal = async () => {
-    const newtotal = await calculateTotal(products)
-    setSubTotal(newtotal[0])
-    setDelivery(newtotal[1])
+    const newtotal = await calculateTotal(products);
+    setSubTotal(newtotal[0]);
+    setDelivery(newtotal[1]);
     console.log(newtotal[1]);
-    if(newtotal[1]){
+    if (newtotal[1]) {
       setTotal(newtotal[0] + newtotal[1]);
-    }else{
+    } else {
       setTotal(newtotal[0]);
     }
     setPoints(newtotal[0] / Info?.data?.minimumAmountForPoints || 0);
-    updateTotal(newtotal[0])
+    updateTotal(newtotal[0]);
+  };
+
+  const cancelCurrentOrder = async ()=>{
+    const currentOrders = await dispatch(cancelCurrentOrderThunk()).unwrap();
+    if(currentOrders.success && currentOrders.response.success){;
+      setShowCancelCurrentOrder(false)
+      setShowSuccessCurrentOrder(true)
+    }
   }
 
   useEffect(() => {
-    getTotal()
+    getTotal();
   }, [products, getAddress().detail]);
 
   return (
@@ -145,7 +177,7 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
       <Typography
         style={isCheckout ? checkoutStyle.title : style.emptyCart.title}
       >
-        TU CARRITO
+       {isCurrentOrder ? 'PEDIDO EN CURSO': 'TU CARRITO'} 
       </Typography>
       <div style={{ padding: "20px" }}>
         {products.map((item: any) => {
@@ -184,7 +216,8 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
                 >
                   <Typography style={style.cards.title}>{item.name}</Typography>
                   <Typography style={style.cards.quantity}>
-                    {item.presentation && (<span>Presentación: </span>)}{item.presentation}
+                    {item.presentation && <span>Presentación: </span>}
+                    {item.presentation}
                   </Typography>
                 </Grid>
                 <Grid item xs={3} sx={{ mt: 0, mb: 0 }}>
@@ -202,14 +235,29 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
                       : CurrencyFormat(item.price)}
                   </Typography>
                   <div className="contentIcons">
-                    <FaMinusCircle   onClick={() => onMinus(item)} style={{color:'#fdbd00', fontSize: '20px', cursor:'pointer'}}/>
+                    <FaMinusCircle
+                      onClick={() => onMinus(item)}
+                      style={{
+                        color: "#fdbd00",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                    />
                     <span
                       className="normalText"
                       style={{ margin: "0px", fontSize: "18px" }}
                     >
-                      {" "}{item.quantity}{" "}
+                      {" "}
+                      {item.quantity}{" "}
                     </span>
-                    <FaPlusCircle   onClick={() => onPlus(item)} style={{color:'#fdbd00', fontSize: '20px', cursor:'pointer'}}/>
+                    <FaPlusCircle
+                      onClick={() => onPlus(item)}
+                      style={{
+                        color: "#fdbd00",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                    />
                   </div>
                 </Grid>
               </Grid>
@@ -274,7 +322,57 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
                   fontSize: "14px",
                 }}
               >
-                {delivery && delivery > 0 ? CurrencyFormat(delivery): "--"}
+                {delivery && delivery > 0 ? CurrencyFormat(delivery) : "--"}
+              </Grid>
+            </>
+          )}
+          {isCurrentOrder && (
+            <>
+              <Grid
+                item
+                xs={6}
+                style={{
+                  ...style.footer.textLeft,
+                  color: "#4F4F4F",
+                  fontSize: "14px",
+                }}
+              >
+                SUBTOTAL:
+              </Grid>
+              <Grid
+                item
+                xs={6}
+                sx={{ mb: 1 }}
+                style={{
+                  ...style.footer.textRigth,
+                  color: "#4F4F4F",
+                  fontSize: "14px",
+                }}
+              >
+                {CurrencyFormat(currentOrder?.amount)}
+              </Grid>
+              <Grid
+                item
+                xs={6}
+                style={{
+                  ...style.footer.textLeft,
+                  color: "#4F4F4F",
+                  fontSize: "14px",
+                }}
+              >
+                DOMICILIO:
+              </Grid>
+              <Grid
+                item
+                xs={6}
+                sx={{ mb: 1 }}
+                style={{
+                  ...style.footer.textRigth,
+                  color: "#4F4F4F",
+                  fontSize: "14px",
+                }}
+              >
+                {currentOrder?.delivery && currentOrder?.delivery > 0 ? CurrencyFormat(currentOrder?.delivery) : "--"}
               </Grid>
             </>
           )}
@@ -282,20 +380,32 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
             TOTAL:
           </Grid>
           <Grid item xs={6} style={style.footer.textRigth}>
-            {CurrencyFormat(total)}
+            {CurrencyFormat(isCurrentOrder ? currentOrder?.total : total)}
           </Grid>
         </Grid>
         <Typography style={style.footer.text}>
-          Domicilio gratis por compras mayores a{" "}
-          {CurrencyFormat(Info?.data?.minimumOrderValueFree)} IVA incluido.
+          {isCurrentOrder ? 'Tu pedido está en camino. Tienes 5 minutos para cancelarlo'
+          : `Domicilio gratis por compras mayores a${" "}
+          ${CurrencyFormat(Info?.data?.minimumOrderValueFree)} IVA incluido.`
+         }
         </Typography>
         {isCheckout ? (
           <ButtonComponent
             disabled={!isFormValid}
             onClick={onClick}
-            style={isFormValid ? style.footer.button : style.footer.disabledButton}
+            style={
+              isFormValid ? style.footer.button : style.footer.disabledButton
+            }
           >
             CONFIRMAR
+          </ButtonComponent>
+        ) : isCurrentOrder ? (
+          <ButtonComponent
+            disabled={false}
+            onClick={() => setShowCancelCurrentOrder(true)}
+            style={style.footer.button}
+          >
+            CANCELAR PEDIDO
           </ButtonComponent>
         ) : (
           <ButtonComponent
@@ -309,23 +419,21 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
       </div>
 
       {/* Modal Delete*/}
-      { showDeleteAlert &&
-        <Box style={{ position: 'relative'}}>
-        <CustomModal
-          modalStyle="cartModal"
-          modalContentStyle="cartModalContent"
-          open={showDeleteAlert}
-          onClose={handleDeleteClose}
-        >
-          <DeleteAlertScreen
-            img={product?.image || ""}
-            title={product?.name || ""}
+      {showDeleteAlert && (
+          <CustomModal
+            modalStyle="cartModal"
+            modalContentStyle="cartModalContent"
+            open={showDeleteAlert}
             onClose={handleDeleteClose}
-            onAccept={() => removeProduct(product?.id || 0)}
-          />
-        </CustomModal>
-        </Box>
-      }
+          >
+            <DeleteAlertScreen
+              img={product?.image || ""}
+              title={product?.name || ""}
+              onClose={handleDeleteClose}
+              onAccept={() => removeProduct(product?.id || 0)}
+            />
+          </CustomModal>
+      )}
       {/* Modal Warning*/}
       <CustomModal
         modalStyle="cartModal"
@@ -337,6 +445,38 @@ const CartComponent: React.FC<customProps> = ({ isCheckout, onClick, isFormValid
           title="INFORMACIÓN"
           Text="No tienes suficientes puntos para este canje. Compra y acumula más puntos."
           onClose={handleWarningClose}
+        />
+      </CustomModal>
+      
+      {/* cancel current order*/}
+      <CustomModal
+        modalStyle="cartModal"
+        modalContentStyle="cartModalContent"
+        open={showCancelCurrentOrder}
+        onClose={handleShowCancelCurrentClose}
+      >
+        <CancelAlertScreen
+          title="INFORMACIÓN"
+          text="¿Estás seguro que quieres cancelar el pedido?"
+          onClose={handleShowCancelCurrentClose}
+          onAccept={cancelCurrentOrder}
+          img="icons/warning-hand.png"
+        />
+      </CustomModal>
+       {/* success cancel current order*/}
+       <CustomModal
+        modalStyle="cartModal"
+        modalContentStyle="cartModalContent"
+        open={showSuccessCurrentOrder}
+        onClose={handleShowSuccessCurrentClose}
+      >
+        <CancelAlertScreen
+          title="INFORMACIÓN"
+          text="Te pedido fue cancelado exitosamente. Puedes seguir comprando ahora."
+          onClose={handleShowSuccessCurrentClose}
+          onAccept={handleShowSuccessCurrentClose}
+          img="icons/checkicon.png"
+          isCheck
         />
       </CustomModal>
     </>
@@ -380,7 +520,7 @@ const style: React.CSSProperties | any = {
       position: "relative",
       top: "10px",
       fontSize: "15px",
-      textAlign: "left"
+      textAlign: "left",
     },
     subtitle: {
       ...weblysleekFontStyle,
@@ -391,7 +531,7 @@ const style: React.CSSProperties | any = {
       marginBottom: "10px",
       fontWeight: "600",
       fontSize: "14px",
-      textAlign: "left"
+      textAlign: "left",
     },
     close: {
       float: "right",
@@ -437,7 +577,7 @@ const style: React.CSSProperties | any = {
       cursor: "pointer",
       border: "1px solid #000000",
     },
-    disabledButton:{
+    disabledButton: {
       ...hudsonNYFontStyle,
       fontSize: "16px",
       background: "#D1D1D1",
@@ -446,9 +586,9 @@ const style: React.CSSProperties | any = {
       borderRadius: "5px",
       padding: "0 0 8px 0",
       cursor: "pointer",
-      color:"#FFFFFF",
+      color: "#FFFFFF",
       border: "none",
-    }
+    },
   },
 };
 const minusDisabled = {
