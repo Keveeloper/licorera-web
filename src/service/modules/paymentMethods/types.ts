@@ -12,4 +12,15 @@ export interface AddPaymentMethod {
     exp_month: string,
     exp_year: string,
 }
+
+export interface posPaymentCredit {
+    cardNumber: string,
+    cardCvc: string,
+    cardExpYear: string,
+    cardExpMonth: string,
+    value: number,
+    orderId: number,
+    dues:number,
+    _cardTokenId: string
+}
   

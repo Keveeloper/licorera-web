@@ -2,7 +2,7 @@ import { AddPaymentResponse, Data } from '../../../store/modules/paymentMethods/
 import { base } from '../../base-api/base';
 import { handleSubModuleError } from '../../tools/apiError';
 import { ApiResponse } from '../../tools/types';
-import { AddPaymentMethod, DeletePaymentMethod } from './types';
+import { AddPaymentMethod, DeletePaymentMethod, posPaymentCredit } from './types';
 
 export const getPaymentMethods = async (): Promise<ApiResponse<Data>> => {
   try {
@@ -77,6 +77,22 @@ export const posPaymentPse  = async (reqData: AddPaymentMethod): Promise<ApiResp
       );
       
       return { response: data.data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+export const posPaymentCreditCard  = async (reqData: posPaymentCredit): Promise<ApiResponse<Data>> => {
+  try {
+   
+    const {data} = await base.post<Data>(
+      '/v2/payments/creditCard',
+      reqData,
+      {}
+      );
+      
+      return { response: data.data || data.message, success: !!Object.keys(data).length };
     
   } catch (error) {
     return handleSubModuleError(error);

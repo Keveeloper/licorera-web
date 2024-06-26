@@ -7,7 +7,8 @@ import { paymentMethodsActions } from "../../../../store/modules/paymentMethods"
 
 export interface  PaymentSelected{
   type:string,
-  payment:string
+  payment:string,
+  ref_payco?:string
 }
 
 const usePaymentHook = () => {

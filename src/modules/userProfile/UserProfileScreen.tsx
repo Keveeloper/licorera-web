@@ -9,16 +9,6 @@ import { getPaymentMethodsThunk } from "../../store/modules/paymentMethods/actio
 
 const UserProfileScreen = () => {
 
-    const dispatch = useAppDispatch();
-
-    const getAsyncPaymentMethods = useCallback(async () => {
-        dispatch(getPaymentMethodsThunk()).unwrap();
-    }, []);
-
-    useEffect(() => {
-        getAsyncPaymentMethods();
-    }, []);
-    
     return (
         <Box sx={{width: '100%'}}>
             <HeaderScreen />

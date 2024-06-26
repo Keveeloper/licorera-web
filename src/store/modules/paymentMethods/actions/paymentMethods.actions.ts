@@ -1,6 +1,6 @@
-import { addPaymentMethods, deletePaymentMethods, getPaymentBanks, getPaymentMethods, posPaymentPse } from "../../../../service/modules/paymentMethods/paymentMethods";
+import { addPaymentMethods, deletePaymentMethods, getPaymentBanks, getPaymentMethods, posPaymentCreditCard, posPaymentPse } from "../../../../service/modules/paymentMethods/paymentMethods";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { AddPaymentMethod, DeletePaymentMethod } from "../../../../service/modules/paymentMethods/types";
+import { AddPaymentMethod, DeletePaymentMethod, posPaymentCredit } from "../../../../service/modules/paymentMethods/types";
 import { AnyARecord } from "dns";
 
 export const getPaymentMethodsThunk = createAsyncThunk(
@@ -60,7 +60,19 @@ export const posPaymentPseThunk = createAsyncThunk(
       const response = await posPaymentPse(reqData);
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.message); // Enviar el mensaje de error
+      return rejectWithValue(error.message); 
+    }
+  }
+);
+
+export const posPaymentCreditThunk = createAsyncThunk(
+  "posPaymentCreditThunk/fetch",
+  async ({reqData}: {reqData: posPaymentCredit}, { rejectWithValue }) => {
+    try {
+      const response = await posPaymentCreditCard(reqData);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(error.message); 
     }
   }
 );

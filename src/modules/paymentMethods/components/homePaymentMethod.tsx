@@ -62,10 +62,10 @@ export default HomePaymentMethod;
 const styleButton = {
     button:{
         ...weblysleekBoltFontStyle,
-        fontSize: "16px",
+        fontSize: "18px",
         background: "#FFFFFF",
         width: "100%",
-        height: "50px",
+        height: "60px",
         borderRadius: "5px",
         cursor: "pointer",
         border: "1px solid #000000",
@@ -75,10 +75,10 @@ const styleButton = {
     },
     submitButton: {
         ...hudsonNYFontStyle,
-        fontSize: "16px",
+        fontSize: "18px",
         background: "#FFFFFF",
         width: "100%",
-        height: "50px",
+        height: "60px",
         borderRadius: "5px",
         // padding: "0 0 8px 0",
         cursor: "pointer",
@@ -87,10 +87,10 @@ const styleButton = {
       },
       disabledButton: {
         ...hudsonNYFontStyle,
-        fontSize: "16px",
+        fontSize: "18px",
         background: "#D1D1D1",
         width: "100%",
-        height: "50px",
+        height: "60px",
         borderRadius: "5px",
         // padding: "0 0 8px 0",
         cursor: "pointer",

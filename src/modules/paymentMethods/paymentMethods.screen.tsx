@@ -7,11 +7,12 @@ import PsePaymentMethod from "./components/psePaymentMethod";
 import FooterScreen from "../shared/footer/FooterScreen";
 import UserPaymentMethods from "../userProfile/components/UserPaymentMethods";
 import HomePaymentMethod from "./components/homePaymentMethod";
+import UserAddPayment from "../userProfile/components/UserAddPayment";
 
 const PaymentMethodsScreen = () => {
   const [value, setValue] = useState("1");
   const [disabled, setDisabled] = useState<boolean>(false);
-  const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(true);
+  const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -23,44 +24,48 @@ const PaymentMethodsScreen = () => {
 
   return (
     <>
-        <Box style={{...displayFlex, margin:'40px 0'}}>
-          <img src="/images/whiteLogo.png" alt="" width={200} />
-        </Box>
-        <TabComponent
-            tabsArray={[
-            { label: "PAGO PSE", img: "/icons/PseIcon.png" },
-            { label: "T. CREDITO", img: "/icons/CreditCardIcon.png" },
-            { label: "EN CASA", img: "/icons/AtHomeIcon.png" },
-            ]}
-            value={value}
-            setValue={setValue}
-            handleChange={handleChange}
-            disabled={disabled}
-            tabStyles={styles}
+      <Box style={{ ...displayFlex, margin: "40px 0" }}>
+        <img src="/images/whiteLogo.png" alt="" width={200} />
+      </Box>
+      <TabComponent
+        tabsArray={[
+          { label: "PAGO PSE", img: "/icons/PseIcon.png" },
+          { label: "T. CREDITO", img: "/icons/CreditCardIcon.png" },
+          { label: "EN CASA", img: "/icons/AtHomeIcon.png" },
+        ]}
+        value={value}
+        setValue={setValue}
+        handleChange={handleChange}
+        disabled={disabled}
+        tabStyles={styles}
+      >
+        <TabPanel
+          sx={{ padding: "0", height: "600px", width: "650px !important" }}
+          value="1"
+          className="columnContainer"
         >
-            <TabPanel
-            sx={{ padding: "0", height: "600px", width:'650px !important' }}
-            value="1"
-            className="columnContainer"
-            >
-              <PsePaymentMethod/>
-            </TabPanel>
-            <TabPanel
-            sx={{ padding: "0", height: "600px",  width:'650px !important' }}
-            value="2"
-            className="columnContainer"
-            >
-              <UserPaymentMethods setPaymentMethodsOpen={setPaymentMethodsOpen}/>
-            </TabPanel>
-            <TabPanel
-            sx={{ padding: "0", height: "600px",  width:'650px !important' }}
-            value="3"
-            className="columnContainer mt-20"
-            >
-              <HomePaymentMethod/>
-            </TabPanel>
-        </TabComponent>
-        <FooterScreen/>
+          <PsePaymentMethod />
+        </TabPanel>
+        <TabPanel
+          sx={{ padding: "0", height: "600px", width: "650px !important" }}
+          value="2"
+          className="columnContainer"
+        >
+          {paymentMethodsOpen ? (
+            <UserAddPayment setPaymentMethodsOpen={setPaymentMethodsOpen} isChekout />
+          ) : (
+            <UserPaymentMethods setPaymentMethodsOpen={setPaymentMethodsOpen} isChekout/>
+          )}
+        </TabPanel>
+        <TabPanel
+          sx={{ padding: "0", height: "600px", width: "650px !important" }}
+          value="3"
+          className="columnContainer mt-20"
+        >
+          <HomePaymentMethod />
+        </TabPanel>
+      </TabComponent>
+      <FooterScreen />
     </>
   );
 };
@@ -77,7 +82,7 @@ const styles = {
       backgroundColor: "transparent !important",
     },
     tab: {
-      height:"90px", 
+      height: "90px",
       width: "150px",
       margin: "0 10px",
       borderRadius: "5px",

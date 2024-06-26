@@ -18,9 +18,11 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../store/store";
 import { getPaymentBanksThunk, posPaymentPseThunk } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
+import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 
 const PsePaymentMethod = () => {
   const [bankList, setBankList] = useState([]);
+  const [warningAlert, setwarningAlert] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   const {
@@ -39,6 +41,10 @@ const PsePaymentMethod = () => {
       setBankList(getPayments.response);
     }
   };
+
+  const alertClose = () => {
+    setwarningAlert(false);
+  }
 
   const postPaymentPse = async () => {
     const {bankSelect, documentType, document, phone, names, lastNames, email } = getValues();
@@ -62,6 +68,9 @@ const PsePaymentMethod = () => {
         const urlBank = Payment.response.data.urlbanco;
         const ref =   Payment.response.data.ref_payco;
         window.open(urlBank, "_blank");
+      }else{
+        setwarningAlert(true)
+        console.log(Payment.response.text_response)
       }
     }
   }
@@ -198,6 +207,17 @@ const PsePaymentMethod = () => {
           PAGAR CON PSE
         </ButtonComponent>
       </Box>
+      {/* error modal */}
+      <ModalAlertComponent
+        handleClose={alertClose}
+        handleSave={alertClose}
+        open={warningAlert}
+        data={{
+          title: "INFORMACIÓN",
+          content: `Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.`,
+          img: "/icons/alert.png",
+        }}
+      />
     </Grid>
   );
 };
@@ -236,10 +256,10 @@ const style = {
 const styleButton = {
   button: {
     ...hudsonNYFontStyle,
-    fontSize: "16px",
+    fontSize: "18px",
     background: "#FFFFFF",
     width: "100%",
-    height: "40px",
+    height: "60px",
     borderRadius: "5px",
     // padding: "0 0 8px 0",
     cursor: "pointer",
@@ -247,10 +267,10 @@ const styleButton = {
   },
   disabledButton: {
     ...hudsonNYFontStyle,
-    fontSize: "16px",
+    fontSize: "18px",
     background: "#D1D1D1",
     width: "100%",
-    height: "40px",
+    height: "60px",
     borderRadius: "5px",
     // padding: "0 0 8px 0",
     cursor: "pointer",
