@@ -30,14 +30,14 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
   const dispatch = useAppDispatch();
   const { addToPayment } = usePaymentHook()
 
-  const paymentMethodsRedux = useSelector(selectAllPaymentMethods);
-  const cartStore = useSelector(selectAllCart);
-  const user = useSelector(selectAllUser);
-  
   const getAsyncPaymentMethods = useCallback(async () => {
     dispatch(getPaymentMethodsThunk()).unwrap();
   }, []);
 
+  const paymentMethodsRedux = useSelector(selectAllPaymentMethods);
+  const cartStore = useSelector(selectAllCart);
+  const user = useSelector(selectAllUser);
+  
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);

@@ -21,21 +21,19 @@ import useAddressHook, {
   AddressSelected,
 } from "../../shared/hooks/addressHook/useAddressHook";
 import { useNavigate } from "react-router-dom";
+import InputMask from "react-input-mask";
 import { useAppDispatch } from "../../../store/store";
 import { getLocationsThunk } from "../../../store/modules/address/actions/address.actions";
-import {
-  postDisccount,
-} from "../../../service/modules/address/address";
+import { postDisccount } from "../../../service/modules/address/address";
 import { useSelector } from "react-redux";
-import {
-  selectAllCart,
-} from "../../../store/modules/cart/selectors/cart.selector";
+import { selectAllCart } from "../../../store/modules/cart/selectors/cart.selector";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import usePaymentHook from "../../shared/hooks/paymentHook/usePaymentHook";
 import { updateOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
 import { requestUpdateOrder } from "../../../service/modules/orders/order";
 import NumberFormat from "../../shared/hooks/numberFormater/NumberFormat";
 import { cartActions } from "../../../store/modules/cart";
+import { paletteColors } from "../../../paletteColors/paletteColors";
 
 type disccount = {
   title?: string;
@@ -103,7 +101,7 @@ const CheckoutComponent = () => {
           value: NumberFormat(total),
         });
         setSuccessAlert(true);
-        dispatch(cartActions.clearState())
+        dispatch(cartActions.clearState());
       }
     }
   };
@@ -205,6 +203,8 @@ const CheckoutComponent = () => {
     }
   }, []);
 
+  const styles = stylesAddPayment(errors, isValid);
+
   return (
     <Box className="">
       <Grid container spacing={0} style={{ textAlign: "center" }}>
@@ -301,7 +301,7 @@ const CheckoutComponent = () => {
             >
               Contacto
             </Typography>
-            <TextField
+            {/* <TextField
               error={!!errors.phone}
               helperText={errors.phone ? errors.phone.message?.toString() : ""}
               {...register("phone", {
@@ -320,7 +320,34 @@ const CheckoutComponent = () => {
               id="standard-basic"
               label="315 352 19 66"
               variant="standard"
-            />
+            /> */}
+            <InputMask
+              style={styles.cardInput}
+              mask="999 999 99 99"
+              maskChar=" "
+              placeholder="Número de celular"
+              className="card-input-payment"
+              {...register("phone", {
+                required: "Este campo es obligatorio",
+                minLength: {
+                  value: 13,
+                  message: "El número de tarjeta debe tener 10 caracteres",
+                },
+                maxLength: {
+                  value: 13,
+                  message:
+                    "El número de tarjeta no debe exceder los 10 caracteres",
+                },
+                validate: (value) =>
+                  value.replace(/\s/g, "").length === 10 ||
+                  "El número de celular debe tener 10 dígitos",
+              })}
+              name="phone"
+              type="text"
+            ></InputMask>
+            <Typography color={"#d32f2f"} fontSize={"0.75rem"} textAlign={'left'}>
+              {errors.phone ? errors.phone.message?.toString() : ""}
+            </Typography>
           </Grid>
           {/* payment method */}
           <Grid item xs={12} sx={{}}>
@@ -448,3 +475,18 @@ const style = {
     },
   },
 };
+
+const stylesAddPayment = (errors: any, isValid: boolean) => ({
+  cardInput: {
+    padding: '4px 0 5px',
+    height: '48px',
+    marginTop: '24px',
+    width: "100%",
+    fontFamily: "weblysleekuil",
+    fontSize: "16px",
+    fontWeight: 300,
+    color: paletteColors.black,
+    border: "none",
+    borderBottom: `1px solid ${errors.cardnumber ? "red" : "black"}`,
+  },
+})

@@ -16,9 +16,14 @@ import {
 import ButtonComponent from "../../shared/button/button.component";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import InputMask from "react-input-mask";
 import { useAppDispatch } from "../../../store/store";
-import { getPaymentBanksThunk, posPaymentPseThunk } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
+import {
+  getPaymentBanksThunk,
+  posPaymentPseThunk,
+} from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
+import { paletteColors } from "../../../paletteColors/paletteColors";
 
 const PsePaymentMethod = () => {
   const [bankList, setBankList] = useState([]);
@@ -44,10 +49,18 @@ const PsePaymentMethod = () => {
 
   const alertClose = () => {
     setwarningAlert(false);
-  }
+  };
 
   const postPaymentPse = async () => {
-    const {bankSelect, documentType, document, phone, names, lastNames, email } = getValues();
+    const {
+      bankSelect,
+      documentType,
+      document,
+      phone,
+      names,
+      lastNames,
+      email,
+    } = getValues();
     const request = {
       value: 15000,
       order_id: 100,
@@ -56,28 +69,32 @@ const PsePaymentMethod = () => {
       doc_number: document,
       cell_phone: phone,
       name: names,
-      last_name:lastNames,
-      email:email,
-      tax: '0',
-      reference: 'PSE',
+      last_name: lastNames,
+      email: email,
+      tax: "0",
+      reference: "PSE",
     };
-    const Payment = await dispatch(posPaymentPseThunk({reqData: request })).unwrap();
-    if(Payment.success){
-      console.log(Payment)
-      if(Payment.response.success){
+    const Payment = await dispatch(
+      posPaymentPseThunk({ reqData: request })
+    ).unwrap();
+    if (Payment.success) {
+      console.log(Payment);
+      if (Payment.response.success) {
         const urlBank = Payment.response.data.urlbanco;
-        const ref =   Payment.response.data.ref_payco;
+        const ref = Payment.response.data.ref_payco;
         window.open(urlBank, "_blank");
-      }else{
-        setwarningAlert(true)
-        console.log(Payment.response.text_response)
+      } else {
+        setwarningAlert(true);
+        console.log(Payment.response.text_response);
       }
     }
-  }
+  };
 
   useEffect(() => {
     getBanks();
   }, []);
+
+  const styles = stylesAddPayment(errors, isValid);
 
   return (
     <Grid item xs={12} sx={{}}>
@@ -125,15 +142,9 @@ const PsePaymentMethod = () => {
           style={{ width: "100%", textAlign: "left" }}
           // onChange={handleChange}
         >
-                <MenuItem value="CC">
-                    Cedula
-                </MenuItem>
-                <MenuItem value="Pasaporte">
-                    Pasaporte
-                </MenuItem>
-                <MenuItem value="Tarjeta de identidad">
-                    Tarjeta de identidad
-                </MenuItem>
+          <MenuItem value="CC">Cedula</MenuItem>
+          <MenuItem value="Pasaporte">Pasaporte</MenuItem>
+          <MenuItem value="Tarjeta de identidad">Tarjeta de identidad</MenuItem>
         </Select>
       </FormControl>
       <TextField
@@ -141,6 +152,10 @@ const PsePaymentMethod = () => {
         helperText={errors.document ? errors.document.message?.toString() : ""}
         {...register("document", {
           required: "Este campo es obligatorio",
+          pattern: {
+            value: /^[0-9]*$/,
+            message: "Solo se permiten números",
+          },
         })}
         style={{ minWidth: "100%" }}
         sx={{ mt: 3 }}
@@ -179,6 +194,10 @@ const PsePaymentMethod = () => {
         helperText={errors.email ? errors.email.message?.toString() : ""}
         {...register("email", {
           required: "Este campo es obligatorio",
+          pattern: {
+            value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+            message: "Debe ser un correo electrónico válido",
+          },
         })}
         style={{ minWidth: "100%" }}
         sx={{ mt: 3 }}
@@ -186,18 +205,56 @@ const PsePaymentMethod = () => {
         label="Correo Electrónico"
         variant="standard"
       />
-      <TextField
+      {/* <TextField
         error={!!errors.phone}
         helperText={errors.phone ? errors.phone.message?.toString() : ""}
         {...register("phone", {
           required: "Este campo es obligatorio",
+          pattern: {
+            value: /^[0-9]*$/,
+            message: "Solo se permiten números",
+          },
+          minLength: {
+            value: 10,
+            message: "Debe tener al menos 10 dígitos",
+          },
+          maxLength: {
+            value: 10,
+            message: "No puede tener más de 10 dígitos",
+          },
         })}
         style={{ minWidth: "100%" }}
         sx={{ mt: 3 }}
         id="standard-basic"
         label="Número de celular"
         variant="standard"
-      />
+      /> */}
+      <InputMask
+        style={styles.cardInput}
+        mask="999 999 99 99"
+        maskChar=" "
+        placeholder="Número de celular"
+        className="card-input-payment"
+        {...register("phone", {
+          required: "Este campo es obligatorio",
+          minLength: {
+            value: 13,
+            message: "El número de tarjeta debe tener 10 caracteres",
+          },
+          maxLength: {
+            value: 13,
+            message: "El número de tarjeta no debe exceder los 10 caracteres",
+          },
+          validate: (value) =>
+            value.replace(/\s/g, "").length === 10 ||
+            "El número de celular debe tener 10 dígitos",
+        })}
+        name="phone"
+        type="text"
+      ></InputMask>
+      <Typography color={"#d32f2f"} fontSize={"0.75rem"}>
+          {errors.phone ? errors.phone.message?.toString() : ""}
+      </Typography>
       <Box sx={{ mt: 10 }}>
         <ButtonComponent
           disabled={!isValid}
@@ -276,5 +333,20 @@ const styleButton = {
     cursor: "pointer",
     color: "#FFFFFF",
     border: "none",
-  },
+  }
 };
+
+const stylesAddPayment = (errors: any, isValid: boolean) => ({
+  cardInput: {
+    padding: '4px 0 5px',
+    height: '48px',
+    marginTop: '24px',
+    width: "100%",
+    fontFamily: "weblysleekuil",
+    fontSize: "16px",
+    fontWeight: 300,
+    color: paletteColors.black,
+    border: "none",
+    borderBottom: `1px solid ${errors.cardnumber ? "red" : "black"}`,
+  },
+})

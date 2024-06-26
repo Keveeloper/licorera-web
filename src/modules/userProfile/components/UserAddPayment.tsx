@@ -5,24 +5,39 @@ import { useForm } from "react-hook-form";
 import InputMask from "react-input-mask";
 import "./UserAddPayment.css";
 import { AddPaymentInterface } from "./types";
-import { AddPaymentMethod } from "../../../service/modules/paymentMethods/types";
+import { AddPaymentMethod, posPaymentCredit } from "../../../service/modules/paymentMethods/types";
 import { useAppDispatch } from "../../../store/store";
 import {
   addPaymentMethodsThunk,
   getPaymentMethodsThunk,
+  posPaymentCreditThunk,
 } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
 import { useEffect, useState } from "react";
 import Loader from "../../shared/Loader/components/Loader";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import { Height } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { selectAllCart } from "../../../store/modules/cart";
+import usePaymentHook, { PaymentSelected } from "../../shared/hooks/paymentHook/usePaymentHook";
+import { useNavigate } from "react-router-dom";
+import DuesModal from "./DuesModal";
+import CheckBoxComponent from "../../shared/checkBox/Checkbox.component";
 
 const UserAddPayment = (props: AddPaymentInterface) => {
   const { setPaymentMethodsOpen, isChekout } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showAlertWarning, setShowAlertWarning] = useState<boolean>(false);
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+  const [showModalDue, setShowModalDue] = useState<boolean>(false);
+  const [textWarning, setTextWarning] = useState<string>('Los datos son erroneos o son requeridos por favor compruebe.')
+  const [dues, setDues] = useState<number>(0);
+  const [checked, setChecked] = useState(false);
+  
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { addToPayment } = usePaymentHook()
+  const cartStore = useSelector(selectAllCart);
 
   const {
     register,
@@ -36,8 +51,8 @@ const UserAddPayment = (props: AddPaymentInterface) => {
 
   const styles = stylesAddPayment(errors, isValid);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (event?: React.FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
     // setShowAlert(true);
     setLoading(true);
     const { cardnumber, expiryDate, ccvnumber, name } = getValues();
@@ -69,6 +84,55 @@ const UserAddPayment = (props: AddPaymentInterface) => {
     }
   };
 
+  const handleShowModalDue = () => {
+    setShowModalDue(true);
+  };
+
+  const sutmitPayment = async () => {
+    setLoading(true);
+    if(checked)
+      handleSubmit()
+    
+    const { cardnumber, expiryDate, ccvnumber, name } = getValues();
+    
+    const request: posPaymentCredit = {
+      cardNumber: cardnumber.replaceAll(" ", ""),
+      cardCvc: ccvnumber,
+      cardExpYear: `20${expiryDate.split("/")[1]}`,
+      cardExpMonth: expiryDate.split("/")[0],
+      value: cartStore.total,
+      orderId: cartStore.order,
+      dues: dues,
+      _cardTokenId: '',
+    };
+    const Payment = await dispatch(
+      posPaymentCreditThunk({ reqData: request })
+    ).unwrap();
+    if (Payment.success) {
+      setLoading(false);
+      if (Payment?.response?.ref_payco) {
+        setShowSuccessAlert(true)
+        const payment:PaymentSelected = {
+          type: "Tarjeta crédito",
+          payment:"",
+          ref_payco: Payment.response.ref_payco
+        }
+        addToPayment(payment)
+      } else {
+        setTextWarning("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
+        setShowAlertWarning(true);
+        console.log(Payment);
+      }
+    }else{
+      setLoading(false);
+    }
+  };
+
+  const dueOnchange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setDues(parseInt(value));
+  };
+
   const handleBack = () => setPaymentMethodsOpen(false);
 
   const validateExpirationDate = (value: any) => {
@@ -94,9 +158,25 @@ const UserAddPayment = (props: AddPaymentInterface) => {
     setShowAlert(false);
   };
 
+  const handleSuccessAlertClose = () => {
+    setShowSuccessAlert(false);
+  };
+
+  const handleModalDueClose = () => {
+    setShowModalDue(false);
+  };
+
   const handleAlertCloseWarning = () => {
     setShowAlertWarning(false);
   };
+
+  const goToCheckOut = () => {
+    navigate("/checkout");
+  };
+
+  const onCheckBox = () => {
+    setChecked(!checked)
+  }
 
   const handleSave = async () => {
     setLoading(true);
@@ -277,6 +357,21 @@ const UserAddPayment = (props: AddPaymentInterface) => {
         <Typography color={"red"}>
           {errors.name ? errors.name.message?.toString() : ""}
         </Typography>
+        {isChekout && 
+          <CheckBoxComponent
+            style={styles.checkBox}
+            checked={checked}
+            onChange={onCheckBox}
+            widthIcon={30}
+          >
+            <Typography
+              style={{ fontFamily: "weblysleekuisb", fontSize: "18px", fontWeight: 400,
+              color: '#000000'  }}
+            >
+              Guardar esta tarjeta
+            </Typography>
+          </CheckBoxComponent>
+        }
         <Box sx={styles.formContainer.ePaycoContainer}>
           <img
             style={styles.formContainer.ePaycoContainer.padlock}
@@ -293,7 +388,8 @@ const UserAddPayment = (props: AddPaymentInterface) => {
             variant="outlined"
             fullWidth
             color="inherit"
-            type="submit"
+            type="button"
+            onClick={handleShowModalDue}
             disabled={!isValid}
           >
             Pagar
@@ -329,8 +425,30 @@ const UserAddPayment = (props: AddPaymentInterface) => {
         isCancellButton={false}
         data={{
           title: "informaCión",
-          content: `Los datos son erroneos o son requeridos por favor compruebe.`,
+          content: textWarning,
           img: `/icons/alert.png`,
+        }}
+      />
+       {/* due modal */}
+       <DuesModal
+        handleClose={handleModalDueClose}
+        handleSave={sutmitPayment}
+        dues={dues}
+        open={showModalDue}
+        setDue={dueOnchange}
+        data={{
+          title: "¿A cuantas cuotas quieres diferir tu pago?",
+        }}
+      />
+       {/* success modal */}
+       <ModalAlertComponent
+        handleClose={handleSuccessAlertClose}
+        handleSave={goToCheckOut}
+        open={showSuccessAlert}
+        data={{
+          title: `¡FELICITACIONES!`,
+          content: `Tu pago fue procesado exitosamente. Procederemos con tu pedido.`,
+          img: `/icons/checkIcon.png`,
         }}
       />
     </>
@@ -465,6 +583,12 @@ const stylesAddPayment = (errors: any, isValid: boolean) => ({
       // },
     },
   },
+  checkBox: {
+    marginTop: "20px",
+    marginLeft: "20px",
+    marginRight: "20px",
+    fontAlign: "center",
+  }
 });
 
 export default UserAddPayment;
