@@ -1,6 +1,7 @@
 import {
   Box,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -10,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import CartComponent from "../../cart/components/cart.component";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   weblysleekBoltFontStyle,
   weblysleekFontStyle,
@@ -40,6 +41,11 @@ type disccount = {
   content?: string;
   img?: string;
 };
+type PaymentMethod = {
+  value: string;
+  label: string;
+};
+
 const CheckoutComponent = () => {
   const cartStore = useSelector(selectAllCart);
   const products = useSelector(selectCartProducts);
@@ -53,6 +59,7 @@ const CheckoutComponent = () => {
   const [successAlert, setSuccessAlert] = useState(false);
   const [disccountResult, setDisccountResult] = useState<disccount>();
   const [successData, setSuccessData] = useState<any>();
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
 
   const { getAddress, updateAddressItem } = useAddressHook();
   const { getPayment } = usePaymentHook();
@@ -64,6 +71,7 @@ const CheckoutComponent = () => {
     register,
     formState: { errors, isValid },
     reset,
+    control,
     getValues,
     setValue,
   } = useForm({
@@ -172,7 +180,7 @@ const CheckoutComponent = () => {
         setDisccountResult({
           title: "LO SENTIMOS",
           content:
-            "El codigo que ingresaste no es valido. Revísalo e intenta nuevamente.",
+            "El codigo que ingresaste no es válido. Revísalo e intenta nuevamente.",
           img: "/icons/alert.png",
         });
         setAlertDisccount(true);
@@ -201,6 +209,10 @@ const CheckoutComponent = () => {
     const payment = getPayment();
 
     if (payment && payment.type) {
+      const newPayment = [{ value: payment.type, label: payment.type }]
+      setPaymentMethods(newPayment)
+      console.log(paymentMethods, payment, newPayment);
+      
       setValue("paymentSelect", payment.type, { shouldValidate: true });
     }
   }, []);
@@ -216,6 +228,7 @@ const CheckoutComponent = () => {
             alt="whitelogo"
             width={200}
             style={{ marginTop: "30px" }}
+            onClick={goToHome}
           />
           <Typography style={style.form.title} sx={{ mt: 2 }}>
             Dirección de entrega
@@ -363,23 +376,32 @@ const CheckoutComponent = () => {
             >
               Forma de pago
             </Typography>
-            <FormControl variant="standard" sx={{ mt: 2, minWidth: "100%" }}>
-              <TextField
-                error={!!errors.paymentSelect}
-                helperText={
-                  errors.paymentSelect
-                    ? errors.paymentSelect.message?.toString()
-                    : ""
-                }
-                {...register("paymentSelect", {
-                  required: "Este campo es obligatorio",
-                })}
-                style={{ minWidth: "100%" }}
-                sx={{ mt: 2 }}
-                id="labelLocation"
-                label="Seleccionar Metodo de pago"
-                variant="standard"
-                onClick={goToPaymentMethods}
+            <FormControl sx={{ mt: 2, minWidth: "100%" }} error={!!errors.paymentSelect}>
+              <InputLabel style={{ ...style.form.label, marginLeft:'-15px' }} id="labelPayment">
+                Seleccionar Metodo de pago
+              </InputLabel>
+              <Controller
+                name="paymentSelect"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Este campo es obligatorio" }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    style={{ width: "100%", textAlign: "left" }}
+                    labelId="labelPayment"
+                    id="labelPayment"
+                    variant="standard"
+                    placeholder="Seleccionar Metodo de pago"
+                    onClick={goToPaymentMethods}
+                  >
+                    {paymentMethods.map((method) => (
+                      <MenuItem key={method.value} value={method.value}>
+                        {method.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
               />
             </FormControl>
           </Grid>

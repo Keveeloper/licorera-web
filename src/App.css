@@ -78,3 +78,11 @@
 .MuiInputBase-root.MuiInput-root:not(.Mui-focused)::after {
   border-bottom: 2px solid #000000 !important;
 }
+
+.card-input-payment:focus {
+  outline: none;
+}
+
+.card-input-payment::placeholder {
+  opacity: 0.5; 
+}

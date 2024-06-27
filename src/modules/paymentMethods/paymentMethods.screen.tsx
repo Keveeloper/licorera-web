@@ -31,7 +31,7 @@ const PaymentMethodsScreen = () => {
         tabsArray={[
           { label: "PAGO PSE", img: "/icons/PseIcon.png" },
           { label: "T. CREDITO", img: "/icons/CreditCardIcon.png" },
-          { label: "EN CASA", img: "/icons/AtHomeIcon.png" },
+          { label: "EN CASA", img: `${value === '3' ? "/icons/AtHomeIconWhite.png":"/icons/AtHomeIcon.png"}` },
         ]}
         value={value}
         setValue={setValue}
@@ -88,7 +88,7 @@ const styles = {
       borderRadius: "5px",
       background: "#D1D1D1",
       fontFamily: "HudsonNYSerif",
-      fontSize: "20px",
+      fontSize: "14px",
       fontWeight: 300,
     },
   },

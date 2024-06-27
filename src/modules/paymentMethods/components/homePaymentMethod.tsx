@@ -12,7 +12,7 @@ const HomePaymentMethod = () => {
     const { addToPayment } = usePaymentHook()
 
     const selectPayment = (id:number) => {
-        const type = id === 1 ? "Efectivo" : "Tarjeta debito/crédito"
+        const type = id === 1 ? "Efectivo" : "Tarjeta débito/crédito"
         const payment:PaymentSelected = {
             type: type,
             payment:""
@@ -33,7 +33,7 @@ const HomePaymentMethod = () => {
       >
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
             Efectivo
-            {buttonSelect === 1 && <img src="/icons/Checked.svg" alt="" width={30}/>}
+            {buttonSelect === 1 && <img src="/icons/Checked.png" alt="" width={30}/>}
        </div>
       </ButtonComponent>
       <ButtonComponent
@@ -42,7 +42,7 @@ const HomePaymentMethod = () => {
       >
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
             Tarjeta debito/crédito
-            {buttonSelect === 2 && <img src="/icons/Checked.svg" alt="" width={30}/>}
+            {buttonSelect === 2 && <img src="/icons/Checked.png" alt="" width={30}/>}
         </div>
       </ButtonComponent>
       <ButtonComponent

@@ -157,7 +157,7 @@ const CartComponent: React.FC<customProps> = ({
       setTotal(newtotal[0]);
     }
     setPoints(newtotal[0] / Info?.data?.minimumAmountForPoints || 0);
-    updateTotal(newtotal[0]);
+    updateTotal(newtotal[0] + newtotal[1]);
   };
 
   const cancelCurrentOrder = async ()=>{

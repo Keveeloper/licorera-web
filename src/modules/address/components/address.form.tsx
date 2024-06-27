@@ -110,7 +110,7 @@ const AddressForm: React.FC<props> = () => {
           style={{ minWidth: "100%" }}
           sx={{ mt: 2 }}
           id="standard-basic"
-          label="Cra 26 # 33 - 17"
+          // label="Cra 26 # 33 - 17"
           variant="standard"
         />
         {checked && (

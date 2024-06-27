@@ -24,12 +24,15 @@ import {
 } from "../../../store/modules/paymentMethods/actions/paymentMethods.actions";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import { paletteColors } from "../../../paletteColors/paletteColors";
+import { useSelector } from "react-redux";
+import { selectAllCart } from "../../../store/modules/cart";
 
 const PsePaymentMethod = () => {
   const [bankList, setBankList] = useState([]);
   const [warningAlert, setwarningAlert] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-
+  const cartStore = useSelector(selectAllCart);
+  
   const {
     register,
     formState: { errors, isValid },
@@ -62,8 +65,8 @@ const PsePaymentMethod = () => {
       email,
     } = getValues();
     const request = {
-      value: 15000,
-      order_id: 100,
+      value: cartStore.total,
+      order_id: cartStore.order,
       bank: bankSelect,
       doc_type: documentType,
       doc_number: document,

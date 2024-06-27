@@ -1,4 +1,5 @@
 import {
+  Box,
   FormControl,
   Grid,
   MenuItem,
@@ -33,6 +34,7 @@ import { Product } from "../types";
 import { productExchange } from "../../exchangeProducts/types";
 import { CurrencyFormat } from "../../../utils/helpers";
 import { useLocation } from 'react-router-dom';
+import { Height } from "@mui/icons-material";
 
 const cardStyle = {
   padding: '20px',
@@ -299,12 +301,14 @@ const ContainerStore = () => {
                   style={cardStyle}
                 >
                   <img src={item.image} alt="" width={200} height={200}  style={{maxWidth: "100%"}}/>
-                  <Typography style={storeStyles.card.title}>
-                    {item.name}
-                  </Typography>
-                  <Typography style={storeStyles.card.subtitle}>
-                    {item.store?.presentation}
-                  </Typography>
+                  <Box sx={{height:'90px'}}>
+                    <Typography style={storeStyles.card.title}>
+                      {item.name}
+                    </Typography>
+                    <Typography style={storeStyles.card.subtitle}>
+                      {item.store?.presentation}
+                    </Typography>
+                  </Box>
                   <Typography style={storeStyles.card.content}>
                     {item.description.slice(0, 50)}
                   </Typography>
@@ -351,7 +355,6 @@ const storeStyles = {
       ...weblysleekBoltFontStyle,
       fontSize: "19px",
       fontWeight: "600",
-      height: "70px",
       marginTop: "10px"
     },
     subtitle: {
