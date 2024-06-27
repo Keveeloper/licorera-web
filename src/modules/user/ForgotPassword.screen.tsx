@@ -6,26 +6,18 @@ import { useForm } from "react-hook-form";
 import "./login.css";
 import ButtonComponent from "../shared/button/button.component";
 import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
-import {
-  getMe,
-  userLogin,
-} from "../../store/modules/users/actions/users.actions";
+import { getMe, postrememberPasswordThunks, userLogin } from "../../store/modules/users/actions/users.actions";
 import { useAppDispatch } from "../../store/store";
 import { LoginRequest } from "../../service/modules/users/types";
 import ModalAlertComponent from "../shared/modal/modalAlert.component";
-import ForgotPassword from "./ForgotPassword.screen";
 
 interface LoginScreenInterface {
   handleClose: () => void;
   modalOpen: boolean;
 }
-const LoginScreen: React.FC<LoginScreenInterface> = ({
-  handleClose,
-  modalOpen,
-}) => {
+const ForgotPassword: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen }) => {
   const dispatch = useAppDispatch();
   const [showAlert, setShowAlert] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
 
   const {
     register,
@@ -36,40 +28,32 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
     mode: "onChange",
   });
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitRecovery = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { email, password, year } = getValues();
-    const loginRequest: LoginRequest = {
-      email,
-      password,
-    };
-    try {
-      const postLogin = await dispatch(userLogin(loginRequest)).unwrap();
+    const { email } = getValues();
+
+    try{
+      const postLogin = await dispatch(postrememberPasswordThunks(email)).unwrap();
       if (postLogin.success) {
-        dispatch(getMe(postLogin?.response?.token)).unwrap();
-        modalOpen = false;
         handleClose();
       } else {
         setShowAlert(true);
       }
-    } catch (error) {
+    } catch (error){
       console.log(error);
       setShowAlert(true);
     }
+    
   };
 
   const handleAlertClose = (isOpen: boolean) => {
     setShowAlert(isOpen);
   };
 
-  const handleCloseForgotPassword = (isOpen: boolean) => {
-    setOpenModal(isOpen);
-  };
-
   return (
     <>
       <ModalComponent style={style} open={modalOpen} handleClose={handleClose}>
-        <Grid container spacing={2} style={{ textAlign: "center" }}>
+        <Grid container spacing={2} style={{ textAlign: "center", height:'100%' }}>
           <Grid
             item
             xs={6}
@@ -81,10 +65,14 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
           >
             <img src="/images/logo-300.png" alt="" width={300} />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6}   style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
             <Box
               component="form"
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmitRecovery}
               noValidate
               autoComplete="off"
             >
@@ -92,7 +80,7 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
                 className="inputCustom"
                 style={{ paddingBottom: "30px" }}
               >
-                Para continuar debes iniciar sesión
+                Ingresa tu correo electrónico para recuperar tu contraseña
               </Typography>
 
               <TextField
@@ -113,34 +101,7 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
                 type="email"
                 className="inputCustom"
               />
-              <TextField
-                label="Contraseña"
-                variant="filled"
-                error={!!errors.password}
-                helperText={
-                  errors.password ? errors.password.message?.toString() : ""
-                }
-                {...register("password", {
-                  required: "Este campo es obligatorio",
-                  minLength: {
-                    value: 6,
-                    message: "El mínimo de caracteres permitidos son 6",
-                  },
-                })}
-                name="password"
-                type="password"
-                className="inputCustom"
-              />
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setOpenModal(true);
-                }}
-                style={{ ...style.recoveryPassword, float: "right" }}
-              >
-                Recuperar Contraseña
-              </a>
+
               <ButtonComponent
                 style={!isValid ? style.Button : style.ButtonChecked}
                 disabled={!isValid}
@@ -148,65 +109,30 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
                 <Typography
                   style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}
                 >
-                  INICIAR SESIÓN
+                 RECUPERAR
                 </Typography>
               </ButtonComponent>
 
-              <Typography
-                className="inputCustom"
-                style={{ paddingTop: "30px" }}
-              >
-                O continuar con
-              </Typography>
-              <Grid
-                container
-                spacing={2}
-                style={{ padding: "20px", textAlign: "center" }}
-              >
-                <Grid item xs={6} style={displayFlex}>
-                  <div className="circleImg">
-                    <img src="icons/google.png" alt="" />
-                  </div>
-                </Grid>
-                <Grid item xs={6} style={displayFlex}>
-                  <div className="circleImg">
-                    <img src="icons/facebook.png" alt="" />
-                  </div>
-                </Grid>
-              </Grid>
-              <Typography className="inputCustom">
-                Crear una cuenta{" "}
-                {/* <a href="/createAccount" style={style.recoveryPassword}>
-                  aquí
-                </a>{" "} */}
-                <Link to={"/createAccount"} style={style.recoveryPassword}>
-                  {" "}
-                  aquí
-                </Link>
-              </Typography>
             </Box>
           </Grid>
         </Grid>
         <ModalAlertComponent
           handleClose={() => handleAlertClose(false)}
+          handleSave={() => handleAlertClose(false)}
           open={showAlert}
           data={{
             title: "INFORMACIÓN",
             content:
-              "Los datos no coinciden en nuestros registros, revísalos o crea una cuenta.",
+              "Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.",
             img: "icons/alert.png",
           }}
         />
       </ModalComponent>
-      <ForgotPassword
-        handleClose={() => handleCloseForgotPassword(false)}
-        modalOpen={openModal}
-      />
     </>
   );
 };
 
-export default LoginScreen;
+export default ForgotPassword;
 
 const style = {
   position: "absolute" as "absolute",
@@ -214,20 +140,21 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 900,
+  height:"521px",
   bgcolor: "#FFFFFF",
   p: 4,
   borderRadius: "20px",
   ButtonChecked: {
     width: "100%",
     height: "43px",
-    background: "#99791C",
-    color: "#FFFFFF",
+    background: "#FFFFFF",
+    color: "#000000",
     borderRadius: "5px",
-    border: "none",
+    border: "1px solid #000000",
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
-    cursor: "pointer",
+    cursor: 'pointer',
   },
   Button: {
     width: "100%",
@@ -239,7 +166,7 @@ const style = {
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
-    cursor: "pointer",
+    cursor: 'pointer',
   },
   recoveryPassword: {
     color: "#99791C",
@@ -247,5 +174,5 @@ const style = {
     fontWeight: "600",
     fontSize: "15px",
     paddingTop: "20px",
-  },
+  }
 };

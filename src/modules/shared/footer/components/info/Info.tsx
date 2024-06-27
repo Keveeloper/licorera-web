@@ -7,10 +7,10 @@ const Info = () => {
     return(
         <Box sx={styles.infoContainer}>
             <Link to={'/aboutus'}>Quienes somos</Link>
-            <Link to={'/'}>Sugerencias</Link>
+            <Link to={'/suggestions'}>Sugerencias</Link>
             <Link to={'https://licorera3jjjs.com/condiciones'}>Términos y condiciones</Link>
-            <Link to={'/'}>Eliminar mis datos</Link>
-            <Link to={'/'}>Crear cuenta</Link>
+            <Link to={'/removeUserData'}>Eliminar mis datos</Link>
+            <Link to={'/createAccount'}>Crear cuenta</Link>
         </Box>
     );
 

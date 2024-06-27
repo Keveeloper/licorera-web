@@ -63,6 +63,8 @@ const CartComponent: React.FC<customProps> = ({
   const [showCancelCurrentOrder, setShowCancelCurrentOrder] = useState<boolean>(false);
   const [showSuccessCurrentOrder, setShowSuccessCurrentOrder] = useState<boolean>(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
+  const [warningText, setWarningText] = useState<string>("No tienes suficientes puntos para este canje. Compra y acumula más puntos.")
+
 
   const onMinus = (product: Product) => {
     if (product.quantity > 1) {
@@ -119,6 +121,9 @@ const CartComponent: React.FC<customProps> = ({
       if (Payment.success && Payment.response.success) {
         updateOrder(Payment.response.data.id);
         navigate("/checkout");
+      }else{
+        setWarningText("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
+        setShoWarningAlert(true)
       }
     }
   };
@@ -443,7 +448,7 @@ const CartComponent: React.FC<customProps> = ({
       >
         <WarningAlertScreen
           title="INFORMACIÓN"
-          Text="No tienes suficientes puntos para este canje. Compra y acumula más puntos."
+          Text={warningText}
           onClose={handleWarningClose}
         />
       </CustomModal>

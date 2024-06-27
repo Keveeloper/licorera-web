@@ -9,8 +9,6 @@ import { productExchange } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { storeActions } from "../../../store/modules/store/store.slice";
 import { useNavigate } from "react-router-dom";
-import LoginScreen from "../../user/login.screen";
-import { selectAllUser } from "../../../store/modules/users/selectors/users.selector";
 
 const ExchangeComponent = () => {
 

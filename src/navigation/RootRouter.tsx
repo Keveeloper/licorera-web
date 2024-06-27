@@ -42,6 +42,18 @@ const PaymentMethods = React.lazy(
    () => import("../modules/paymentMethods/paymentMethods.screen")
 );
 
+const Suggestions = React.lazy(
+  () => import("../modules/suggestions/suggestions")
+);
+
+const RemoveUserData = React.lazy(
+  () => import("../modules/removeUserData/removeUserData")
+);
+
+const CreateAccount = React.lazy(
+  () => import("../modules/createAccount/createAccount")
+);
+
 const RootRouter = () => {
   return (
     <Routes>
@@ -148,6 +160,30 @@ const RootRouter = () => {
         element={
           <React.Suspense fallback={<Loader screenLoader={true} />}>
             <PaymentMethods />
+          </React.Suspense>
+        }
+      />
+      <Route
+        path="/suggestions"
+        element={
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
+            <Suggestions />
+          </React.Suspense>
+        }
+      />
+      <Route
+        path="/removeUserData"
+        element={
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
+            <RemoveUserData />
+          </React.Suspense>
+        }
+      />
+      <Route
+        path="/createAccount"
+        element={
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
+            <CreateAccount />
           </React.Suspense>
         }
       />

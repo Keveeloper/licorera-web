@@ -115,6 +115,10 @@ const UserInfo = () => {
                     // endAdornment
                     {...register("email", {
                         required: "Este campo es obligatorio",
+                        pattern: {
+                            value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                            message: "Debe ser un correo electrónico válido",
+                        },
                     })}
                     onChange={(event) => setUserEmail(event?.target.value)}
                     name="email"
