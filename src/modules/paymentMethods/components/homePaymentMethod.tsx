@@ -41,7 +41,7 @@ const HomePaymentMethod = () => {
         style={styleButton.button}
       >
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            Tarjeta debito/crédito
+            Tarjeta débito/crédito
             {buttonSelect === 2 && <img src="/icons/Checked.png" alt="" width={30}/>}
         </div>
       </ButtonComponent>

@@ -36,6 +36,20 @@ export const getCurrentOrder= async (): Promise<ApiResponse<any>> => {
   }
 };
 
+export const getOrderById= async (id:number): Promise<ApiResponse<any>> => {
+  try {
+    const  {data}  = await base.get<any>(
+      `/v2/payments/confirmation/${id}`,
+      {}
+      );
+      return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+
 export const cancelCurrentOrder= async (): Promise<ApiResponse<any>> => {
   try {
     const  {data}  = await base.get<any>(

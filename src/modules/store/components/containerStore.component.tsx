@@ -51,7 +51,7 @@ const ContainerStore = () => {
 
   const location = useLocation();
 
-  const [search, setSearch] = React.useState<string>("Menor Precio");
+  const [search, setSearch] = React.useState<string>("");
   const [categories, setCategories] = React.useState<any>([]);
   const [categorySelected, setCategorySelected] = React.useState<any>({});
   const [products, setProducts] = React.useState<any>([]);

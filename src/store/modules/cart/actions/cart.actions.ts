@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { cancelCurrentOrder, getCurrentOrder, postOrder, requestOrder, requestUpdateOrder, updateOrder } from "../../../../service/modules/orders/order";
+import { cancelCurrentOrder, getCurrentOrder, getOrderById, postOrder, requestOrder, requestUpdateOrder, updateOrder } from "../../../../service/modules/orders/order";
 
 
 export const getCurrentOrderThunk = createAsyncThunk(
@@ -7,6 +7,19 @@ export const getCurrentOrderThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getCurrentOrder();
+      console.log(response);
+      return response;
+    } catch (error: any) { 
+      return rejectWithValue(error.message); 
+    }
+  }
+);
+
+export const getOrderByIdThunk = createAsyncThunk(
+  "getOrderByIdThunk/fetch",
+  async ( id: number, { rejectWithValue }) => {
+    try {
+      const response = await getOrderById(id);
       console.log(response);
       return response;
     } catch (error: any) { 

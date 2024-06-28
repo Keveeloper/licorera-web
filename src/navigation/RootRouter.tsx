@@ -156,13 +156,15 @@ const RootRouter = () => {
         }
       />
       <Route
-        path="/paymentMethods"
+        path="/paymentMethods" 
         element={
           <React.Suspense fallback={<Loader screenLoader={true} />}>
             <PaymentMethods />
           </React.Suspense>
         }
-      />
+      >
+         <Route path=":id" element={<PaymentMethods />} />
+      </Route>
       <Route
         path="/suggestions"
         element={

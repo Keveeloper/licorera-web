@@ -76,6 +76,7 @@ const PsePaymentMethod = () => {
       email: email,
       tax: "0",
       reference: "PSE",
+      isWeb:true
     };
     const Payment = await dispatch(
       posPaymentPseThunk({ reqData: request })
