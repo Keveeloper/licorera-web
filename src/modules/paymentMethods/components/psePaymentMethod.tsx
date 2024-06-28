@@ -145,7 +145,7 @@ const PsePaymentMethod = () => {
           style={{ width: "100%", textAlign: "left" }}
           // onChange={handleChange}
         >
-          <MenuItem value="CC">Cedula</MenuItem>
+          <MenuItem value="CC">Cédula</MenuItem>
           <MenuItem value="Pasaporte">Pasaporte</MenuItem>
           <MenuItem value="Tarjeta de identidad">Tarjeta de identidad</MenuItem>
         </Select>

@@ -147,7 +147,7 @@ const SuggestionsComponent: React.FC<props> = () => {
         open={successAlert}
         data={{
           title: "FELICITACIONES!",
-          content: `La dirección fue agregada exitosamente.`,
+          content: `Tu sugerencia ha sido enviada exitosamente y la atenderemos muy pronto. Trabajamos para mejorar.`,
           img: "/icons/success-icon.png",
         }}
       />

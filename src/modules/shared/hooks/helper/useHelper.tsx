@@ -7,7 +7,7 @@ const useHelperHook = () => {
 
     const calculateTotal = async (products:any) => {
         let newtotal = 0;
-        products.forEach((item:any) => {
+        products?.forEach((item:any) => {
             if (item.price) {
                 newtotal += item.quantity * item.price;
             }

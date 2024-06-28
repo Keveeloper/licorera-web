@@ -203,8 +203,8 @@ const CheckoutComponent = () => {
     const address = getAddress();
     if (address && address.detail) {
       setCoords(address.coords);
-      setValue("address", address.addressInput, { shouldValidate: true });
-      setValue("detail", address.detail, { shouldValidate: true });
+      setValue("address", address.addressInput, { shouldValidate: true, shouldTouch:true });
+      setValue("detail", address.detail, { shouldValidate: true, shouldTouch:true });
     }
     const payment = getPayment();
 
@@ -271,38 +271,43 @@ const CheckoutComponent = () => {
             >
               Ingresa una dirección
             </Typography>
-            <TextField
-              onClick={goToAddress}
-              error={!!errors.address}
-              helperText={
-                errors.address ? errors.address.message?.toString() : ""
-              }
-              {...register("address", {
-                required: "Este campo es obligatorio",
-              })}
-              style={{ minWidth: "100%" }}
-              sx={{ mt: 2 }}
-              id="standard-basic"
-              label="Ej: Cra 26 # 33-17"
-              variant="standard"
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-            <TextField
-              error={!!errors.detail}
-              helperText={
-                errors.detail ? errors.detail.message?.toString() : ""
-              }
-              {...register("detail", {
-                required: "Este campo es obligatorio",
-              })}
-              style={{ minWidth: "100%" }}
-              sx={{ mt: 2 }}
-              id="standard-basic"
-              label="Torre / Apto / Casa / Detalles"
-              variant="standard"
-            />
+            <Controller
+                name="address"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Este campo es obligatorio" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    onClick={goToAddress}
+                    error={!!errors.address}
+                    helperText={errors.address ? errors.address.message?.toString() : ""}
+                    style={{ minWidth: "100%" }}
+                    sx={{ mt: 2 }}
+                    id="standard-basic"
+                    label="Ej: Cra 26 # 33-17"
+                    variant="standard"
+                  />
+                )}
+              />
+              <Controller
+                name="detail"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Este campo es obligatorio" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    error={!!errors.detail}
+                    helperText={errors.detail ? errors.detail.message?.toString() : ""}
+                    style={{ minWidth: "100%" }}
+                    sx={{ mt: 2 }}
+                    id="standard-basic"
+                    label="Torre / Apto / Casa / Detalles"
+                    variant="standard"
+                  />
+                )}
+              />
           </Grid>
           {/* contact section */}
           <Grid item xs={12} sx={{}}>
@@ -394,6 +399,7 @@ const CheckoutComponent = () => {
                     variant="standard"
                     placeholder="Seleccionar Metodo de pago"
                     onClick={goToPaymentMethods}
+                    readOnly
                   >
                     {paymentMethods.map((method) => (
                       <MenuItem key={method.value} value={method.value}>

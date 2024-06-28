@@ -7,8 +7,9 @@ export const getCurrentOrderThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getCurrentOrder();
+      console.log(response);
       return response;
-    } catch (error: any) {
+    } catch (error: any) { 
       return rejectWithValue(error.message); 
     }
   }

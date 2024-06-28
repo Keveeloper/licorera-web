@@ -121,10 +121,12 @@ const UserAddPayment = (props: AddPaymentInterface) => {
       } else {
         setTextWarning("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
         setShowAlertWarning(true);
-        console.log(Payment);
       }
     }else{
+      setShowModalDue(false)
       setLoading(false);
+      setTextWarning("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
+      setShowAlertWarning(true);
     }
   };
 
