@@ -131,7 +131,8 @@ const AddressForm: React.FC<props> = () => {
               style={{ minWidth: "100%" }}
               sx={{ mt: 2 }}
               id="standard-basic"
-              label="Mi casa"
+              // label="Mi casa"
+              placeholder="Mi casa"
               variant="standard"
             />
           </>
