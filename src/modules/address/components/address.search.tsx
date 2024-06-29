@@ -14,15 +14,17 @@ import {
 import ButtonComponent from "../../shared/button/button.component";
 import { useForm } from "react-hook-form";
 import SearchIcon from "@mui/icons-material/Search";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAddress from "../hooks/useAddress";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useAddressHook from "../../shared/hooks/addressHook/useAddressHook";
 
 interface props {
 }
 const AddressSearch: React.FC<props> = () => {
+
+  const location = useLocation();
   const { GetHookGoogleApi } = useAddress();
   const navigate = useNavigate();
   const { addToAddress  } = useAddressHook();
@@ -30,6 +32,10 @@ const AddressSearch: React.FC<props> = () => {
 
   const [googleAddress, setGoogleAddress] = useState<any[]>([]);
   const [myTimeout, setMyTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const getLocation = (event: any) => {
     console.log(event.target.value);
@@ -57,7 +63,10 @@ const AddressSearch: React.FC<props> = () => {
   };
 
   const goToMap = () => {
-    navigate('map')
+    const module = {
+      module: location.state.module.module === 'user' ? 'user' : 'checkout'
+    }
+    navigate('map', {state: {module} } );
   }
   const setAddress = (address:any) => {
     const newAddress = {
@@ -68,7 +77,10 @@ const AddressSearch: React.FC<props> = () => {
       addressInput: address.formatted_address 
     }
     addToAddress(newAddress)
-    navigate('form')
+    const module = {
+      module: location.state.module.module === 'user' ? 'user' : 'checkout'
+    }
+    navigate('form', {state: {module} } );
   }
 
   return (

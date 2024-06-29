@@ -16,14 +16,15 @@ import { getPaymentMethodsThunk } from "../../../store/modules/paymentMethods/ac
 import Loader from "../../shared/Loader/components/Loader";
 import UserAddPayment from "./UserAddPayment";
 import UserAddress from "./UserAddress";
+import { useLocation } from "react-router-dom";
 
 const UserContent = () => {
 
     const dispatch = useAppDispatch();
     const personalInfo: any = useSelector(selectAllPersonalInfo);
-    // console.log('Personal info from user: ', personalInfo);
+    const location = useLocation();
     
-    const [value, setValue] = useState<string>("1");
+    const [value, setValue] = useState<string>(location.state.tab);
     const [disabled, setDisabled] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(false);
