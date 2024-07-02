@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 import { GOOGLE_MAP_API_KEY } from "../../../service/tools/constans";
 import useAddress from "../hooks/useAddress";
 import useAddressHook from "../../shared/hooks/addressHook/useAddressHook";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface props {}
 const initialCenter = {
@@ -19,6 +19,8 @@ const containerStyle = {
   marginTop: "20px",
 };
 const AddressMap: React.FC<props> = () => {
+
+  const location = useLocation();
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const mapRef = useRef(null);
   const [coordinates, setCoordinates] = useState(initialCenter);
@@ -61,7 +63,10 @@ const AddressMap: React.FC<props> = () => {
         addressInput: address
     }
     addToAddress(newAddress)
-    navigate('/address/form')
+    const module = {
+      module: location.state.module.module === 'user' ? 'user' : 'checkout'
+    }
+    navigate('/address/form', {state: {module} });
   };
 
   return (
