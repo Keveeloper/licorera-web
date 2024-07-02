@@ -1,10 +1,10 @@
-import { getIsActive, postSuggestion } from "../../../service/modules/info/info";
+import { postRemoveUser,  } from "../../../service/modules/info/info";
 
 const useRemoveDatanHook = () => {
 
-    const postSuggestionApi = async (request:any) => {
+    const postRemoveUserApi = async (request:any) => {
       try {
-        const response = await postSuggestion(request);
+        const response = await postRemoveUser(request);
         console.log(response)
         if (response.success && response.response) {
           return response.response;
@@ -18,7 +18,7 @@ const useRemoveDatanHook = () => {
       }
     };
 
-    return { postSuggestionApi };
+    return { postRemoveUserApi };
   };
   
   export default useRemoveDatanHook;

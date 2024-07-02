@@ -17,7 +17,7 @@ const RemoveUserDataComponent: React.FC<props> = () => {
   const [successAlert, setSucessAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
 
-  const { postSuggestionApi } = useRemoveDatanHook();
+  const { postRemoveUserApi } = useRemoveDatanHook();
   const navigate = useNavigate();
 
   const {
@@ -32,13 +32,12 @@ const RemoveUserDataComponent: React.FC<props> = () => {
 
 
   const handleSubmit = async () => {
-    const { title, email, name, message } = getValues();
+    const { email} = getValues();
 
     const request = {
-      title,
-      suggest: message,
+      email,
     };
-    postSuggestionApi(request)
+    postRemoveUserApi(request)
       .then((res) => {
         if (res.success) {
           setSucessAlert(true);
@@ -131,7 +130,7 @@ const RemoveUserDataComponent: React.FC<props> = () => {
         open={successAlert}
         data={{
           title: "FELICITACIONES!",
-          content: `La dirección fue agregada exitosamente.`,
+          content: `Hemos recibido tu solicitud de remover datos. Estaremos procesandola en las próximas horas.`,
           img: "/icons/success-icon.png",
         }}
       />
