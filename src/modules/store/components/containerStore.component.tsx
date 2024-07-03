@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Pagination as MyPagination } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import CardComponent from "../../shared/card/card.component";
 import { useAppDispatch } from "../../../store/store";
 import {
@@ -33,7 +33,7 @@ import { useNavigate } from "react-router";
 import { Product } from "../types";
 import { productExchange } from "../../exchangeProducts/types";
 import { CurrencyFormat } from "../../../utils/helpers";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Height } from "@mui/icons-material";
 
 const cardStyle = {
@@ -48,6 +48,7 @@ const cardStyle = {
 }
 
 const ContainerStore = () => {
+  const { id } = useParams();
 
   const location = useLocation();
 
@@ -89,12 +90,14 @@ const ContainerStore = () => {
   };
 
   const handleCategory = async (id: number, page: number, sort?:string) => {
+    navigate(`/store/${id}`);
     const categoriesById = await dispatch(
       CategoriesById({ id, page, sort })
     ).unwrap();
     setTotalPage(categoriesById.response.data?.last_page);
     setProducts(categoriesById.response.data?.data);
     filterCategory(id);
+    
   };
 
   const filterCategory = (id: number) => {
@@ -144,17 +147,17 @@ const ContainerStore = () => {
     async function getCategories() {
       const categories = await dispatch(Categories()).unwrap();
       setCategories(categories.response.data);
-
-      if(location && location.state){
-        const {id} = location.state.categoryId;
+      if(id !== undefined){
         const categoryfilter = categories.response.data.filter((category: any) => {
-          return category.id === id;
+          return category.id === parseInt(id);
         });
-        setCategorySelected(categoryfilter[0]);
-        handleCategory(id, 1);
-      }else{
-        setCategorySelected(categories.response.data[0]);
-        handleCategory(1, 1);
+        if(categoryfilter.length > 0){
+          setCategorySelected(categoryfilter[0]);
+          handleCategory(parseInt(id), 1);
+        }else{
+          setCategorySelected(categories.response.data[0]);
+          handleCategory(1, 1);
+        }
       }
     }
     getCategories();

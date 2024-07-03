@@ -9,14 +9,14 @@ const Menu = () => {
 
     const location = useLocation();
     const { pathname } = location;
-    const menuSelected = pathname === '/' ? 'Inicio' : pathname === '/store' ? 'Tienda' : pathname === '/exchange-products' ? 'Canjes' : '';
+    const menuSelected = pathname === '/' ? 'Inicio' : pathname === '/store/1' ? 'Tienda' : pathname === '/exchange-products' ? 'Canjes' : '';
 
     const [clicked, setClicked] = useState<string>(menuSelected);
 
     return(
         <Box sx={styles.menuContainer}>
             <Link style={clicked === 'Inicio' ? styles.menuContainer.clicked : {}} to={'/'}>Inicio</Link>
-            <Link style={clicked === 'Tienda' ? styles.menuContainer.clicked : {}} to={'/store'}>Tienda</Link>
+            <Link style={clicked === 'Tienda' ? styles.menuContainer.clicked : {}} to={'/store/1'}>Tienda</Link>
             <Link style={clicked === 'Canjes' ? styles.menuContainer.clicked : {}} to={'/exchange-products'}>Canjes</Link>
         </Box>
     );
