@@ -40,6 +40,10 @@ const useCartHook = () => {
     dispatch(cartActions.setCartTotal(total));
   };
 
+  const updatePhone = (phone: string) => {
+    dispatch(cartActions.setCartPhone(phone));
+  };
+
   const removeCartItem = (productId: number) => {
     const updatedCart = cart.filter(item => item.id !== productId);
     dispatch(cartActions.setCartProducts(updatedCart))
@@ -51,7 +55,8 @@ const useCartHook = () => {
     updateCartItem,
     removeCartItem,
     updateOrder,
-    updateTotal
+    updateTotal,
+    updatePhone
   };
 };
 

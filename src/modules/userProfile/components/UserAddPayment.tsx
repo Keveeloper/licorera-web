@@ -90,6 +90,7 @@ const UserAddPayment = (props: AddPaymentInterface) => {
 
   const sutmitPayment = async () => {
     setLoading(true);
+    setShowModalDue(false);
     if(checked)
       handleSubmit()
     
@@ -110,7 +111,7 @@ const UserAddPayment = (props: AddPaymentInterface) => {
     ).unwrap();
     if (Payment.success) {
       setLoading(false);
-      if (Payment?.response?.ref_payco) {
+      if (Payment?.response?.ref_payco && Payment.response.estado === "Aceptada") {
         setShowSuccessAlert(true)
         const payment:PaymentSelected = {
           type: "Tarjeta crédito",

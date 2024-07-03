@@ -98,7 +98,7 @@ const UserAddress = () => {
 
     return (
       <Box sx={{width: '100%', height: '100%'}}>
-        <Box sx={{padding: '60px 5%', width: '100%', height: '88%', overflow: 'auto'}}>
+        <Box sx={{padding: '60px 5%', width: '100%', height: '80%', overflow: 'auto'}}>
             {addressArray?.length > 0 ? addressArray?.map((item: any, index: any) => (
               <>
                 <Box key={item.token} sx={{marginTop: '30px', padding: '0 0 20px 0', width: '100%', height: '25%', ...displayFlex, borderBottom: '1px solid gray' }}>

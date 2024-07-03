@@ -33,6 +33,9 @@ export const addressSlice = createSlice({
     clearAddress: (status: AddressState) => {
       status.data = {};
     },
+    clearAddressSelected: ( state: AddressState) => {
+      state.addressSelected = {} 
+    },
   },
   extraReducers: (builder) => {
     builder

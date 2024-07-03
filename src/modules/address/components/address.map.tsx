@@ -64,7 +64,7 @@ const AddressMap: React.FC<props> = () => {
     }
     addToAddress(newAddress)
     const module = {
-      module: location.state.module.module === 'user' ? 'user' : 'checkout'
+      module: location?.state?.module?.module === 'user' ? 'user' : 'checkout'
     }
     navigate('/address/form', {state: {module} });
   };

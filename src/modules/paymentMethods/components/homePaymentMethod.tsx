@@ -83,7 +83,7 @@ const styleButton = {
         // padding: "0 0 8px 0",
         cursor: "pointer",
         border: "1px solid #000000",
-        marginTop:"300px",
+        marginTop:"250px",
       },
       disabledButton: {
         ...hudsonNYFontStyle,
@@ -96,6 +96,6 @@ const styleButton = {
         cursor: "pointer",
         color: "#FFFFFF",
         border: "none",
-        marginTop:"300px",
+        marginTop:"250px",
       },
 }

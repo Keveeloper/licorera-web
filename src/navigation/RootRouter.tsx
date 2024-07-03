@@ -54,6 +54,10 @@ const CreateAccount = React.lazy(
   () => import("../modules/createAccount/createAccount")
 );
 
+const RecentOrder = React.lazy(
+  () => import("../modules/recentOrders/RecentOrderScreen")
+);
+
 const RootRouter = () => {
   return (
     <Routes>
@@ -189,6 +193,15 @@ const RootRouter = () => {
           </React.Suspense>
         }
       />
+      <Route
+        path="/recentOrder/*"
+        element={
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
+            <RecentOrder />
+          </React.Suspense>
+        }
+      />
+      
       
       <Route path="*" element={<h1>Not found</h1>} />
     </Routes>

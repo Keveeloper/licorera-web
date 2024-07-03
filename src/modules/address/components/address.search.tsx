@@ -64,7 +64,7 @@ const AddressSearch: React.FC<props> = () => {
 
   const goToMap = () => {
     const module = {
-      module: location.state.module.module === 'user' ? 'user' : 'checkout'
+      module: location?.state?.module?.module === 'user' ? 'user' : 'checkout'
     }
     navigate('map', {state: {module} } );
   }
@@ -78,7 +78,7 @@ const AddressSearch: React.FC<props> = () => {
     }
     addToAddress(newAddress)
     const module = {
-      module: location.state.module.module === 'user' ? 'user' : 'checkout'
+      module: location?.state?.module?.module === 'user' ? 'user' : 'checkout'
     }
     navigate('form', {state: {module} } );
   }

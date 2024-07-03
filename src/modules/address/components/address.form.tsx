@@ -81,7 +81,7 @@ const AddressForm: React.FC<props> = () => {
 
   const handleSave = () => {
     setSucessAlert(false);
-    if (location.state.module.module === 'user') {
+    if (location?.state?.module?.module === 'user') {
       navigate("/user-profile", {state: {tab: "3"}});
     }else{
       navigate("/checkout");
