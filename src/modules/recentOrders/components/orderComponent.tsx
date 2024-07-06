@@ -54,7 +54,7 @@ const OrderComponent: React.FC<props> = () => {
         id: item.store.product.id,
         name: item.store.product.name,
         image: item.store.product.image,
-        quantity:item.store.quantity,
+        quantity:item.quantity,
         points:item.store.points,
         price:item.store.price,
         description: item.store.product.description,
@@ -155,7 +155,7 @@ const OrderComponent: React.FC<props> = () => {
                         {item.store.presentation && (
                           <span>Presentación: {item.store.presentation}</span>
                         )}
-                        Cantidad: {item.store.quantity}
+                        Cantidad: {item.quantity}
                       </Typography>
                     </Grid>
                     <Grid

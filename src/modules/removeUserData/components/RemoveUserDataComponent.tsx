@@ -119,7 +119,7 @@ const RemoveUserDataComponent: React.FC<props> = () => {
           <Typography
             style={{ marginTop: "-5px", fontFamily: "HudsonNYSerif" }}
           >
-            EVNIAR
+            ENVIAR
           </Typography>
         </ButtonComponent>
       </div>

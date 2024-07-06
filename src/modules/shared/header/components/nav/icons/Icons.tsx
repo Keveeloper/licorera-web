@@ -89,7 +89,7 @@ const  Icons = () => {
                                 <p>{user?.points} Jotas</p>
                             </Box>
                             <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={() => navigation('/user-profile', {state: {tab: "1"}})}>Perfil</MenuItem>
-                            <MenuItem sx={styles.iconsContainer.menu.menuitem}>Mis Pedidos</MenuItem>
+                            <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={() => navigation('/recentOrder')}>Mis Pedidos</MenuItem>
                             <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={handleShowAlert}>Cerrar Sesión</MenuItem>
                         </Menu>
                         <ModalAlertComponent
