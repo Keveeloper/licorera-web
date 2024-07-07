@@ -36,6 +36,9 @@ export const paymentMethodsSlice = createSlice({
     clearState: () => {
       // Clearing redux state and localForage happens in store.ts.
     },
+    clearPaymentSelected: ( state: PaymentMethodState) => {
+      state.paymentSelected = {} 
+    },
     clearPersonalInfo: (status: PaymentMethodState) => {
       status.state = {
         id_customer: '',

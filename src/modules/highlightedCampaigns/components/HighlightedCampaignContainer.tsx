@@ -61,7 +61,7 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
         const categoryId = {
             id: highlightedCampaign?.categoryId
         }
-        navigate("/store", { state: { categoryId } });
+        navigate(`/store/${categoryId.id}`);
     }
 
     return (

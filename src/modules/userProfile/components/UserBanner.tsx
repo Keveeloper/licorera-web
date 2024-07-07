@@ -32,6 +32,10 @@ const UserBanner = () => {
         navigate('/');
     }
 
+    const goToRecentOrder = ()=>{
+        navigate('/recentOrder')
+    }
+
     return(
         <Box sx={styles.bannerContainer}>
             <Box sx={styles.bannerContainer.boxLeft}>
@@ -59,7 +63,7 @@ const UserBanner = () => {
                 <img style={{cursor: 'pointer'}} src="/icons/logout-icon.png" width={30} alt="" onClick={handleShowAlert}/>
                 <Box sx={styles.bannerContainer.boxRight.circle}>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.order_quantity}</Typography>
-                    <Typography sx={styles.bannerContainer.boxRight.circle.text}>Pedidos</Typography>
+                    <Typography sx={styles.bannerContainer.boxRight.circle.text} onClick={goToRecentOrder}>Pedidos</Typography>
                 </Box>
                 <Box sx={styles.bannerContainer.boxRight.circle}>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.exchanges_quantity}</Typography>
@@ -130,7 +134,8 @@ const styles = {
                 ...displayFlexColumn,
                 background: 'white',
                 text: {
-                    fontFamily: 'weblysleekuisb'
+                    fontFamily: 'weblysleekuisb',
+                    cursor:'pointer'
                 }
             }
         }

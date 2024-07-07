@@ -13,6 +13,7 @@ export interface Data {
     products:Products[];
     order:number;
     total:number;
+    phone?:string;
 }
 
 export interface Products {

@@ -22,6 +22,18 @@ const useCartHook = () => {
     dispatch(cartActions.setCartProducts(newCart))
   };
 
+  const addArrayToCart = (products: Product[]): void => {
+    let newProducts:any = [...cart];
+    products.forEach((product) => {
+      const existingProduct = newProducts.find((item:Product) => item.id === product.id);
+      if (existingProduct) {
+        return;
+      }
+      newProducts = [...newProducts, product];
+    });
+    dispatch(cartActions.setCartProducts(newProducts));
+  };
+
   const updateCartItem = (updatedProduct: Product) => {
     const updatedCart = cart.map(item => {
       if (item.id === updatedProduct.id) {
@@ -40,6 +52,10 @@ const useCartHook = () => {
     dispatch(cartActions.setCartTotal(total));
   };
 
+  const updatePhone = (phone: string) => {
+    dispatch(cartActions.setCartPhone(phone));
+  };
+
   const removeCartItem = (productId: number) => {
     const updatedCart = cart.filter(item => item.id !== productId);
     dispatch(cartActions.setCartProducts(updatedCart))
@@ -48,10 +64,12 @@ const useCartHook = () => {
   return {
     getCart,
     addToCart,
+    addArrayToCart,
     updateCartItem,
     removeCartItem,
     updateOrder,
-    updateTotal
+    updateTotal,
+    updatePhone
   };
 };
 

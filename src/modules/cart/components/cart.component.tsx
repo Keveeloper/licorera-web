@@ -1,6 +1,5 @@
 import { Box, Divider, Grid, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import { selectCartProducts } from "../../../store/modules/cart/selectors/cart.selector";
 import CardComponent from "../../shared/card/card.component";
 import { CurrencyFormat, JotaFormat } from "../../../utils/helpers";
 import { useEffect, useState } from "react";
@@ -27,6 +26,9 @@ import { cancelCurrentOrderThunk, postOrderThunk } from "../../../store/modules/
 import { requestOrder } from "../../../service/modules/orders/order";
 import CancelAlertScreen from "../alert.screens/cancelAlertScreen";
 import LoginScreen from "../../user/login.screen";
+import { addressActions } from "../../../store/modules/address";
+import { paymentMethodsActions } from "../../../store/modules/paymentMethods";
+import { cartActions } from "../../../store/modules/cart";
 
 interface customProps {
   isCheckout?: boolean;
@@ -124,6 +126,9 @@ const CartComponent: React.FC<customProps> = ({
         postOrderThunk({ reqData: request })
       ).unwrap();
       if (Payment.success && Payment.response.success) {
+        dispatch(cartActions.clearPhone());
+        dispatch(addressActions.clearAddressSelected())
+        dispatch(paymentMethodsActions.clearPaymentSelected())
         updateOrder(Payment.response.data.id);
         navigate("/checkout");
       }else if(Payment.success && !Payment.response.success){
@@ -153,7 +158,6 @@ const CartComponent: React.FC<customProps> = ({
     setShowSuccessCurrentOrder(false);
     navigate("/home");
   };
-  
 
   const handleDeleteOpen = (item: Product) => {
     setProduct(item);

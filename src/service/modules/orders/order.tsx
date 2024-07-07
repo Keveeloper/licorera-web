@@ -36,6 +36,35 @@ export const getCurrentOrder= async (): Promise<ApiResponse<any>> => {
   }
 };
 
+export const getOrders= async (page:number): Promise<ApiResponse<any>> => {
+  try {
+    const  {data}  = await base.get<any>(
+      `/v2/clients/orders?page=${page}`,
+      {}
+      );
+      return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+
+export const getOrder= async (id:number): Promise<ApiResponse<any>> => {
+  try {
+    const  {data}  = await base.get<any>(
+      `/v2/clients/orders/${id}`,
+      {}
+      );
+      return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+
+
 export const getOrderById= async (id:number): Promise<ApiResponse<any>> => {
   try {
     const  {data}  = await base.get<any>(

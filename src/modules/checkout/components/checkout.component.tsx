@@ -27,7 +27,10 @@ import { useAppDispatch } from "../../../store/store";
 import { getLocationsThunk } from "../../../store/modules/address/actions/address.actions";
 import { postDisccount } from "../../../service/modules/address/address";
 import { useSelector } from "react-redux";
-import { selectAllCart, selectCartProducts } from "../../../store/modules/cart/selectors/cart.selector";
+import {
+  selectAllCart,
+  selectCartProducts,
+} from "../../../store/modules/cart/selectors/cart.selector";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import usePaymentHook from "../../shared/hooks/paymentHook/usePaymentHook";
 import { updateOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
@@ -35,6 +38,9 @@ import { requestUpdateOrder } from "../../../service/modules/orders/order";
 import NumberFormat from "../../shared/hooks/numberFormater/NumberFormat";
 import { cartActions } from "../../../store/modules/cart";
 import { paletteColors } from "../../../paletteColors/paletteColors";
+import useCartHook from "../../shared/hooks/cartHook/useCartHook";
+import { addressActions } from "../../../store/modules/address";
+import { paymentMethodsActions } from "../../../store/modules/paymentMethods";
 
 type disccount = {
   title?: string;
@@ -59,10 +65,11 @@ const CheckoutComponent = () => {
   const [successAlert, setSuccessAlert] = useState(false);
   const [disccountResult, setDisccountResult] = useState<disccount>();
   const [successData, setSuccessData] = useState<any>();
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
 
   const { getAddress, updateAddressItem } = useAddressHook();
   const { getPayment } = usePaymentHook();
+  const { updatePhone } = useCartHook();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -74,6 +81,7 @@ const CheckoutComponent = () => {
     control,
     getValues,
     setValue,
+    watch,
   } = useForm({
     mode: "onChange",
   });
@@ -112,8 +120,16 @@ const CheckoutComponent = () => {
         });
         setSuccessAlert(true);
         dispatch(cartActions.clearState());
+        dispatch(addressActions.clearAddressSelected())
+        dispatch(paymentMethodsActions.clearPaymentSelected())
       }
     }
+  };
+
+  const handlePhoneChange = (event:any, onChange:any) => {
+    const phone = event.target.value;
+    onChange(phone); 
+    updatePhone(phone);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -203,17 +219,30 @@ const CheckoutComponent = () => {
     const address = getAddress();
     if (address && address.detail) {
       setCoords(address.coords);
-      setValue("address", address.addressInput, { shouldValidate: true, shouldTouch:true });
-      setValue("detail", address.detail, { shouldValidate: true, shouldTouch:true });
+      setValue("address", address.addressInput, {
+        shouldValidate: true,
+        shouldTouch: true,
+      });
+      setValue("detail", address.detail, {
+        shouldValidate: true,
+        shouldTouch: true,
+      });
     }
-    const payment = getPayment();
 
+    const payment = getPayment();
     if (payment && payment.type) {
-      const newPayment = [{ value: payment.type, label: payment.type }]
-      setPaymentMethods(newPayment)
+      const newPayment = [{ value: payment.type, label: payment.type }];
+      setPaymentMethods(newPayment);
       console.log(paymentMethods, payment, newPayment);
-      
+
       setValue("paymentSelect", payment.type, { shouldValidate: true });
+    }
+
+    if (cartStore.phone) {
+      setValue("phone", cartStore.phone, {
+        shouldValidate: true,
+        shouldTouch: true,
+      });
     }
   }, []);
 
@@ -272,42 +301,46 @@ const CheckoutComponent = () => {
               Ingresa una dirección
             </Typography>
             <Controller
-                name="address"
-                control={control}
-                defaultValue=""
-                rules={{ required: "Este campo es obligatorio" }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    onClick={goToAddress}
-                    error={!!errors.address}
-                    helperText={errors.address ? errors.address.message?.toString() : ""}
-                    style={{ minWidth: "100%" }}
-                    sx={{ mt: 2 }}
-                    id="standard-basic"
-                    label="Ej: Cra 26 # 33-17"
-                    variant="standard"
-                  />
-                )}
-              />
-              <Controller
-                name="detail"
-                control={control}
-                defaultValue=""
-                rules={{ required: "Este campo es obligatorio" }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    error={!!errors.detail}
-                    helperText={errors.detail ? errors.detail.message?.toString() : ""}
-                    style={{ minWidth: "100%" }}
-                    sx={{ mt: 2 }}
-                    id="standard-basic"
-                    label="Torre / Apto / Casa / Detalles"
-                    variant="standard"
-                  />
-                )}
-              />
+              name="address"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Este campo es obligatorio" }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  onClick={goToAddress}
+                  error={!!errors.address}
+                  helperText={
+                    errors.address ? errors.address.message?.toString() : ""
+                  }
+                  style={{ minWidth: "100%" }}
+                  sx={{ mt: 2 }}
+                  id="standard-basic"
+                  label="Ej: Cra 26 # 33-17"
+                  variant="standard"
+                />
+              )}
+            />
+            <Controller
+              name="detail"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Este campo es obligatorio" }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  error={!!errors.detail}
+                  helperText={
+                    errors.detail ? errors.detail.message?.toString() : ""
+                  }
+                  style={{ minWidth: "100%" }}
+                  sx={{ mt: 2 }}
+                  id="standard-basic"
+                  label="Torre / Apto / Casa / Detalles"
+                  variant="standard"
+                />
+              )}
+            />
           </Grid>
           {/* contact section */}
           <Grid item xs={12} sx={{}}>
@@ -341,31 +374,42 @@ const CheckoutComponent = () => {
               label="315 352 19 66"
               variant="standard"
             /> */}
-            <InputMask
-              style={styles.cardInput}
-              mask="999 999 99 99"
-              maskChar=" "
-              placeholder="Número de celular"
-              className="card-input-payment"
-              {...register("phone", {
+            <Controller
+              name="phone"
+              control={control}
+              rules={{
                 required: "Este campo es obligatorio",
                 minLength: {
                   value: 13,
-                  message: "El número de tarjeta debe tener 10 caracteres",
+                  message: "El número de celular debe tener 10 caracteres",
                 },
                 maxLength: {
                   value: 13,
                   message:
-                    "El número de tarjeta no debe exceder los 10 caracteres",
+                    "El número de celular no debe exceder los 10 caracteres",
                 },
                 validate: (value) =>
                   value.replace(/\s/g, "").length === 10 ||
                   "El número de celular debe tener 10 dígitos",
-              })}
-              name="phone"
-              type="text"
-            ></InputMask>
-            <Typography color={"#d32f2f"} fontSize={"0.75rem"} textAlign={'left'}>
+              }}
+              render={({ field: { onChange, value } }) => (
+                <InputMask
+                  style={styles.cardInput}
+                  mask="999 999 99 99"
+                  maskChar=" "
+                  placeholder="Número de celular"
+                  className="card-input-payment"
+                  value={value || ""}
+                  onChange={(e) => handlePhoneChange(e, onChange)}
+                  type="text"
+                />
+              )}
+            />
+            <Typography
+              color={"#d32f2f"}
+              fontSize={"0.75rem"}
+              textAlign={"left"}
+            >
               {errors.phone ? errors.phone.message?.toString() : ""}
             </Typography>
           </Grid>
@@ -381,8 +425,14 @@ const CheckoutComponent = () => {
             >
               Forma de pago
             </Typography>
-            <FormControl sx={{ mt: 2, minWidth: "100%" }} error={!!errors.paymentSelect}>
-              <InputLabel style={{ ...style.form.label, marginLeft:'-15px' }} id="labelPayment">
+            <FormControl
+              sx={{ mt: 2, minWidth: "100%" }}
+              error={!!errors.paymentSelect}
+            >
+              <InputLabel
+                style={{ ...style.form.label, marginLeft: "-15px" }}
+                id="labelPayment"
+              >
                 Seleccionar Metodo de pago
               </InputLabel>
               <Controller
@@ -441,7 +491,12 @@ const CheckoutComponent = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={4} sx={{}} style={{ background: "#F5F5F5", position: 'relative' }}>
+        <Grid
+          item
+          xs={4}
+          sx={{}}
+          style={{ background: "#F5F5F5", position: "relative" }}
+        >
           <CartComponent
             isCheckout
             onClick={handleSubmit}
@@ -509,9 +564,9 @@ const style = {
 
 const stylesAddPayment = (errors: any, isValid: boolean) => ({
   cardInput: {
-    padding: '4px 0 5px',
-    height: '48px',
-    marginTop: '24px',
+    padding: "4px 0 5px",
+    height: "48px",
+    marginTop: "24px",
     width: "100%",
     fontFamily: "weblysleekuil",
     fontSize: "16px",
@@ -520,4 +575,4 @@ const stylesAddPayment = (errors: any, isValid: boolean) => ({
     border: "none",
     borderBottom: `1px solid ${errors.cardnumber ? "red" : "black"}`,
   },
-})
+});
