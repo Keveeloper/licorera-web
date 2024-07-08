@@ -8,8 +8,11 @@ import { selectAllPersonalInfo, selectIsWelcome } from "../../../store/modules/u
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import { getInfoThunk, getMe } from "../../../store/modules/users/actions/users.actions";
 import { useNavigate } from "react-router-dom";
+import { UserExchangeinterface } from "./types";
 
-const UserBanner = () => {
+const UserBanner = (props: UserExchangeinterface) => {
+
+    const { exchangeOpen, setExchangeOpen } = props;
 
     const user = useSelector(selectAllUser);
     const navigate = useNavigate();
@@ -34,6 +37,10 @@ const UserBanner = () => {
 
     const goToRecentOrder = ()=>{
         navigate('/recentOrder')
+    }
+
+    const handleExchange = () => {
+        setExchangeOpen(true);
     }
 
     return(
@@ -65,7 +72,7 @@ const UserBanner = () => {
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.order_quantity}</Typography>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text} onClick={goToRecentOrder}>Pedidos</Typography>
                 </Box>
-                <Box sx={styles.bannerContainer.boxRight.circle}>
+                <Box sx={styles.bannerContainer.boxRight.circle} onClick={handleExchange}>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.exchanges_quantity}</Typography>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>Canjes</Typography>
                 </Box>
@@ -132,10 +139,10 @@ const styles = {
                 border: '3px solid black',
                 borderRadius: '50%',
                 ...displayFlexColumn,
+                cursor:'pointer',
                 background: 'white',
                 text: {
                     fontFamily: 'weblysleekuisb',
-                    cursor:'pointer'
                 }
             }
         }

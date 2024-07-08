@@ -78,14 +78,14 @@ const ExchangeComponent = () => {
                 return (
                     <Grid item xs={6} key={item.id}>
                         <CardComponent
-                        style={{ padding: "25px 0px", borderRadius: "10px",  cursor: 'pointer', height:"200px"}}
+                            style={{ padding: "25px 0px", borderRadius: "10px",  cursor: 'pointer', height:"200px"}}
                         >
                         <Grid
                                 className="columnContainer"
                                 container
                                 spacing={0}
                                 style={{
-                                height:"100%"
+                                    height:"100%"
                                 }}
                                 onClick={() =>cardHandle(item)}
                             >
