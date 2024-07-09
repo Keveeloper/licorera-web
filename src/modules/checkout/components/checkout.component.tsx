@@ -33,14 +33,18 @@ import {
 } from "../../../store/modules/cart/selectors/cart.selector";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import usePaymentHook from "../../shared/hooks/paymentHook/usePaymentHook";
-import { updateOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
-import { requestUpdateOrder } from "../../../service/modules/orders/order";
+import { postOrderThunk, updateOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
+import { requestOrder, requestUpdateOrder } from "../../../service/modules/orders/order";
 import NumberFormat from "../../shared/hooks/numberFormater/NumberFormat";
 import { cartActions } from "../../../store/modules/cart";
 import { paletteColors } from "../../../paletteColors/paletteColors";
 import useCartHook from "../../shared/hooks/cartHook/useCartHook";
 import { addressActions } from "../../../store/modules/address";
 import { paymentMethodsActions } from "../../../store/modules/paymentMethods";
+import ArrowRightIcon from "./ArrowrightIcon";
+import CustomModal from "../../shared/modal/customModal";
+import WarningAlertScreen from "../../cart/alert.screens/warningAlertScreen";
+import useHelperHook from "../../shared/hooks/helper/useHelper";
 
 type disccount = {
   title?: string;
@@ -63,13 +67,19 @@ const CheckoutComponent = () => {
   }>();
   const [alertDisccount, setAlertDisccount] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
+  const [showWarningAlert, setShoWarningAlert] = useState<boolean>(false);
   const [disccountResult, setDisccountResult] = useState<disccount>();
   const [successData, setSuccessData] = useState<any>();
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [warningText, setWarningText] = useState<string>("")
+
 
   const { getAddress, updateAddressItem } = useAddressHook();
   const { getPayment } = usePaymentHook();
-  const { updatePhone } = useCartHook();
+  const { updatePhone, updateTotal, updateOrder } = useCartHook();
+  
+  const { calculateTotal } = useHelperHook();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -113,7 +123,7 @@ const CheckoutComponent = () => {
       console.log(updateOrder);
       if (updateOrder.response && updateOrder.response.success) {
         const data = updateOrder.response.data;
-        const total = parseInt(data.delivery) + parseInt(data.value);
+        const total = parseInt(data.value);
         setSuccessData({
           time: data.time,
           value: NumberFormat(total),
@@ -130,6 +140,10 @@ const CheckoutComponent = () => {
     const phone = event.target.value;
     onChange(phone); 
     updatePhone(phone);
+  };
+
+  const handleWarningClose = () => {
+    setShoWarningAlert(false);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -160,11 +174,60 @@ const CheckoutComponent = () => {
   };
 
   const goToPaymentMethods = () => {
-    navigate("/paymentMethods");
+    const {  address, paymentSelect } = getValues();
+    if(!address){
+      alert("Se debe seleccionar una Dirección Valida")
+      return
+    }
+    !paymentSelect ? postOrder() : navigate("/paymentMethods");
   };
 
   const goToHome = () => {
     navigate("/home");
+  };
+
+  const getTotal = async () => {
+    const newtotal = await calculateTotal(products);
+    if (newtotal[1]) {
+      setTotal(newtotal[0] + newtotal[1]);
+      updateTotal(newtotal[0] + newtotal[1]);
+    } else {
+      setTotal(newtotal[0]);
+      updateTotal(newtotal[0]);
+    } 
+  };
+
+  const postOrder = async () => {
+    getTotal()
+    if (products.length > 0 && total > 0) {
+      const resultado = products.reduce((acumulador: any, producto: any) => {
+        if (acumulador !== "") {
+          acumulador += ",";
+        }
+        acumulador += `${producto.id}:${producto.quantity}`;
+        return acumulador;
+      }, "");
+      const request: requestOrder = {
+        products: resultado,
+        amount: total,
+        instructions: "test",
+        source: "Web",
+      };
+      const Payment = await dispatch(
+        postOrderThunk({ reqData: request })
+      ).unwrap();
+      if (Payment.success && Payment.response.success) {
+        updateOrder(Payment.response.data.id);
+        navigate("/paymentMethods");
+      }else if(Payment.success && !Payment.response.success){
+        // if(Payment.response.error_code === 401){
+        //   setOpenLogin(true)
+        // }
+      }else{
+        setWarningText("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
+        setShoWarningAlert(true)
+      }
+    }
   };
 
   const getLocations = async () => {
@@ -433,7 +496,7 @@ const CheckoutComponent = () => {
                 style={{ ...style.form.label, marginLeft: "-15px" }}
                 id="labelPayment"
               >
-                Seleccionar Metodo de pago
+                Selecciona un método de pago
               </InputLabel>
               <Controller
                 name="paymentSelect"
@@ -450,6 +513,7 @@ const CheckoutComponent = () => {
                     placeholder="Seleccionar Metodo de pago"
                     onClick={goToPaymentMethods}
                     readOnly
+                    IconComponent={ArrowRightIcon}
                   >
                     {paymentMethods.map((method) => (
                       <MenuItem key={method.value} value={method.value}>
@@ -505,6 +569,19 @@ const CheckoutComponent = () => {
           />
         </Grid>
       </Grid>
+       {/* Modal Warning*/}
+       <CustomModal
+        modalStyle="cartModal"
+        modalContentStyle="cartModalContent"
+        open={showWarningAlert}
+        onClose={handleWarningClose}
+      >
+        <WarningAlertScreen
+          title="INFORMACIÓN"
+          Text={warningText}
+          onClose={handleWarningClose}
+        />
+      </CustomModal>
       {/* modal to disccount ok */}
       <ModalAlertComponent
         handleClose={alertDiscountClose}

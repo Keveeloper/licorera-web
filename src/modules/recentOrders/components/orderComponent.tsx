@@ -189,7 +189,7 @@ const OrderComponent: React.FC<props> = () => {
           >
             <div style={{ padding: "20px", width: '100%', maxWidth:'550px'}}>
               <Typography style={styles.footer.title}>
-                Obtienes por tu compra {order?.points} J
+                Obtienes por tu compra {order?.earned_points} J
               </Typography>
               <Grid
                 container

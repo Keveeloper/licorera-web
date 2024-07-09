@@ -123,7 +123,7 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
     ).unwrap();
     
     if (Payment.success) {
-      if (Payment?.response?.ref_payco) {
+      if (Payment?.response?.ref_payco && Payment.response.estado === "Aceptada") {
         setShowSuccessAlert(true)
         const payment:PaymentSelected = {
           type: "Tarjeta crédito",
