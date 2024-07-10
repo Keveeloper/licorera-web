@@ -49,6 +49,8 @@ const useCartHook = () => {
   };
 
   const updateTotal = (total: number) => {
+    console.log(total);
+    
     dispatch(cartActions.setCartTotal(total));
   };
 

@@ -36,6 +36,8 @@ const SuggestionsComponent: React.FC<props> = () => {
     const request = {
       title,
       suggest: message,
+      email,
+      name
     };
     postSuggestionApi(request)
       .then((res) => {
