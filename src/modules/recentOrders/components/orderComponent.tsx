@@ -259,7 +259,7 @@ const OrderComponent: React.FC<props> = () => {
               </Grid>
               <Typography style={styles.footer.text} sx={{mb:2}}>
                 {`Domicilio gratis por compras mayores a${" "} 
-                  ${CurrencyFormat(Info?.data?.minimumOrderValueFree)} IVA incluido.`}
+                  ${CurrencyFormat(Info?.data?.minimumOrderAmount)} IVA incluido.`}
               </Typography>
 
               <ButtonComponent

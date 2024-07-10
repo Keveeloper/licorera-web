@@ -425,7 +425,7 @@ const CartComponent: React.FC<customProps> = ({
         <Typography style={style.footer.text}>
           {isCurrentOrder ? 'Tu pedido está en camino. Tienes 5 minutos para cancelarlo'
           : `Domicilio gratis por compras mayores a${" "}
-          ${CurrencyFormat(Info?.data?.minimumOrderValueFree)} IVA incluido.`
+          ${CurrencyFormat(Info?.data?.minimumOrderAmount)} IVA incluido.`
          }
         </Typography>
         {isCheckout ? (
