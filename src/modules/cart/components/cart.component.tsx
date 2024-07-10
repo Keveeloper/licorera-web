@@ -12,7 +12,7 @@ import {
   weblysleekFontStyle,
 } from "../../shared/recursiveStyles/RecursiveStyles";
 import ButtonComponent from "../../shared/button/button.component";
-import { selectAllInfo } from "../../../store/modules/users/selectors/users.selector";
+import { selectAllInfo, selectToken } from "../../../store/modules/users/selectors/users.selector";
 import CustomModal from "../../shared/modal/customModal";
 import WarningAlertScreen from "../alert.screens/warningAlertScreen";
 import DeleteAlertScreen from "../alert.screens/deleteAlertScreen";
@@ -28,7 +28,7 @@ import CancelAlertScreen from "../alert.screens/cancelAlertScreen";
 import LoginScreen from "../../user/login.screen";
 import { addressActions } from "../../../store/modules/address";
 import { paymentMethodsActions } from "../../../store/modules/paymentMethods";
-import { cartActions } from "../../../store/modules/cart";
+import { cartActions, selectAllCart } from "../../../store/modules/cart";
 
 interface customProps {
   isCheckout?: boolean;
@@ -49,6 +49,9 @@ const CartComponent: React.FC<customProps> = ({
 }) => {
   const user = useSelector(selectAllUser);
   const Info = useSelector(selectAllInfo);
+  const cartStore = useSelector(selectAllCart);
+  const token = useSelector(selectToken);
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -108,38 +111,45 @@ const CartComponent: React.FC<customProps> = ({
   };
 
   const postOrder = async () => {
-    if (products.length > 0) {
-      const resultado = products.reduce((acumulador: any, producto: any) => {
-        if (acumulador !== "") {
-          acumulador += ",";
-        }
-        acumulador += `${producto.id}:${producto.quantity}`;
-        return acumulador;
-      }, "");
-      const request: requestOrder = {
-        products: resultado,
-        amount: total,
-        instructions: "test",
-        source: "Web",
-      };
-      const Payment = await dispatch(
-        postOrderThunk({ reqData: request })
-      ).unwrap();
-      if (Payment.success && Payment.response.success) {
-        dispatch(cartActions.clearPhone());
-        dispatch(addressActions.clearAddressSelected())
-        dispatch(paymentMethodsActions.clearPaymentSelected())
-        updateOrder(Payment.response.data.id);
-        navigate("/checkout");
-      }else if(Payment.success && !Payment.response.success){
-        if(Payment.response.error_code === 401){
-          setOpenLogin(true)
-        }
-      }else{
-        setWarningText("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
-        setShoWarningAlert(true)
-      }
+    // if (products.length > 0) {
+    //   const resultado = products.reduce((acumulador: any, producto: any) => {
+    //     if (acumulador !== "") {
+    //       acumulador += ",";
+    //     }
+    //     acumulador += `${producto.id}:${producto.quantity}`;
+    //     return acumulador;
+    //   }, "");
+    //   const request: requestOrder = {
+    //     products: resultado,
+    //     amount: total,
+    //     instructions: "test",
+    //     source: "Web",
+    //   };
+    //   const Payment = await dispatch(
+    //     postOrderThunk({ reqData: request })
+    //   ).unwrap();
+    //   if (Payment.success && Payment.response.success) {
+    //     dispatch(cartActions.clearPhone());
+    //     dispatch(addressActions.clearAddressSelected())
+    //     dispatch(paymentMethodsActions.clearPaymentSelected())
+    //     updateOrder(Payment.response.data.id);
+    //     navigate("/checkout");
+    //   }else if(Payment.success && !Payment.response.success){
+    //     if(Payment.response.error_code === 401){
+    //       setOpenLogin(true)
+    //     }
+    //   }else{
+    //     setWarningText("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
+    //     setShoWarningAlert(true)
+    //   }
+    // }
+    if(!token){
+        setOpenLogin(true)
+        return;
     }
+    dispatch(addressActions.clearAddressSelected())
+    dispatch(paymentMethodsActions.clearPaymentSelected())
+    navigate("/checkout");
   };
 
   const handleDeleteClose = () => {
@@ -168,14 +178,16 @@ const CartComponent: React.FC<customProps> = ({
     const newtotal = await calculateTotal(products);
     setSubTotal(newtotal[0]);
     setDelivery(newtotal[1]);
-    console.log(newtotal[1]);
+
     if (newtotal[1]) {
       setTotal(newtotal[0] + newtotal[1]);
+      updateTotal(newtotal[0] + newtotal[1]);
     } else {
       setTotal(newtotal[0]);
+      updateTotal(newtotal[0]);
     }
     setPoints(newtotal[0] / Info?.data?.minimumAmountForPoints || 0);
-    updateTotal(newtotal[0] + newtotal[1]);
+   
   };
 
   const cancelCurrentOrder = async ()=>{
@@ -214,13 +226,21 @@ const CartComponent: React.FC<customProps> = ({
                 spacing={0}
                 style={{}}
               >
-                <Grid item xs={3}>
+                <Grid 
+                  item 
+                  xs={3} 
+                  style={{
+                    display: 'flex',
+                    textAlign: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }} 
+                >
                   <img
                     src={item.image}
                     alt=""
-                    width={100}
-                    height={100}
-                    style={{ marginLeft: "-20px" }}
+                    style={{width: '100%',
+                      height: 'auto' }}
                   />
                 </Grid>
                 <Grid
@@ -230,6 +250,7 @@ const CartComponent: React.FC<customProps> = ({
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
+                    padding:'0 5%'
                   }}
                 >
                   <Typography style={style.cards.title}>{item.name}</Typography>
@@ -242,7 +263,7 @@ const CartComponent: React.FC<customProps> = ({
                   <img
                     style={style.cards.close}
                     src="/icons/vector_close.png"
-                    onClick={() => handleDeleteOpen(item)}
+                    onClick={() => !cartStore.order && handleDeleteOpen(item)}
                   />
                   <Typography
                     style={style.cards.price}
@@ -254,7 +275,7 @@ const CartComponent: React.FC<customProps> = ({
                   </Typography>
                   <div className="contentIcons">
                     <FaMinusCircle
-                      onClick={() => onMinus(item)}
+                      onClick={() => !cartStore.order && onMinus(item)}
                       style={{
                         color: "#fdbd00",
                         fontSize: "20px",
@@ -269,7 +290,7 @@ const CartComponent: React.FC<customProps> = ({
                       {item.quantity}{" "}
                     </span>
                     <FaPlusCircle
-                      onClick={() => onPlus(item)}
+                      onClick={() => !cartStore.order && onPlus(item)}
                       style={{
                         color: "#fdbd00",
                         fontSize: "20px",

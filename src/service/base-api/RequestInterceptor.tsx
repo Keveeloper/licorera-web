@@ -61,13 +61,13 @@ const RequestInterceptor: FC<RequestInterceptorProps> = ({ children }) => {
           }
         } catch (refreshError) {
           console.error("Error al refrescar el token:", refreshError);
-          await new Promise(reject => setTimeout(reject, 1000));
+          await new Promise(reject => setTimeout(reject, 1500));
           return Promise.reject(error);
         } finally {
           isRefreshing = false;
         }
       } else {
-        await new Promise(resolve => setTimeout(resolve, 100)); 
+        await new Promise(resolve => setTimeout(resolve, 500)); 
         if(error.config){
           return axios(error.config); 
         }
