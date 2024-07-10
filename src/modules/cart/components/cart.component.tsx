@@ -226,13 +226,21 @@ const CartComponent: React.FC<customProps> = ({
                 spacing={0}
                 style={{}}
               >
-                <Grid item xs={3}>
+                <Grid 
+                  item 
+                  xs={3} 
+                  style={{
+                    display: 'flex',
+                    textAlign: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }} 
+                >
                   <img
                     src={item.image}
                     alt=""
-                    width={100}
-                    height={100}
-                    style={{ marginLeft: "-20px" }}
+                    style={{width: '100%',
+                      height: 'auto' }}
                   />
                 </Grid>
                 <Grid
@@ -242,6 +250,7 @@ const CartComponent: React.FC<customProps> = ({
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
+                    padding:'0 5%'
                   }}
                 >
                   <Typography style={style.cards.title}>{item.name}</Typography>

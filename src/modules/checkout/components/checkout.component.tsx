@@ -45,6 +45,7 @@ import ArrowRightIcon from "./ArrowrightIcon";
 import CustomModal from "../../shared/modal/customModal";
 import WarningAlertScreen from "../../cart/alert.screens/warningAlertScreen";
 import useHelperHook from "../../shared/hooks/helper/useHelper";
+import Loader from "../../shared/Loader/components/Loader";
 
 type disccount = {
   title?: string;
@@ -73,6 +74,7 @@ const CheckoutComponent = () => {
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [warningText, setWarningText] = useState<string>("")
+  const [loading, setLoading] = useState<boolean>(false);
 
 
   const { getAddress, updateAddressItem } = useAddressHook();
@@ -198,8 +200,9 @@ const CheckoutComponent = () => {
   };
 
   const postOrder = async () => {
+    setLoading(true)
     getTotal()
-    if (products.length > 0 && total > 0) {
+    if (products.length > 0 && cartStore.total > 0) {
       const resultado = products.reduce((acumulador: any, producto: any) => {
         if (acumulador !== "") {
           acumulador += ",";
@@ -217,16 +220,18 @@ const CheckoutComponent = () => {
         postOrderThunk({ reqData: request })
       ).unwrap();
       if (Payment.success && Payment.response.success) {
+        setLoading(false)
         updateOrder(Payment.response.data.id);
         navigate("/paymentMethods");
       }else if(Payment.success && !Payment.response.success){
-        // if(Payment.response.error_code === 401){
-        //   setOpenLogin(true)
-        // }
+        setLoading(false)
       }else{
+        setLoading(false)
         setWarningText("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
         setShoWarningAlert(true)
       }
+    }else{
+      setLoading(false)
     }
   };
 
@@ -310,7 +315,10 @@ const CheckoutComponent = () => {
   }, []);
 
   const styles = stylesAddPayment(errors, isValid);
-
+  if (loading) {
+        return <Loader screenLoader={true}/>;
+  }
+  
   return (
     <Box className="">
       <Grid container spacing={0} style={{ textAlign: "center" }}>

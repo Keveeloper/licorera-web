@@ -52,6 +52,9 @@ export const cartSlice = createSlice({
     clearPhone: ( state: CartState,) => {
       state.state.phone = ''
     },
+    clearOrder: ( state: CartState,) => {
+      state.state.order = 0
+    },
   },
   extraReducers: (builder) => {
     // builder

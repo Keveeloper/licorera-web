@@ -21,6 +21,7 @@ import Cart from "../../../../../cart/cart.screen";
 import { selectCartProducts } from "../../../../../../store/modules/cart/selectors/cart.selector";
 import { useNavigate } from "react-router-dom";
 import ModalAlertComponent from "../../../../modal/modalAlert.component";
+import { cartActions } from "../../../../../../store/modules/cart";
 
 const  Icons = () => {
 
@@ -54,6 +55,7 @@ const  Icons = () => {
     }
 
     const toggleDrawer = (open: boolean) => {
+        dispatch(cartActions.clearOrder());
         setIsDrawerOpen(open);
     };
 
