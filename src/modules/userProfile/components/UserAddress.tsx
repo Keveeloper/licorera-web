@@ -119,7 +119,7 @@ const UserAddress = () => {
             ))
             :
               <Box sx={{width: '100%', height: '100%', ...displayFlexColumn}}>
-                <Typography sx={{fontFamily: 'HudsonNYSerif'}}>aun no tienes tarjetas guardadas</Typography>
+                <Typography sx={{fontFamily: 'HudsonNYSerif'}}>aun no tienes direcciones guardadas</Typography>
                 <Typography sx={{fontFamily: 'weblysleekuil'}}>agrega una para continuar</Typography>
               </Box>
             }
