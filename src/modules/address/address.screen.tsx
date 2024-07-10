@@ -9,7 +9,7 @@ import AddressSearch from "./components/address.search";
 import AddressMap from "./components/address.map";
 import AddressForm from "./components/address.form";
 import './components/address.css'
-import { Route, Routes } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 
 interface props {}
   const AddressScreen: React.FC<props> = () => {
@@ -17,7 +17,9 @@ interface props {}
   return (
     <>
       <div style={styles.img} className="mt-20">
-        <img src="/images/whiteLogo.png" alt="" width={200} />
+        <Link to={'/'}>
+          <img src="/images/whiteLogo.png" alt="" width={200} />
+        </Link>
       </div>
       <Routes>
         <Route path="/" element={<AddressSearch />} />
