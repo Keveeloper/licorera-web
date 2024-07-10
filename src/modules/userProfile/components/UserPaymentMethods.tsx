@@ -22,6 +22,7 @@ import DuesModal from "./DuesModal";
 import { selectAllCart } from "../../../store/modules/cart";
 import { useNavigate } from "react-router-dom";
 import usePaymentHook, { PaymentSelected } from "../../shared/hooks/paymentHook/usePaymentHook";
+import Loader from "../../shared/Loader/components/Loader";
 
 const UserPaymentMethods = (props: AddPaymentInterface) => {
   const { setPaymentMethodsOpen, isChekout } = props;
@@ -37,32 +38,47 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
   const paymentMethodsRedux = useSelector(selectAllPaymentMethods);
   const cartStore = useSelector(selectAllCart);
   const user = useSelector(selectAllUser);
-  
-
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
   const [dues, setDues] = useState<number>(0);
   const [showModalDue, setShowModalDue] = useState<boolean>(false);
   const [item, setItem] = useState<any>({});
   const [warningAlert, setwarningAlert] = useState<boolean>(false);
-
-  const [itemToRemove, setItemToRemove] = useState<DeletePaymentMethod>({
-    token: "",
-    franchise: "",
-    mask: "",
-  });
-
+  const [itemToRemove, setItemToRemove] = useState<DeletePaymentMethod | null>(null);
+  const [newItem, setNewItem] = useState<DeletePaymentMethod | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  
+  const deletePayment = async () => {
+    if (itemToRemove) {
+      await dispatch(deletePaymentMethodsThunk({ reqData: itemToRemove })).unwrap().then((response) => {
+        console.log('removed: ', response.response.success);
+        if (response.response.success) {
+          dispatch(getPaymentMethodsThunk()).unwrap().then((res) => {            
+            if(res.success){
+              setItemToRemove(null);
+              setLoading(false);
+            }
+          });
+        }
+      });
+    }
+  }
+  
   useEffect(() => {
-    if (
-      itemToRemove.token !== "" &&
-      itemToRemove.franchise !== "" &&
-      itemToRemove.mask !== ""
-    ) {
-      dispatch(deletePaymentMethodsThunk({ reqData: itemToRemove })).unwrap();
+    if (itemToRemove) {
+      deletePayment();
+    }else {
+      setLoading(false);
     }
   }, [itemToRemove]);
 
-  const handleShowAlert = () => {
+  const handleShowAlert = (item: DeletePaymentMethod) => {
+    const newItemToRemove = {
+      token: item.token,
+      franchise: item.franchise,
+      mask: item.mask,
+    };
+    setNewItem(newItemToRemove);
     setShowAlert(true);
   };
 
@@ -76,13 +92,18 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
     setShowModalDue(true);
   };
 
-  const handleRemove = (item: DeletePaymentMethod) => {
-    const newItemToRemove = {
-      token: item.token,
-      franchise: item.franchise,
-      mask: item.mask,
-    };
-    setItemToRemove(newItemToRemove);
+  // const handleRemove = (item: DeletePaymentMethod) => {
+  const handleRemove = () => {
+    console.log(newItem);
+    
+    // const newItemToRemove = {
+    //   token: item.token,
+    //   franchise: item.franchise,
+    //   mask: item.mask,
+    // };
+    setLoading(true);
+    setItemToRemove(newItem);
+    setShowAlert(false);
   };
 
   useEffect(() => {
@@ -144,6 +165,14 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
     navigate("/checkout");
   };
 
+  if (loading) {
+    return (
+        
+            <Loader screenLoader={false}/>
+        
+    );
+}
+
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
       <Box
@@ -188,29 +217,31 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
                 </Typography>
               </Box>
               {!isChekout && (
-                <figure
-                  style={{ width: "10%", height: "100%", ...displayFlex }}
-                >
-                  {/* <img style={{height: '40%'}} src="/icons/trash.png" alt="credit card color icon" onClick={(() => handleRemove(item))}/> */}
-                  <img
-                    style={{ height: "40%", cursor: "pointer" }}
-                    src="/icons/trash.png"
-                    alt="credit card color icon"
-                    onClick={handleShowAlert}
+                <>
+                  <figure
+                    style={{ width: "10%", height: "100%", ...displayFlex }}
+                  >
+                    {/* <img style={{height: '40%'}} src="/icons/trash.png" alt="credit card color icon" onClick={(() => handleRemove(item))}/> */}
+                    <img
+                      style={{ height: "40%", cursor: "pointer" }}
+                      src="/icons/trash.png"
+                      alt="credit card color icon"
+                      onClick={() => handleShowAlert(item)}
+                    />
+                  </figure>
+                  <ModalAlertComponent
+                    handleClose={handleAlertClose}
+                    handleSave={() => handleRemove()}
+                    open={showAlert}
+                    isCancellButton={true}
+                    data={{
+                      title: newItem?.mask,
+                      content: `¿Seguro que quieres eliminar esta tarjeta?`,
+                      img: `/icons/alert.png`,
+                    }}
                   />
-                </figure>
+                </>
               )}
-              <ModalAlertComponent
-                handleClose={handleAlertClose}
-                handleSave={() => handleRemove(item)}
-                open={showAlert}
-                isCancellButton={true}
-                data={{
-                  title: item.mask,
-                  content: `¿Seguro que quieres eliminar esta tarjeta?`,
-                  img: `/icons/alert.png`,
-                }}
-              />
             </div>
           ))
         ) : (

@@ -581,9 +581,9 @@ const stylesAddPayment = (errors: any, isValid: boolean) => ({
       color: "white !important",
       border: "none !important",
       height: "60px",
-      // '&:hover': {
-      //     background: `${edit ? paletteColors.gold : 'transparent'}`,
-      // },
+      '&:hover': {
+          background: paletteColors.gold,
+      },
     },
   },
   checkBox: {

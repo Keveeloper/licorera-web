@@ -34,7 +34,7 @@ const UserContent = (props: UserExchangeinterface) => {
     const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(false);
 
 
-    const styles = stylesUserContent(value, paymentMethodsOpen);
+    const styles = stylesUserContent(value, paymentMethodsOpen, exchangeOpen);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -99,11 +99,12 @@ const UserContent = (props: UserExchangeinterface) => {
 
 }
 
-const stylesUserContent = (value: string, paymentMethodsOpen: boolean) => ({
+const stylesUserContent = (value: string, paymentMethodsOpen: boolean, exchangeOpen: boolean) => ({
     contentContainer: {
         margin: '90px auto',
         width: '60%',
-        height: value === '2' || value === '3' && !paymentMethodsOpen ? '500px' : '',
+        // height: (value === '2' || value === '3') && (!paymentMethodsOpen || !exchangeOpen) ? '500px' : '',
+        height: paymentMethodsOpen || exchangeOpen ? '' : '500px',
         // background: 'orange'
     }
 });
