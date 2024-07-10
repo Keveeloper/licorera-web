@@ -11,6 +11,7 @@ import { selectCartProducts } from "../../store/modules/cart/selectors/cart.sele
 import CartComponent from "./components/cart.component";
 import { getCurrentOrderThunk } from "../../store/modules/cart/actions/cart.actions";
 import { useAppDispatch } from "../../store/store";
+import LoginScreen from "../user/login.screen";
 
 interface cartInterface {
   open: boolean;
@@ -26,6 +27,8 @@ const Cart: React.FC<cartInterface> = ({
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [products, setProducts] = useState<any>([]);
   const [currentOrder, setCurrentOrder] = useState<any>({});
+  const [openLogin, setOpenLogin] = useState(false);
+
   const productsSelector = useSelector(selectCartProducts);
 
   const dispatch = useAppDispatch();
@@ -38,9 +41,14 @@ const Cart: React.FC<cartInterface> = ({
       return;
     }
     if (currentOrders.success && currentOrders.response) {
+      if(!currentOrders.response.success){
+        setIsEmpty(true)
+        setOpenLogin(true)
+        return;
+      }
       setIsEmpty(false)
-      const responseProducts = currentOrders.response.data.products;
-      const mappedData = responseProducts.map((item: any) => ({
+      const responseProducts = currentOrders?.response?.data?.products;
+      const mappedData = responseProducts?.map((item: any) => ({
         quantity: item.quantity,
         points: Number(item.points),
         price: Number(item.price),
@@ -51,14 +59,22 @@ const Cart: React.FC<cartInterface> = ({
         category_id: item.store.product.category_id,
         presentation: item.store.presentation,
       }));
-      setCurrentOrder({
-        total: currentOrders.response.data.total,
-        amount: currentOrders.response.data.amount,
-        delivery: currentOrders.response.data.delivery_value
-      });
+      if(currentOrders?.response?.data){
+        setCurrentOrder({
+          total: currentOrders.response.data.total,
+          amount: currentOrders.response.data.amount,
+          delivery: currentOrders.response.data.delivery_value
+        });
+      }
       setProducts(mappedData);
       console.log(products);
+    }else{
+      
     }
+  };
+
+  const handleCloseLogin= (isOpen: boolean) => {
+    setOpenLogin(isOpen);
   };
 
   useEffect(() => {
@@ -71,7 +87,7 @@ const Cart: React.FC<cartInterface> = ({
       setProducts(productsSelector);
       setIsEmpty(false);
     }
-  }, [productsSelector, isCurrentOrder]);
+  }, [productsSelector, isCurrentOrder, open]);
 
   return (
     <DrawerComponent open={open} anchor="right" toggleDrawer={toggleDrawer}>
@@ -100,6 +116,7 @@ const Cart: React.FC<cartInterface> = ({
           <CartComponent products={products} isCurrentOrder={isCurrentOrder} currentOrder={currentOrder}/>
         )}
       </Box>
+      <LoginScreen modalOpen={openLogin}  handleClose={()=>handleCloseLogin(false)}/>
     </DrawerComponent>
   );
 };

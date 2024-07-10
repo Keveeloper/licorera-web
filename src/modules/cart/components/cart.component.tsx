@@ -1,6 +1,5 @@
 import { Box, Divider, Grid, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import { selectCartProducts } from "../../../store/modules/cart/selectors/cart.selector";
 import CardComponent from "../../shared/card/card.component";
 import { CurrencyFormat, JotaFormat } from "../../../utils/helpers";
 import { useEffect, useState } from "react";
@@ -13,7 +12,7 @@ import {
   weblysleekFontStyle,
 } from "../../shared/recursiveStyles/RecursiveStyles";
 import ButtonComponent from "../../shared/button/button.component";
-import { selectAllInfo } from "../../../store/modules/users/selectors/users.selector";
+import { selectAllInfo, selectToken } from "../../../store/modules/users/selectors/users.selector";
 import CustomModal from "../../shared/modal/customModal";
 import WarningAlertScreen from "../alert.screens/warningAlertScreen";
 import DeleteAlertScreen from "../alert.screens/deleteAlertScreen";
@@ -26,6 +25,10 @@ import { useAppDispatch } from "../../../store/store";
 import { cancelCurrentOrderThunk, postOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
 import { requestOrder } from "../../../service/modules/orders/order";
 import CancelAlertScreen from "../alert.screens/cancelAlertScreen";
+import LoginScreen from "../../user/login.screen";
+import { addressActions } from "../../../store/modules/address";
+import { paymentMethodsActions } from "../../../store/modules/paymentMethods";
+import { cartActions, selectAllCart } from "../../../store/modules/cart";
 
 interface customProps {
   isCheckout?: boolean;
@@ -46,6 +49,9 @@ const CartComponent: React.FC<customProps> = ({
 }) => {
   const user = useSelector(selectAllUser);
   const Info = useSelector(selectAllInfo);
+  const cartStore = useSelector(selectAllCart);
+  const token = useSelector(selectToken);
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -63,6 +69,8 @@ const CartComponent: React.FC<customProps> = ({
   const [showCancelCurrentOrder, setShowCancelCurrentOrder] = useState<boolean>(false);
   const [showSuccessCurrentOrder, setShowSuccessCurrentOrder] = useState<boolean>(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
+  const [warningText, setWarningText] = useState<string>("No tienes suficientes puntos para este canje. Compra y acumula más puntos.")
+  const [openLogin, setOpenLogin] = useState(false);
 
   const onMinus = (product: Product) => {
     if (product.quantity > 1) {
@@ -84,6 +92,10 @@ const CartComponent: React.FC<customProps> = ({
     updateCartItem(updatedProduct);
   };
 
+  const handleCloseLogin= (isOpen: boolean) => {
+    setOpenLogin(isOpen);
+  };
+
   const validatePoints = (points: number) => {
     if (user.points >= points) return true;
     else return false;
@@ -99,28 +111,45 @@ const CartComponent: React.FC<customProps> = ({
   };
 
   const postOrder = async () => {
-    if (products.length > 0) {
-      const resultado = products.reduce((acumulador: any, producto: any) => {
-        if (acumulador !== "") {
-          acumulador += ",";
-        }
-        acumulador += `${producto.id}:${producto.quantity}`;
-        return acumulador;
-      }, "");
-      const request: requestOrder = {
-        products: resultado,
-        amount: total,
-        instructions: "test",
-        source: "Web",
-      };
-      const Payment = await dispatch(
-        postOrderThunk({ reqData: request })
-      ).unwrap();
-      if (Payment.success && Payment.response.success) {
-        updateOrder(Payment.response.data.id);
-        navigate("/checkout");
-      }
+    // if (products.length > 0) {
+    //   const resultado = products.reduce((acumulador: any, producto: any) => {
+    //     if (acumulador !== "") {
+    //       acumulador += ",";
+    //     }
+    //     acumulador += `${producto.id}:${producto.quantity}`;
+    //     return acumulador;
+    //   }, "");
+    //   const request: requestOrder = {
+    //     products: resultado,
+    //     amount: total,
+    //     instructions: "test",
+    //     source: "Web",
+    //   };
+    //   const Payment = await dispatch(
+    //     postOrderThunk({ reqData: request })
+    //   ).unwrap();
+    //   if (Payment.success && Payment.response.success) {
+    //     dispatch(cartActions.clearPhone());
+    //     dispatch(addressActions.clearAddressSelected())
+    //     dispatch(paymentMethodsActions.clearPaymentSelected())
+    //     updateOrder(Payment.response.data.id);
+    //     navigate("/checkout");
+    //   }else if(Payment.success && !Payment.response.success){
+    //     if(Payment.response.error_code === 401){
+    //       setOpenLogin(true)
+    //     }
+    //   }else{
+    //     setWarningText("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
+    //     setShoWarningAlert(true)
+    //   }
+    // }
+    if(!token){
+        setOpenLogin(true)
+        return;
     }
+    dispatch(addressActions.clearAddressSelected())
+    dispatch(paymentMethodsActions.clearPaymentSelected())
+    navigate("/checkout");
   };
 
   const handleDeleteClose = () => {
@@ -139,7 +168,6 @@ const CartComponent: React.FC<customProps> = ({
     setShowSuccessCurrentOrder(false);
     navigate("/home");
   };
-  
 
   const handleDeleteOpen = (item: Product) => {
     setProduct(item);
@@ -150,14 +178,16 @@ const CartComponent: React.FC<customProps> = ({
     const newtotal = await calculateTotal(products);
     setSubTotal(newtotal[0]);
     setDelivery(newtotal[1]);
-    console.log(newtotal[1]);
+
     if (newtotal[1]) {
       setTotal(newtotal[0] + newtotal[1]);
+      updateTotal(newtotal[0] + newtotal[1]);
     } else {
       setTotal(newtotal[0]);
+      updateTotal(newtotal[0]);
     }
     setPoints(newtotal[0] / Info?.data?.minimumAmountForPoints || 0);
-    updateTotal(newtotal[0]);
+   
   };
 
   const cancelCurrentOrder = async ()=>{
@@ -180,7 +210,7 @@ const CartComponent: React.FC<customProps> = ({
        {isCurrentOrder ? 'PEDIDO EN CURSO': 'TU CARRITO'} 
       </Typography>
       <div style={{ padding: "20px" }}>
-        {products.map((item: any) => {
+        {products?.map((item: any) => {
           return (
             <CardComponent
               key={item.id}
@@ -196,13 +226,21 @@ const CartComponent: React.FC<customProps> = ({
                 spacing={0}
                 style={{}}
               >
-                <Grid item xs={3}>
+                <Grid 
+                  item 
+                  xs={3} 
+                  style={{
+                    display: 'flex',
+                    textAlign: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }} 
+                >
                   <img
                     src={item.image}
                     alt=""
-                    width={100}
-                    height={100}
-                    style={{ marginLeft: "-20px" }}
+                    style={{width: '100%',
+                      height: 'auto' }}
                   />
                 </Grid>
                 <Grid
@@ -212,6 +250,7 @@ const CartComponent: React.FC<customProps> = ({
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
+                    padding:'0 5%'
                   }}
                 >
                   <Typography style={style.cards.title}>{item.name}</Typography>
@@ -224,7 +263,7 @@ const CartComponent: React.FC<customProps> = ({
                   <img
                     style={style.cards.close}
                     src="/icons/vector_close.png"
-                    onClick={() => handleDeleteOpen(item)}
+                    onClick={() => !cartStore.order && handleDeleteOpen(item)}
                   />
                   <Typography
                     style={style.cards.price}
@@ -236,7 +275,7 @@ const CartComponent: React.FC<customProps> = ({
                   </Typography>
                   <div className="contentIcons">
                     <FaMinusCircle
-                      onClick={() => onMinus(item)}
+                      onClick={() => !cartStore.order && onMinus(item)}
                       style={{
                         color: "#fdbd00",
                         fontSize: "20px",
@@ -251,7 +290,7 @@ const CartComponent: React.FC<customProps> = ({
                       {item.quantity}{" "}
                     </span>
                     <FaPlusCircle
-                      onClick={() => onPlus(item)}
+                      onClick={() => !cartStore.order && onPlus(item)}
                       style={{
                         color: "#fdbd00",
                         fontSize: "20px",
@@ -443,7 +482,7 @@ const CartComponent: React.FC<customProps> = ({
       >
         <WarningAlertScreen
           title="INFORMACIÓN"
-          Text="No tienes suficientes puntos para este canje. Compra y acumula más puntos."
+          Text={warningText}
           onClose={handleWarningClose}
         />
       </CustomModal>
@@ -479,6 +518,7 @@ const CartComponent: React.FC<customProps> = ({
           isCheck
         />
       </CustomModal>
+      <LoginScreen modalOpen={openLogin}  handleClose={()=>handleCloseLogin(false)}/>
     </>
   );
 };

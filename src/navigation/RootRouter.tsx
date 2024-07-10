@@ -42,6 +42,22 @@ const PaymentMethods = React.lazy(
    () => import("../modules/paymentMethods/paymentMethods.screen")
 );
 
+const Suggestions = React.lazy(
+  () => import("../modules/suggestions/suggestions")
+);
+
+const RemoveUserData = React.lazy(
+  () => import("../modules/removeUserData/removeUserData")
+);
+
+const CreateAccount = React.lazy(
+  () => import("../modules/createAccount/createAccount")
+);
+
+const RecentOrder = React.lazy(
+  () => import("../modules/recentOrders/RecentOrderScreen")
+);
+
 const RootRouter = () => {
   return (
     <Routes>
@@ -71,7 +87,7 @@ const RootRouter = () => {
         }
       />
       <Route
-        path="/store"
+        path="/store/:id?"
         element={
           <React.Suspense fallback={<Loader screenLoader={true} />}>
             <StoreScreen />
@@ -144,13 +160,48 @@ const RootRouter = () => {
         }
       />
       <Route
-        path="/paymentMethods"
+        path="/paymentMethods" 
         element={
           <React.Suspense fallback={<Loader screenLoader={true} />}>
             <PaymentMethods />
           </React.Suspense>
         }
+      >
+         <Route path=":id" element={<PaymentMethods />} />
+      </Route>
+      <Route
+        path="/suggestions"
+        element={
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
+            <Suggestions />
+          </React.Suspense>
+        }
       />
+      <Route
+        path="/removeUserData"
+        element={
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
+            <RemoveUserData />
+          </React.Suspense>
+        }
+      />
+      <Route
+        path="/createAccount"
+        element={
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
+            <CreateAccount />
+          </React.Suspense>
+        }
+      />
+      <Route
+        path="/recentOrder/*"
+        element={
+          <React.Suspense fallback={<Loader screenLoader={true} />}>
+            <RecentOrder />
+          </React.Suspense>
+        }
+      />
+      
       
       <Route path="*" element={<h1>Not found</h1>} />
     </Routes>

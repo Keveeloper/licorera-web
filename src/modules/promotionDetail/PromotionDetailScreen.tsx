@@ -36,7 +36,7 @@ const PromotionDetailScreen = () => {
         const newProduct: Product = {
           quantity: count,
           points: 0,
-          price: productDetail?.price,
+          price: productDetail?.price.replace(".",""),
           name: productDetail?.name || "",
           id: productDetail?.id || 0,
           image: productDetail?.image || "",

@@ -30,7 +30,7 @@ const SwiperCategories = (props: swiperCategoriesType) => {
         const categoryId = {
             id
         }
-        navigate("/store", { state: { categoryId } });
+        navigate(`/store/${categoryId.id}`);
     };
 
     return(

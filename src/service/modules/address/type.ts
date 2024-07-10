@@ -12,3 +12,7 @@ export interface DeliveryRequest {
     longitude : number;
     orderValue : number;
 }
+
+export interface FavoriteRequest {
+    id: number;
+}

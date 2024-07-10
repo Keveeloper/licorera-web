@@ -1,22 +1,31 @@
 import { useState } from "react";
 import ModalComponent from "../shared/modal/modal.component";
 import { Box, Grid, TextField, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "./login.css";
 import ButtonComponent from "../shared/button/button.component";
 import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
-import { getMe, userLogin } from "../../store/modules/users/actions/users.actions";
+import {
+  getMe,
+  userLogin,
+} from "../../store/modules/users/actions/users.actions";
 import { useAppDispatch } from "../../store/store";
 import { LoginRequest } from "../../service/modules/users/types";
 import ModalAlertComponent from "../shared/modal/modalAlert.component";
+import ForgotPassword from "./ForgotPassword.screen";
 
 interface LoginScreenInterface {
   handleClose: () => void;
   modalOpen: boolean;
 }
-const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen }) => {
+const LoginScreen: React.FC<LoginScreenInterface> = ({
+  handleClose,
+  modalOpen,
+}) => {
   const dispatch = useAppDispatch();
   const [showAlert, setShowAlert] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const {
     register,
@@ -34,7 +43,7 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen })
       email,
       password,
     };
-    try{
+    try {
       const postLogin = await dispatch(userLogin(loginRequest)).unwrap();
       if (postLogin.success) {
         dispatch(getMe(postLogin?.response?.token)).unwrap();
@@ -43,15 +52,18 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen })
       } else {
         setShowAlert(true);
       }
-    } catch (error){
+    } catch (error) {
       console.log(error);
       setShowAlert(true);
     }
-    
   };
 
   const handleAlertClose = (isOpen: boolean) => {
     setShowAlert(isOpen);
+  };
+
+  const handleCloseForgotPassword = (isOpen: boolean) => {
+    setOpenModal(isOpen);
   };
 
   return (
@@ -93,8 +105,8 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen })
                 {...register("email", {
                   required: "Este campo es obligatorio",
                   pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: "Formato de correo no válido",
+                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                    message: "Debe ser un correo electrónico válido",
                   },
                 })}
                 name="email"
@@ -119,7 +131,14 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen })
                 type="password"
                 className="inputCustom"
               />
-              <a href="#" style={{ ...style.recoveryPassword, float: "right" }}>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpenModal(true);
+                }}
+                style={{ ...style.recoveryPassword, float: "right" }}
+              >
                 Recuperar Contraseña
               </a>
               <ButtonComponent
@@ -146,20 +165,24 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen })
               >
                 <Grid item xs={6} style={displayFlex}>
                   <div className="circleImg">
-                    <img src="icons/google.png" alt=""/>
+                    <img src="icons/google.png" alt="" />
                   </div>
                 </Grid>
                 <Grid item xs={6} style={displayFlex}>
                   <div className="circleImg">
-                    <img src="icons/facebook.png" alt=""/>
+                    <img src="icons/facebook.png" alt="" />
                   </div>
                 </Grid>
               </Grid>
               <Typography className="inputCustom">
                 Crear una cuenta{" "}
-                <a href="#" style={style.recoveryPassword}>
+                {/* <a href="/createAccount" style={style.recoveryPassword}>
                   aquí
-                </a>{" "}
+                </a>{" "} */}
+                <Link to={"/createAccount"} style={style.recoveryPassword}>
+                  {" "}
+                  aquí
+                </Link>
               </Typography>
             </Box>
           </Grid>
@@ -168,12 +191,17 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({ handleClose, modalOpen })
           handleClose={() => handleAlertClose(false)}
           open={showAlert}
           data={{
-            title:"INFORMACIÓN",
-            content:"Los datos no coinciden en nuestros registros, revísalos o crea una cuenta.",
-            img:"icons/alert.png"
+            title: "INFORMACIÓN",
+            content:
+              "Los datos no coinciden en nuestros registros, revísalos o crea una cuenta.",
+            img: "icons/alert.png",
           }}
         />
       </ModalComponent>
+      <ForgotPassword
+        handleClose={() => handleCloseForgotPassword(false)}
+        modalOpen={openModal}
+      />
     </>
   );
 };
@@ -199,7 +227,7 @@ const style = {
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
-    cursor: 'pointer',
+    cursor: "pointer",
   },
   Button: {
     width: "100%",
@@ -211,13 +239,13 @@ const style = {
     fontFamily: "HudsonNYSerif",
     fontSize: "17px",
     marginTop: "20px",
-    cursor: 'pointer',
+    cursor: "pointer",
   },
   recoveryPassword: {
     color: "#99791C",
     fontFamily: "weblysleekuil",
     fontWeight: "600",
-    fontSize: "12px",
+    fontSize: "15px",
     paddingTop: "20px",
-  }
+  },
 };

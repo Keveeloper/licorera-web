@@ -1,10 +1,12 @@
 import {
   getUser,
+  postCreateUser,
+  postRememberPassword,
   postUserLogin,
   putUser,
   refreshUserLogin,
 } from "../../../../service/modules/users/users";
-import { LoginRequest, putUserRequest } from "../../../../service/modules/users/types";
+import { LoginRequest, postUserRequest, putUserRequest } from "../../../../service/modules/users/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getInfo } from "../../../../service/modules/info/info";
 
@@ -58,3 +60,24 @@ export const getInfoThunk = createAsyncThunk(
     return response;
   }
 );
+
+export const postUserThunks = createAsyncThunk(
+  "postUserThunks",
+  async (reqData: postUserRequest, { rejectWithValue, dispatch }) => {
+    const response = await postCreateUser(reqData);
+    if (!response.success) throw rejectWithValue(response);
+
+    return response;
+  }
+);
+
+export const postrememberPasswordThunks = createAsyncThunk(
+  "postrememberPasswordThunks",
+  async (email: string, { rejectWithValue, dispatch }) => {
+    const response = await postRememberPassword(email);
+    if (!response.success) throw rejectWithValue(response);
+
+    return response;
+  }
+);
+

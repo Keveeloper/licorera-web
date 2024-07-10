@@ -1,7 +1,7 @@
 import { base } from '../../base-api/base';
 import { handleSubModuleError } from '../../tools/apiError';
 import { ApiResponse } from '../../tools/types';
-import { ResponseAuth, LoginRequest, putUserRequest } from './types';
+import { ResponseAuth, LoginRequest, putUserRequest, postUserRequest } from './types';
 
 export const postUserLogin = async ( reqData: LoginRequest): Promise<ApiResponse<ResponseAuth>> => {
   try {
@@ -54,5 +54,33 @@ export const putUser = async ( reqData: putUserRequest, userId: string): Promise
     return handleSubModuleError(error);
   }
 };
+
+export const postCreateUser = async ( reqData: postUserRequest): Promise<ApiResponse<ResponseAuth>> => {
+  try {
+    const { data } = await base.post<any>(
+      '/mobile/clients',
+      reqData,
+      {}
+      );
+    return { response: data?.data, status: data.status, success: data.success};
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+export const postRememberPassword = async ( email: string): Promise<ApiResponse<ResponseAuth>> => {
+  try {
+    const { data } = await base.post<any>(
+      '/mobile/clients/rememberPassword',
+      email,
+      {}
+      );
+    return { response: data?.data, status: data.status, success: data.success};
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+
 
 

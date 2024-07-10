@@ -12,7 +12,7 @@ const HomePaymentMethod = () => {
     const { addToPayment } = usePaymentHook()
 
     const selectPayment = (id:number) => {
-        const type = id === 1 ? "Efectivo" : "Tarjeta debito/crédito"
+        const type = id === 1 ? "Efectivo" : "Tarjeta débito/crédito"
         const payment:PaymentSelected = {
             type: type,
             payment:""
@@ -33,7 +33,7 @@ const HomePaymentMethod = () => {
       >
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
             Efectivo
-            {buttonSelect === 1 && <img src="/icons/Checked.svg" alt="" width={30}/>}
+            {buttonSelect === 1 && <img src="/icons/Checked.png" alt="" width={30}/>}
        </div>
       </ButtonComponent>
       <ButtonComponent
@@ -41,8 +41,8 @@ const HomePaymentMethod = () => {
         style={styleButton.button}
       >
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            Tarjeta debito/crédito
-            {buttonSelect === 2 && <img src="/icons/Checked.svg" alt="" width={30}/>}
+            Tarjeta débito/crédito
+            {buttonSelect === 2 && <img src="/icons/Checked.png" alt="" width={30}/>}
         </div>
       </ButtonComponent>
       <ButtonComponent
@@ -83,7 +83,7 @@ const styleButton = {
         // padding: "0 0 8px 0",
         cursor: "pointer",
         border: "1px solid #000000",
-        marginTop:"300px",
+        marginTop:"250px",
       },
       disabledButton: {
         ...hudsonNYFontStyle,
@@ -96,6 +96,6 @@ const styleButton = {
         cursor: "pointer",
         color: "#FFFFFF",
         border: "none",
-        marginTop:"300px",
+        marginTop:"250px",
       },
 }

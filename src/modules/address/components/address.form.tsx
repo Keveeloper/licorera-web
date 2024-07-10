@@ -14,10 +14,12 @@ import useAddressHook, {
 import useAddress from "../hooks/useAddress";
 import { CreateLocationRequest } from "../../../service/modules/address/type";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface props {}
 const AddressForm: React.FC<props> = () => {
+
+  const location = useLocation();
   const [checked, setChecked] = useState(false);
   const [successAlert, setSucessAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
@@ -79,7 +81,11 @@ const AddressForm: React.FC<props> = () => {
 
   const handleSave = () => {
     setSucessAlert(false);
-    navigate("/checkout");
+    if (location?.state?.module?.module === 'user') {
+      navigate("/user-profile", {state: {tab: "3"}});
+    }else{
+      navigate("/checkout");
+    }
   };
 
   useEffect(() => {
@@ -110,7 +116,7 @@ const AddressForm: React.FC<props> = () => {
           style={{ minWidth: "100%" }}
           sx={{ mt: 2 }}
           id="standard-basic"
-          label="Cra 26 # 33 - 17"
+          // label="Cra 26 # 33 - 17"
           variant="standard"
         />
         {checked && (
@@ -125,7 +131,7 @@ const AddressForm: React.FC<props> = () => {
               style={{ minWidth: "100%" }}
               sx={{ mt: 2 }}
               id="standard-basic"
-              label="Mi casa"
+              placeholder="Mi casa"
               variant="standard"
             />
           </>

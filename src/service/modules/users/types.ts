@@ -19,4 +19,17 @@ export type putUserRequest = {
     cellphone: string | undefined,
 }
 
+export type postUserRequest = {
+    id:string,
+    name:string,
+    last_name:string,
+    email:string,
+    password:string,
+    uuid:string,
+    birthday:string,
+    cellphone:string,
+    social_id:number
+};
+
+
   

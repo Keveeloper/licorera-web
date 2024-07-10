@@ -26,3 +26,30 @@ export const getIsActive = async (): Promise<ApiResponse<Data>> => {
     return handleSubModuleError(error);
   }
 };
+
+export const postSuggestion= async (request:any): Promise<ApiResponse<Data>> => {
+  try {
+    const  {data}  = await base.post<Data>(
+      `/mobile/emailsuggest`,
+      request
+      );
+    return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+
+export const postRemoveUser= async (request:any): Promise<ApiResponse<Data>> => {
+  try {
+    const  {data}  = await base.post<Data>(
+      `/mobile/removeuserinfo`,
+      request
+      );
+    return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+

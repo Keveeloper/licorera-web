@@ -121,8 +121,9 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
     const Payment = await dispatch(
       posPaymentCreditThunk({ reqData: request })
     ).unwrap();
+    
     if (Payment.success) {
-      if (Payment?.response?.ref_payco) {
+      if (Payment?.response?.ref_payco && Payment.response.estado === "Aceptada") {
         setShowSuccessAlert(true)
         const payment:PaymentSelected = {
           type: "Tarjeta crédito",
@@ -134,6 +135,8 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
         setwarningAlert(true);
         console.log(Payment);
       }
+    }else{
+      setwarningAlert(true);
     }
   };
 
@@ -147,7 +150,7 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
         sx={{
           padding: "60px 5%",
           width: "100%",
-          height: "88%",
+          height: "80%",
           overflow: "auto",
         }}
       >

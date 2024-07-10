@@ -1,6 +1,7 @@
 import {
   Box,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -10,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import CartComponent from "../../cart/components/cart.component";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   weblysleekBoltFontStyle,
   weblysleekFontStyle,
@@ -26,20 +27,36 @@ import { useAppDispatch } from "../../../store/store";
 import { getLocationsThunk } from "../../../store/modules/address/actions/address.actions";
 import { postDisccount } from "../../../service/modules/address/address";
 import { useSelector } from "react-redux";
-import { selectAllCart, selectCartProducts } from "../../../store/modules/cart/selectors/cart.selector";
+import {
+  selectAllCart,
+  selectCartProducts,
+} from "../../../store/modules/cart/selectors/cart.selector";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import usePaymentHook from "../../shared/hooks/paymentHook/usePaymentHook";
-import { updateOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
-import { requestUpdateOrder } from "../../../service/modules/orders/order";
+import { postOrderThunk, updateOrderThunk } from "../../../store/modules/cart/actions/cart.actions";
+import { requestOrder, requestUpdateOrder } from "../../../service/modules/orders/order";
 import NumberFormat from "../../shared/hooks/numberFormater/NumberFormat";
 import { cartActions } from "../../../store/modules/cart";
 import { paletteColors } from "../../../paletteColors/paletteColors";
+import useCartHook from "../../shared/hooks/cartHook/useCartHook";
+import { addressActions } from "../../../store/modules/address";
+import { paymentMethodsActions } from "../../../store/modules/paymentMethods";
+import ArrowRightIcon from "./ArrowrightIcon";
+import CustomModal from "../../shared/modal/customModal";
+import WarningAlertScreen from "../../cart/alert.screens/warningAlertScreen";
+import useHelperHook from "../../shared/hooks/helper/useHelper";
+import Loader from "../../shared/Loader/components/Loader";
 
 type disccount = {
   title?: string;
   content?: string;
   img?: string;
 };
+type PaymentMethod = {
+  value: string;
+  label: string;
+};
+
 const CheckoutComponent = () => {
   const cartStore = useSelector(selectAllCart);
   const products = useSelector(selectCartProducts);
@@ -51,11 +68,20 @@ const CheckoutComponent = () => {
   }>();
   const [alertDisccount, setAlertDisccount] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
+  const [showWarningAlert, setShoWarningAlert] = useState<boolean>(false);
   const [disccountResult, setDisccountResult] = useState<disccount>();
   const [successData, setSuccessData] = useState<any>();
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [warningText, setWarningText] = useState<string>("")
+  const [loading, setLoading] = useState<boolean>(false);
+
 
   const { getAddress, updateAddressItem } = useAddressHook();
   const { getPayment } = usePaymentHook();
+  const { updatePhone, updateTotal, updateOrder } = useCartHook();
+  
+  const { calculateTotal } = useHelperHook();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -64,8 +90,10 @@ const CheckoutComponent = () => {
     register,
     formState: { errors, isValid },
     reset,
+    control,
     getValues,
     setValue,
+    watch,
   } = useForm({
     mode: "onChange",
   });
@@ -97,15 +125,27 @@ const CheckoutComponent = () => {
       console.log(updateOrder);
       if (updateOrder.response && updateOrder.response.success) {
         const data = updateOrder.response.data;
-        const total = parseInt(data.delivery) + parseInt(data.value);
+        const total = parseInt(data.value);
         setSuccessData({
           time: data.time,
           value: NumberFormat(total),
         });
         setSuccessAlert(true);
         dispatch(cartActions.clearState());
+        dispatch(addressActions.clearAddressSelected())
+        dispatch(paymentMethodsActions.clearPaymentSelected())
       }
     }
+  };
+
+  const handlePhoneChange = (event:any, onChange:any) => {
+    const phone = event.target.value;
+    onChange(phone); 
+    updatePhone(phone);
+  };
+
+  const handleWarningClose = () => {
+    setShoWarningAlert(false);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -136,11 +176,63 @@ const CheckoutComponent = () => {
   };
 
   const goToPaymentMethods = () => {
-    navigate("/paymentMethods");
+    const {  address, paymentSelect } = getValues();
+    if(!address){
+      alert("Se debe seleccionar una Dirección Valida")
+      return
+    }
+    !paymentSelect ? postOrder() : navigate("/paymentMethods");
   };
 
   const goToHome = () => {
     navigate("/home");
+  };
+
+  const getTotal = async () => {
+    const newtotal = await calculateTotal(products);
+    if (newtotal[1]) {
+      setTotal(newtotal[0] + newtotal[1]);
+      updateTotal(newtotal[0] + newtotal[1]);
+    } else {
+      setTotal(newtotal[0]);
+      updateTotal(newtotal[0]);
+    } 
+  };
+
+  const postOrder = async () => {
+    setLoading(true)
+    getTotal()
+    if (products.length > 0 && cartStore.total > 0) {
+      const resultado = products.reduce((acumulador: any, producto: any) => {
+        if (acumulador !== "") {
+          acumulador += ",";
+        }
+        acumulador += `${producto.id}:${producto.quantity}`;
+        return acumulador;
+      }, "");
+      const request: requestOrder = {
+        products: resultado,
+        amount: total,
+        instructions: "test",
+        source: "Web",
+      };
+      const Payment = await dispatch(
+        postOrderThunk({ reqData: request })
+      ).unwrap();
+      if (Payment.success && Payment.response.success) {
+        setLoading(false)
+        updateOrder(Payment.response.data.id);
+        navigate("/paymentMethods");
+      }else if(Payment.success && !Payment.response.success){
+        setLoading(false)
+      }else{
+        setLoading(false)
+        setWarningText("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
+        setShoWarningAlert(true)
+      }
+    }else{
+      setLoading(false)
+    }
   };
 
   const getLocations = async () => {
@@ -172,7 +264,7 @@ const CheckoutComponent = () => {
         setDisccountResult({
           title: "LO SENTIMOS",
           content:
-            "El codigo que ingresaste no es valido. Revísalo e intenta nuevamente.",
+            "El codigo que ingresaste no es válido. Revísalo e intenta nuevamente.",
           img: "/icons/alert.png",
         });
         setAlertDisccount(true);
@@ -195,18 +287,38 @@ const CheckoutComponent = () => {
     const address = getAddress();
     if (address && address.detail) {
       setCoords(address.coords);
-      setValue("address", address.addressInput, { shouldValidate: true });
-      setValue("detail", address.detail, { shouldValidate: true });
+      setValue("address", address.addressInput, {
+        shouldValidate: true,
+        shouldTouch: true,
+      });
+      setValue("detail", address.detail, {
+        shouldValidate: true,
+        shouldTouch: true,
+      });
     }
-    const payment = getPayment();
 
+    const payment = getPayment();
     if (payment && payment.type) {
+      const newPayment = [{ value: payment.type, label: payment.type }];
+      setPaymentMethods(newPayment);
+      console.log(paymentMethods, payment, newPayment);
+
       setValue("paymentSelect", payment.type, { shouldValidate: true });
+    }
+
+    if (cartStore.phone) {
+      setValue("phone", cartStore.phone, {
+        shouldValidate: true,
+        shouldTouch: true,
+      });
     }
   }, []);
 
   const styles = stylesAddPayment(errors, isValid);
-
+  if (loading) {
+        return <Loader screenLoader={true}/>;
+  }
+  
   return (
     <Box className="">
       <Grid container spacing={0} style={{ textAlign: "center" }}>
@@ -216,6 +328,7 @@ const CheckoutComponent = () => {
             alt="whitelogo"
             width={200}
             style={{ marginTop: "30px" }}
+            onClick={goToHome}
           />
           <Typography style={style.form.title} sx={{ mt: 2 }}>
             Dirección de entrega
@@ -258,37 +371,46 @@ const CheckoutComponent = () => {
             >
               Ingresa una dirección
             </Typography>
-            <TextField
-              onClick={goToAddress}
-              error={!!errors.address}
-              helperText={
-                errors.address ? errors.address.message?.toString() : ""
-              }
-              {...register("address", {
-                required: "Este campo es obligatorio",
-              })}
-              style={{ minWidth: "100%" }}
-              sx={{ mt: 2 }}
-              id="standard-basic"
-              label="Ej: Cra 26 # 33-17"
-              variant="standard"
-              InputProps={{
-                readOnly: true,
-              }}
+            <Controller
+              name="address"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Este campo es obligatorio" }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  onClick={goToAddress}
+                  error={!!errors.address}
+                  helperText={
+                    errors.address ? errors.address.message?.toString() : ""
+                  }
+                  style={{ minWidth: "100%" }}
+                  sx={{ mt: 2 }}
+                  id="standard-basic"
+                  label="Ej: Cra 26 # 33-17"
+                  variant="standard"
+                />
+              )}
             />
-            <TextField
-              error={!!errors.detail}
-              helperText={
-                errors.detail ? errors.detail.message?.toString() : ""
-              }
-              {...register("detail", {
-                required: "Este campo es obligatorio",
-              })}
-              style={{ minWidth: "100%" }}
-              sx={{ mt: 2 }}
-              id="standard-basic"
-              label="Torre / Apto / Casa / Detalles"
-              variant="standard"
+            <Controller
+              name="detail"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Este campo es obligatorio" }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  error={!!errors.detail}
+                  helperText={
+                    errors.detail ? errors.detail.message?.toString() : ""
+                  }
+                  style={{ minWidth: "100%" }}
+                  sx={{ mt: 2 }}
+                  id="standard-basic"
+                  label="Torre / Apto / Casa / Detalles"
+                  variant="standard"
+                />
+              )}
             />
           </Grid>
           {/* contact section */}
@@ -323,31 +445,42 @@ const CheckoutComponent = () => {
               label="315 352 19 66"
               variant="standard"
             /> */}
-            <InputMask
-              style={styles.cardInput}
-              mask="999 999 99 99"
-              maskChar=" "
-              placeholder="Número de celular"
-              className="card-input-payment"
-              {...register("phone", {
+            <Controller
+              name="phone"
+              control={control}
+              rules={{
                 required: "Este campo es obligatorio",
                 minLength: {
                   value: 13,
-                  message: "El número de tarjeta debe tener 10 caracteres",
+                  message: "El número de celular debe tener 10 caracteres",
                 },
                 maxLength: {
                   value: 13,
                   message:
-                    "El número de tarjeta no debe exceder los 10 caracteres",
+                    "El número de celular no debe exceder los 10 caracteres",
                 },
                 validate: (value) =>
                   value.replace(/\s/g, "").length === 10 ||
                   "El número de celular debe tener 10 dígitos",
-              })}
-              name="phone"
-              type="text"
-            ></InputMask>
-            <Typography color={"#d32f2f"} fontSize={"0.75rem"} textAlign={'left'}>
+              }}
+              render={({ field: { onChange, value } }) => (
+                <InputMask
+                  style={styles.cardInput}
+                  mask="999 999 99 99"
+                  maskChar=" "
+                  placeholder="Número de celular"
+                  className="card-input-payment"
+                  value={value || ""}
+                  onChange={(e) => handlePhoneChange(e, onChange)}
+                  type="text"
+                />
+              )}
+            />
+            <Typography
+              color={"#d32f2f"}
+              fontSize={"0.75rem"}
+              textAlign={"left"}
+            >
               {errors.phone ? errors.phone.message?.toString() : ""}
             </Typography>
           </Grid>
@@ -363,23 +496,40 @@ const CheckoutComponent = () => {
             >
               Forma de pago
             </Typography>
-            <FormControl variant="standard" sx={{ mt: 2, minWidth: "100%" }}>
-              <TextField
-                error={!!errors.paymentSelect}
-                helperText={
-                  errors.paymentSelect
-                    ? errors.paymentSelect.message?.toString()
-                    : ""
-                }
-                {...register("paymentSelect", {
-                  required: "Este campo es obligatorio",
-                })}
-                style={{ minWidth: "100%" }}
-                sx={{ mt: 2 }}
-                id="labelLocation"
-                label="Seleccionar Metodo de pago"
-                variant="standard"
-                onClick={goToPaymentMethods}
+            <FormControl
+              sx={{ mt: 2, minWidth: "100%" }}
+              error={!!errors.paymentSelect}
+            >
+              <InputLabel
+                style={{ ...style.form.label, marginLeft: "-15px" }}
+                id="labelPayment"
+              >
+                Selecciona un método de pago
+              </InputLabel>
+              <Controller
+                name="paymentSelect"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Este campo es obligatorio" }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    style={{ width: "100%", textAlign: "left" }}
+                    labelId="labelPayment"
+                    id="labelPayment"
+                    variant="standard"
+                    placeholder="Seleccionar Metodo de pago"
+                    onClick={goToPaymentMethods}
+                    readOnly
+                    IconComponent={ArrowRightIcon}
+                  >
+                    {paymentMethods.map((method) => (
+                      <MenuItem key={method.value} value={method.value}>
+                        {method.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
               />
             </FormControl>
           </Grid>
@@ -413,7 +563,12 @@ const CheckoutComponent = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={4} sx={{}} style={{ background: "#F5F5F5", position: 'relative' }}>
+        <Grid
+          item
+          xs={4}
+          sx={{}}
+          style={{ background: "#F5F5F5", position: "relative" }}
+        >
           <CartComponent
             isCheckout
             onClick={handleSubmit}
@@ -422,6 +577,19 @@ const CheckoutComponent = () => {
           />
         </Grid>
       </Grid>
+       {/* Modal Warning*/}
+       <CustomModal
+        modalStyle="cartModal"
+        modalContentStyle="cartModalContent"
+        open={showWarningAlert}
+        onClose={handleWarningClose}
+      >
+        <WarningAlertScreen
+          title="INFORMACIÓN"
+          Text={warningText}
+          onClose={handleWarningClose}
+        />
+      </CustomModal>
       {/* modal to disccount ok */}
       <ModalAlertComponent
         handleClose={alertDiscountClose}
@@ -481,9 +649,9 @@ const style = {
 
 const stylesAddPayment = (errors: any, isValid: boolean) => ({
   cardInput: {
-    padding: '4px 0 5px',
-    height: '48px',
-    marginTop: '24px',
+    padding: "4px 0 5px",
+    height: "48px",
+    marginTop: "24px",
     width: "100%",
     fontFamily: "weblysleekuil",
     fontSize: "16px",
@@ -492,4 +660,4 @@ const stylesAddPayment = (errors: any, isValid: boolean) => ({
     border: "none",
     borderBottom: `1px solid ${errors.cardnumber ? "red" : "black"}`,
   },
-})
+});

@@ -90,6 +90,7 @@ const UserAddPayment = (props: AddPaymentInterface) => {
 
   const sutmitPayment = async () => {
     setLoading(true);
+    setShowModalDue(false);
     if(checked)
       handleSubmit()
     
@@ -110,7 +111,7 @@ const UserAddPayment = (props: AddPaymentInterface) => {
     ).unwrap();
     if (Payment.success) {
       setLoading(false);
-      if (Payment?.response?.ref_payco) {
+      if (Payment?.response?.ref_payco && Payment.response.estado === "Aceptada") {
         setShowSuccessAlert(true)
         const payment:PaymentSelected = {
           type: "Tarjeta crédito",
@@ -121,10 +122,12 @@ const UserAddPayment = (props: AddPaymentInterface) => {
       } else {
         setTextWarning("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
         setShowAlertWarning(true);
-        console.log(Payment);
       }
     }else{
+      setShowModalDue(false)
       setLoading(false);
+      setTextWarning("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
+      setShowAlertWarning(true);
     }
   };
 

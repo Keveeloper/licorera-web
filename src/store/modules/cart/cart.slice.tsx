@@ -37,10 +37,23 @@ export const cartSlice = createSlice({
     ) => {
       state.state.total = action.payload;
     },
+    setCartPhone: (
+      state: CartState,
+      action: PayloadAction<any>
+    ) => {
+      state.state.phone = action.payload;
+    },
     clearState: ( state: CartState,) => {
       state.state.products = []
       state.state.order = 0
       state.state.total = 0
+      state.state.phone = ''
+    },
+    clearPhone: ( state: CartState,) => {
+      state.state.phone = ''
+    },
+    clearOrder: ( state: CartState,) => {
+      state.state.order = 0
     },
   },
   extraReducers: (builder) => {

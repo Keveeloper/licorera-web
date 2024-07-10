@@ -21,6 +21,7 @@ import Cart from "../../../../../cart/cart.screen";
 import { selectCartProducts } from "../../../../../../store/modules/cart/selectors/cart.selector";
 import { useNavigate } from "react-router-dom";
 import ModalAlertComponent from "../../../../modal/modalAlert.component";
+import { cartActions } from "../../../../../../store/modules/cart";
 
 const  Icons = () => {
 
@@ -54,6 +55,7 @@ const  Icons = () => {
     }
 
     const toggleDrawer = (open: boolean) => {
+        dispatch(cartActions.clearOrder());
         setIsDrawerOpen(open);
     };
 
@@ -88,8 +90,8 @@ const  Icons = () => {
                                 <h2>{user?.name?.toUpperCase()}</h2>
                                 <p>{user?.points} Jotas</p>
                             </Box>
-                            <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={() => navigation('/user-profile')}>Perfil</MenuItem>
-                            <MenuItem sx={styles.iconsContainer.menu.menuitem}>Mis Pedidos</MenuItem>
+                            <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={() => navigation('/user-profile', {state: {tab: "1"}})}>Perfil</MenuItem>
+                            <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={() => navigation('/recentOrder')}>Mis Pedidos</MenuItem>
                             <MenuItem sx={styles.iconsContainer.menu.menuitem} onClick={handleShowAlert}>Cerrar Sesión</MenuItem>
                         </Menu>
                         <ModalAlertComponent
