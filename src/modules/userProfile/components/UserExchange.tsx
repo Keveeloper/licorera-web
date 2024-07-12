@@ -16,7 +16,7 @@ const UserExchange = (props: UserExchangeinterface) => {
     const [total, setTotal] = useState(1);
     const [products, setProducts] = useState<any>([]);
     const [loading, setLiading] = useState<boolean>(true);
-    const [currentPage, setCurrentPage] = useState<number>(2);
+    const [currentPage, setCurrentPage] = useState<number>(1);
     
     const handleExchange = ( ) => setExchangeOpen(false);
 
