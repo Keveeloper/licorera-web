@@ -13,42 +13,29 @@ const UserExchange = (props: UserExchangeinterface) => {
     const { exchangeOpen, setExchangeOpen } = props;
     const dispatchApp = useAppDispatch();
 
-    const [page, setPage] = useState(1);
     const [total, setTotal] = useState(1);
     const [products, setProducts] = useState<any>([]);
     const [loading, setLiading] = useState<boolean>(true);
-
-    console.log('productsproducts: ', products);
+    const [currentPage, setCurrentPage] = useState<number>(2);
     
-
     const handleExchange = ( ) => setExchangeOpen(false);
 
     const handleChangePagination = (
         event: React.ChangeEvent<unknown>,
         value: number
     ) => {
-        setPage(value);
-        handleExchangeProducts(value);
+        setCurrentPage(value);
     };
 
-    const handleExchangeProducts = async (page:number) => {
-        const {response} = await dispatchApp(
-            getExchangeProductThunk({page})
-        ).unwrap();
-        if(response.success){
-            // setProducts(response.data.data)
-            setTotal(response.data.last_page)
-        }
-    }
-
     useEffect(() => {
-        dispatchApp(getMeExchangeProductThunk()).unwrap().then((response) => {
+        dispatchApp(getMeExchangeProductThunk(currentPage)).unwrap().then((response) => {
             if (response.response.data.data.length > 0) {
                 setProducts(response.response.data.data);
                 setLiading(false);
+                setTotal(response.response.data.last_page);
             }
         });
-    }, []);
+    }, [currentPage]);
 
     if (loading) {
         return (
@@ -68,7 +55,6 @@ const UserExchange = (props: UserExchangeinterface) => {
             container
             spacing={2}
             style={{
-                // padding: "30px 5%",
                 margin: 0,
                 width: '100%',
             }}
@@ -106,7 +92,7 @@ const UserExchange = (props: UserExchangeinterface) => {
                 <Stack spacing={2} style={{ ...displayFlex, padding: "30px 0" }}>
                     <Pagination
                         count={total}
-                        page={page}
+                        page={currentPage}
                         onChange={handleChangePagination}
                     />
                 </Stack>

@@ -39,7 +39,7 @@ const UserBanner = (props: UserExchangeinterface) => {
     }
 
     const handleExchange = async () => {
-        await dispatch(getMeExchangeProductThunk()).unwrap().then((response) => {
+        await dispatch(getMeExchangeProductThunk(1)).unwrap().then((response) => {
             if (response.response.data.data.length > 0) {
                 setExchangeOpen(true);
             }

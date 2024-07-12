@@ -18,9 +18,9 @@ export const getExchangeProductThunk = createAsyncThunk(
 
 export const getMeExchangeProductThunk = createAsyncThunk(
   "meExchange/fetch",
-  async ( _, { rejectWithValue }) => {
+  async ( page: number, { rejectWithValue }) => {
     try {
-      const response = await getMeExchangeProducts();
+      const response = await getMeExchangeProducts(page);
       return response;
     } catch (error: any) {
       return rejectWithValue(error.message); // Enviar el mensaje de error
