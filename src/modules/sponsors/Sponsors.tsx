@@ -6,7 +6,6 @@ import { selectAllSponsors } from "../../store/modules/sponsors/selectors/sponso
 import { useSelector } from "react-redux";
 import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
 import { displayFlexColumn } from "../shared/recursiveStyles/RecursiveStyles";
-import { BorderRight, Padding } from "@mui/icons-material";
 
 import './Sponsors.css';
 
@@ -35,7 +34,8 @@ const Sponsors = () => {
                 }}
                 loop={true}
                 spaceBetween={1}
-                slidesPerView={sponsorsDataredux.length}
+                // slidesPerView={sponsorsDataredux.length}
+                slidesPerView={6}
                 // onSlideChange={() => console.log('slide change')}
                 // onSwiper={(swiper: any) => console.log(swiper)}
             >
@@ -48,11 +48,11 @@ const Sponsors = () => {
                         {/* {(loadingStatus === 'loading') ? 
                                 <Skeleton sx={styles.swiperContainer.swiper.swiperSlide.skeleton} variant="rectangular" />
                             : */}
-                                <Box className={`${sponsorsDataredux?.length === (index + 1) ? '' : 'sponsor-container-line'}`} sx={sponsorsDataredux?.length === (index + 1) ? styles.swiper.sponsorContainer : styles.swiper.sponsorContainerLine}>
+                                <Box className={`${sponsorsDataredux?.length === (index + 1) && sponsorsDataredux?.length < 6 ? '' : 'sponsor-container-line'}`} sx={sponsorsDataredux?.length === (index + 1) ? styles.swiper.sponsorContainer : styles.swiper.sponsorContainerLine}>
                                     <img height={"100px"} src={`${item.imageUrl}`} alt=""/>
-                                    <Typography>
+                                    {/* <Typography>
                                         {item.name}
-                                    </Typography>
+                                    </Typography> */}
                                 </Box>
                         {/* }  */}
                     </SwiperSlide>

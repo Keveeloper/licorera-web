@@ -92,7 +92,7 @@ const UserExchange = (props: UserExchangeinterface) => {
                                 <Grid item xs={7} style={{display:"flex", flexDirection:"column", justifyContent:"space-between", padding: '0 0 0 10px'}}>
                                     <Typography sx={{fontFamily: 'weblysleekuisb', fontSize: '18px', fontWeight: 'bold'}} >{item?.order_products[0]?.store?.product?.name}</Typography>
                                     <Typography sx={{fontFamily: 'weblysleekuil', fontSize: '15px'}}>{item?.order_products[0]?.store?.product?.description.slice(0, 50)}</Typography>
-                                    <Typography sx={{fontFamily: 'weblysleekuisb', fontSize: '16px', fontWeight: 'bold'}}>Canjeado: {convertFormatDateNoHour(item?.order_products[0]?.updated_at)}</Typography>
+                                    <Typography sx={{fontFamily: 'weblysleekuisb', fontSize: '16px', fontWeight: 'bold'}}>Canjeado: {convertFormatDateNoHour(item?.order_products[0]?.created_at)}</Typography>
                                 </Grid> 
                                 <Grid item xs={2} style={{display: 'flex',justifyContent: 'flex-end'}}>
                                     <Typography sx={{fontFamily: 'HudsonNYSerif', fontSize: '18px', lineHeight: 1}}>{item?.order_products[0]?.store?.points} J</Typography>
