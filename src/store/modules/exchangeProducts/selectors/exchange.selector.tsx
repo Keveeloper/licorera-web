@@ -20,6 +20,11 @@ export const selectLoading = createSelector(
   (promotion) => promotion.loadingStatus
 );
 
+export const selectAllMeExchange = createSelector(
+  getPromotionState,
+  (promotion) => promotion.state.data
+);
+
 
 
 
