@@ -75,9 +75,9 @@ const UserBanner = (props: UserExchangeinterface) => {
             </Box>
             <Box sx={styles.bannerContainer.boxRight}>
                 <img style={{cursor: 'pointer'}} src="/icons/logout-icon.png" width={30} alt="" onClick={handleShowAlert}/>
-                <Box sx={styles.bannerContainer.boxRight.circle}>
+                <Box sx={styles.bannerContainer.boxRight.circle} onClick={goToRecentOrder}>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.order_quantity}</Typography>
-                    <Typography sx={styles.bannerContainer.boxRight.circle.text} onClick={goToRecentOrder}>Pedidos</Typography>
+                    <Typography sx={styles.bannerContainer.boxRight.circle.text}>Pedidos</Typography>
                 </Box>
                 <Box sx={styles.bannerContainer.boxRight.circle} onClick={handleExchange}>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.exchanges_quantity}</Typography>
