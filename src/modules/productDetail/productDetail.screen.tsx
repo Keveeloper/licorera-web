@@ -6,7 +6,7 @@ import ProductDetail from "./components/productDetail";
 import SuggestedProducts from "./components/suggestedProducts";
 
 const ProductDetailScreen = () => {
-
+    
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);

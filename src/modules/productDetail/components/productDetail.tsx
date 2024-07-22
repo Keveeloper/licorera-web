@@ -22,8 +22,15 @@ import LoginScreen from "../../user/login.screen";
 import { Margin } from "@mui/icons-material";
 import { FaMinusCircle } from "react-icons/fa";
 import { FaPlusCircle } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import { productExchange } from "../../exchangeProducts/types";
+import { storeActions } from "../../../store/modules/store";
+import { useAppDispatch } from "../../../store/store";
+import useProductDetailHook from "../hooks/useProductDetail";
 
 const ProductDetail = () => {
+  const { id } = useParams();
+  
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showError, setShowError] = useState<boolean>(false);
   const [categoryName, setCategoryName] = useState<string>("");
@@ -36,6 +43,8 @@ const ProductDetail = () => {
   const user = useSelector(selectAllUser);
   const categories = useSelector(selectArrayCategories);
   const { addToCart } = useCartHook();
+  const dispatch = useAppDispatch();
+  const { getStoreProduct } = useProductDetailHook();
 
   const handleAlertClose = () => {
     setShowAlert(false);
@@ -95,17 +104,62 @@ const ProductDetail = () => {
   };
 
   useEffect(() => {
-    const categoryName = categories.find(
-      (item: { id: any }) => item.id === product?.product.category_id
-    );
-    setCategoryName(categoryName.name);
-    if(product?.product.discount && product?.price){
-      const discountValue = product?.price - (product?.price * product?.product.discount / 100)  ;
-      setDiscount(discountValue)
+    if(!id){
+      const categoryName = categories.find(
+        (item: { id: any }) => item.id === product?.product.category_id
+      );
+      setCategoryName(categoryName.name);
+      if(product?.product.discount && product?.price){
+        const discountValue = product?.price - (product?.price * product?.product.discount / 100)  ;
+        setDiscount(discountValue)
+      }
     }
-   
-    console.log(product);
   }, [product]);
+
+  useEffect(() => {
+    if(id){
+      handleProduct(parseInt(id))
+    }
+  }, []);
+
+  const handleProduct = (id:number) => {
+    getStoreProduct(id)
+    .then((res) => {
+      console.log(res);
+      const product = res.data;
+      const mappedProduct: productExchange = {
+        id: product.id,
+        quantity: product.quantity,
+        points: product.points|| 0,
+        price: product.price,
+        status: product.status,
+        start_date: product.start_date || "",
+        end_date: product?.end_date || "",
+        isExchange: product.points > 0 ? true : false,
+        product_id: product.id,
+        features: product.features_string,
+        product: {
+          id: product.product.id,
+          name: product.product.name,
+          serial: product.product.serial,
+          lot: product.product.lot,
+          image: product.product.image,
+          quantity: product.quantity,
+          points: product.points || undefined,
+          description: product.product.description,
+          category_id: product.product.category_id,
+          created_at: product.product.created_at,
+          updated_at: product.product.updated_at,
+          deleted_at: product.product.deleted_at,
+          presentation: product.presentation,
+          discount: product.discount
+        }
+      }
+      dispatch(storeActions.setProductDetail(mappedProduct))
+    })
+    .catch((err) => console.log(err));
+
+  }
 
   return (
     <Grid

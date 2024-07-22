@@ -27,3 +27,15 @@ export const getCategoriesById = async (request:CategoriesRequest): Promise<ApiR
       return handleSubModuleError(error);
     }
 };
+
+export const getStoreProductsById = async (id:number): Promise<ApiResponse<CategoriesResponse>> => {
+  try {
+    const { data } = await base.get<CategoriesResponse>(
+      `/mobile/storeProducts/${id}`,
+      {}
+      );
+    return { response: data, status: 200, success: !!Object.keys(data).length };
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};

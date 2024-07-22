@@ -113,7 +113,7 @@ const Cart: React.FC<cartInterface> = ({
           </>
         )}
         {!isEmpty && (
-          <CartComponent products={products} isCurrentOrder={isCurrentOrder} currentOrder={currentOrder}/>
+          <CartComponent products={products} toggleDrawer={toggleDrawer} isCurrentOrder={isCurrentOrder} currentOrder={currentOrder}/>
         )}
       </Box>
       <LoginScreen modalOpen={openLogin}  handleClose={()=>handleCloseLogin(false)}/>
