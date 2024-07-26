@@ -17,8 +17,12 @@ import Loader from "../../shared/Loader/components/Loader";
 import UserAddPayment from "./UserAddPayment";
 import UserAddress from "./UserAddress";
 import { useLocation } from "react-router-dom";
+import { UserExchangeinterface } from "./types";
+import UserExchange from "./UserExchange";
 
-const UserContent = () => {
+const UserContent = (props: UserExchangeinterface) => {
+
+    const { exchangeOpen, setExchangeOpen } = props;
 
     const dispatch = useAppDispatch();
     const personalInfo: any = useSelector(selectAllPersonalInfo);
@@ -29,7 +33,8 @@ const UserContent = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [paymentMethodsOpen, setPaymentMethodsOpen] = useState<boolean>(false);
 
-    const styles = stylesUserContent(value, paymentMethodsOpen);
+
+    const styles = stylesUserContent(value, paymentMethodsOpen, exchangeOpen);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -63,35 +68,43 @@ const UserContent = () => {
             {paymentMethodsOpen ? 
                 <UserAddPayment setPaymentMethodsOpen={setPaymentMethodsOpen}/>
             :
-                <TabComponent
-                    tabsArray={["INFORMACIÓN", "MÉTODOS DE PAGO", "DIRECCIONES"]}
-                    // tabsArray={}
-                    value={value}
-                    setValue={setValue}
-                    handleChange={handleChange}
-                    disabled={disabled}
-                >
-                    <TabPanel sx={{padding: 0}} value="1">
-                        <UserInfo />
-                    </TabPanel>
-                    <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="2">
-                        <UserPaymentMethods setPaymentMethodsOpen={setPaymentMethodsOpen}/>
-                    </TabPanel>
-                    <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="3">
-                        <UserAddress />
-                    </TabPanel>
-                </TabComponent>
+                exchangeOpen ?
+                    <UserExchange 
+                        exchangeOpen={exchangeOpen}
+                        setExchangeOpen={setExchangeOpen}
+                    />
+                :
+                    <TabComponent
+                        tabsArray={["INFORMACIÓN", "MÉTODOS DE PAGO", "DIRECCIONES"]}
+                        // tabsArray={}
+                        value={value}
+                        setValue={setValue}
+                        handleChange={handleChange}
+                        disabled={disabled}
+                    >
+                        <TabPanel sx={{padding: 0}} value="1">
+                            <UserInfo />
+                        </TabPanel>
+                        <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="2">
+                            <UserPaymentMethods setPaymentMethodsOpen={setPaymentMethodsOpen}/>
+                        </TabPanel>
+                        <TabPanel sx={{padding: 0, width: '100%', height: '100%'}} value="3">
+                            <UserAddress />
+                        </TabPanel>
+                    </TabComponent>
+                
             }
         </Box>
     );
 
 }
 
-const stylesUserContent = (value: string, paymentMethodsOpen: boolean) => ({
+const stylesUserContent = (value: string, paymentMethodsOpen: boolean, exchangeOpen: boolean) => ({
     contentContainer: {
         margin: '90px auto',
         width: '60%',
-        height: value === '2' || value === '3' && !paymentMethodsOpen ? '500px' : '',
+        // height: (value === '2' || value === '3') && (!paymentMethodsOpen || !exchangeOpen) ? '500px' : '',
+        height: paymentMethodsOpen || exchangeOpen ? '' : '500px',
         // background: 'orange'
     }
 });

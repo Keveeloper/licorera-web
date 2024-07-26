@@ -6,7 +6,6 @@ import { selectAllSponsors } from "../../store/modules/sponsors/selectors/sponso
 import { useSelector } from "react-redux";
 import { displayFlex } from "../shared/recursiveStyles/RecursiveStyles";
 import { displayFlexColumn } from "../shared/recursiveStyles/RecursiveStyles";
-import { BorderRight, Padding } from "@mui/icons-material";
 
 import './Sponsors.css';
 
@@ -35,26 +34,16 @@ const Sponsors = () => {
                 }}
                 loop={true}
                 spaceBetween={1}
-                slidesPerView={sponsorsDataredux.length}
-                // onSlideChange={() => console.log('slide change')}
-                // onSwiper={(swiper: any) => console.log(swiper)}
+                slidesPerView={6}
             >
                 {sponsorsDataredux?.length > 0 && sponsorsDataredux.map((item: any, index: any) => {
                 return (
                     <SwiperSlide
                     key={index}
-                    //   onClick={() => handleCategory(item.id, 1)}
                     >
-                        {/* {(loadingStatus === 'loading') ? 
-                                <Skeleton sx={styles.swiperContainer.swiper.swiperSlide.skeleton} variant="rectangular" />
-                            : */}
-                                <Box className={`${sponsorsDataredux?.length === (index + 1) ? '' : 'sponsor-container-line'}`} sx={sponsorsDataredux?.length === (index + 1) ? styles.swiper.sponsorContainer : styles.swiper.sponsorContainerLine}>
-                                    <img height={"100px"} src={`${item.imageUrl}`} alt=""/>
-                                    <Typography>
-                                        {item.name}
-                                    </Typography>
-                                </Box>
-                        {/* }  */}
+                        <Box className={`${sponsorsDataredux?.length === (index + 1) && sponsorsDataredux?.length < 6 ? '' : 'sponsor-container-line'}`} sx={sponsorsDataredux?.length === (index + 1) ? styles.swiper.sponsorContainer : styles.swiper.sponsorContainerLine}>
+                            <img style={styles.swiper.image} src={`${item.imageUrl}`} alt=""/>
+                        </Box>
                     </SwiperSlide>
                 );
                 })}
@@ -66,19 +55,20 @@ const Sponsors = () => {
 
 const styles = {
     swiper: {
-        padding: '0 30px 0 30px',
-        // width: '100%',
-        // maxWidth: '1450px',
+        padding: '0 40px 0 40px',
         height: '190px',
         sponsorContainerLine: {
             height: '100%',
             ...displayFlexColumn,
-            // borderRight: '0.5px solid',
         },
         sponsorContainer: {
             height: '100%',
             ...displayFlexColumn,
+        },
+        image : {
+            width: '50%'
         }
+
     }
 }
 export default Sponsors;

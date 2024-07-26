@@ -18,3 +18,17 @@ export const getExchangeProducts = async (request:ExchangeRequest): Promise<ApiR
   }
 };
 
+export const getMeExchangeProducts = async (page: number): Promise<ApiResponse<Data>> => {
+  try {
+   
+    const  {data}  = await base.get<Data>(
+      `/v2/me/exchanges?page=${page}`,
+      {}
+      );
+      return { response: data, success: !!Object.keys(data).length };
+    
+  } catch (error) {
+    return handleSubModuleError(error);
+  }
+};
+

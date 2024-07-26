@@ -69,13 +69,14 @@ const CheckoutComponent = () => {
   const [alertDisccount, setAlertDisccount] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
   const [showWarningAlert, setShoWarningAlert] = useState<boolean>(false);
+  const [showWarningProduct, setShowWarningProduct] = useState<boolean>(false);
   const [disccountResult, setDisccountResult] = useState<disccount>();
   const [successData, setSuccessData] = useState<any>();
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [warningText, setWarningText] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [warningProductError, setWarningProductError] = useState<any>({title:'',img:''})
 
   const { getAddress, updateAddressItem } = useAddressHook();
   const { getPayment } = usePaymentHook();
@@ -146,6 +147,10 @@ const CheckoutComponent = () => {
 
   const handleWarningClose = () => {
     setShoWarningAlert(false);
+  };
+
+  const handleWarningProductClose = () => {
+    setShowWarningProduct(false);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -225,6 +230,23 @@ const CheckoutComponent = () => {
         navigate("/paymentMethods");
       }else if(Payment.success && !Payment.response.success){
         setLoading(false)
+        if(Payment.response.statusCode === 9){
+          const cadena = Payment.response.message.split(' ')[2]
+          const numero = parseInt(cadena);
+
+            const product = products.find((element:{id:number}) => {
+              if(element.id === numero){
+                return element
+              }else{
+                return null
+              }
+            })
+            console.log(product);
+            setWarningProductError({title: product?.name, img: product?.image})
+            console.log(warningProductError);
+            setShowWarningProduct(true)
+        }
+       
       }else{
         setLoading(false)
         setWarningText("Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.")
@@ -577,6 +599,20 @@ const CheckoutComponent = () => {
           />
         </Grid>
       </Grid>
+        {/* Modal with dont Product*/}
+        <CustomModal
+          modalStyle="cartModal"
+          modalContentStyle="cartModalContent"
+          open={showWarningProduct}
+          onClose={handleWarningProductClose}
+        >
+          <WarningAlertScreen
+            title={warningProductError.title}
+            img={warningProductError.img}
+            Text="Lo sentimos. Se nos agotó este producto. Cámbialo por otro para generar la orden."
+            onClose={handleWarningProductClose}
+          />
+        </CustomModal>
        {/* Modal Warning*/}
        <CustomModal
         modalStyle="cartModal"

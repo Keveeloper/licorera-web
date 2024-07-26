@@ -8,7 +8,7 @@ interface ModalArletCustomProps {
   style?: object;
   open?: boolean;
   data: {
-    title: string;
+    title: string | undefined;
     content: string;
     img: string;
   };

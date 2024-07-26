@@ -5,12 +5,13 @@ interface AlertProps{
     onClose: () => void;
     title:string;
     Text:string;
+    img?:string;
 }
 
-const WarningAlertScreen:React.FC<AlertProps> = ({onClose, title, Text}) => {
+const WarningAlertScreen:React.FC<AlertProps> = ({onClose, title, Text, img}) => {
   return (
     <Box sx={defaultStyle}>
-      <img src="icons/alert.png" alt="" style={{width:"100px"}} />
+      <img src={img ? img : "icons/alert.png"} alt="" style={img ? {...defaultStyle.img, width:"100px"}: {width:"100px"}} />
       <Typography style={{ fontFamily: "HudsonNYSerif", marginBottom: '15px', fontSize:'20px'}}>
         {title}
       </Typography>
@@ -52,4 +53,9 @@ const defaultStyle = {
       cursor: "pointer",
     },
   },
+  img:{
+    width: '100px',
+    border: '1px solid gray',
+    borderRadius: '50%'
+  }
 };

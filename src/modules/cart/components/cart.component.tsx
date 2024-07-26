@@ -37,6 +37,7 @@ interface customProps {
   isFormValid?: boolean;
   products: any;
   currentOrder?:any;
+  toggleDrawer?:any
 }
 
 const CartComponent: React.FC<customProps> = ({
@@ -45,7 +46,8 @@ const CartComponent: React.FC<customProps> = ({
   isCurrentOrder,
   onClick,
   isFormValid,
-  currentOrder
+  currentOrder,
+  toggleDrawer
 }) => {
   const user = useSelector(selectAllUser);
   const Info = useSelector(selectAllInfo);
@@ -166,6 +168,7 @@ const CartComponent: React.FC<customProps> = ({
 
   const handleShowSuccessCurrentClose = () => {
     setShowSuccessCurrentOrder(false);
+    toggleDrawer(false);
     navigate("/home");
   };
 
@@ -425,7 +428,7 @@ const CartComponent: React.FC<customProps> = ({
         <Typography style={style.footer.text}>
           {isCurrentOrder ? 'Tu pedido está en camino. Tienes 5 minutos para cancelarlo'
           : `Domicilio gratis por compras mayores a${" "}
-          ${CurrencyFormat(Info?.data?.minimumOrderValueFree)} IVA incluido.`
+          ${CurrencyFormat(Info?.data?.minimumOrderAmount)} IVA incluido.`
          }
         </Typography>
         {isCheckout ? (
@@ -514,7 +517,7 @@ const CartComponent: React.FC<customProps> = ({
           text="Te pedido fue cancelado exitosamente. Puedes seguir comprando ahora."
           onClose={handleShowSuccessCurrentClose}
           onAccept={handleShowSuccessCurrentClose}
-          img="icons/checkicon.png"
+          img="icons/alert.png"
           isCheck
         />
       </CustomModal>

@@ -103,7 +103,7 @@ const RootRouter = () => {
         }
       />
       <Route
-        path="/product-detail"
+        path="/product-detail/:id?"
         element={
           <React.Suspense fallback={<Loader screenLoader={true} />}>
             <ProductDetailScreen />

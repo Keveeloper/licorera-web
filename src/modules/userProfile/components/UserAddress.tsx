@@ -119,7 +119,7 @@ const UserAddress = () => {
             ))
             :
               <Box sx={{width: '100%', height: '100%', ...displayFlexColumn}}>
-                <Typography sx={{fontFamily: 'HudsonNYSerif'}}>aun no tienes tarjetas guardadas</Typography>
+                <Typography sx={{fontFamily: 'HudsonNYSerif'}}>aun no tienes direcciones guardadas</Typography>
                 <Typography sx={{fontFamily: 'weblysleekuil'}}>agrega una para continuar</Typography>
               </Box>
             }
@@ -136,17 +136,21 @@ const UserAddress = () => {
             img:`/icons/alert.png`
           }}
         />
-        <Button 
-            // sx={styles.button}
-            sx={{height: '12%', fontFamily: 'HudsonNYSerif', fontSize: '18px'}}
-            variant="outlined" 
-            fullWidth 
-            color="inherit" 
-            onClick={goToAddress}
-        >
-            {/* {edit ? 'Guardar' : 'Editar'} */}
-            Agregar
-        </Button>
+        {
+          addressArray?.length < 3 && (
+            <Button 
+                // sx={styles.button}
+                sx={{height: '12%', fontFamily: 'HudsonNYSerif', fontSize: '18px'}}
+                variant="outlined" 
+                fullWidth 
+                color="inherit" 
+                onClick={goToAddress}
+            >
+                {/* {edit ? 'Guardar' : 'Editar'} */}
+                Agregar
+            </Button>
+          )
+        }
       </Box>
     );
 

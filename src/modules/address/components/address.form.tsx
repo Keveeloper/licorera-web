@@ -20,7 +20,7 @@ interface props {}
 const AddressForm: React.FC<props> = () => {
 
   const location = useLocation();
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(location?.state?.module?.module === 'user' ? true : false);
   const [successAlert, setSucessAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
 
@@ -154,6 +154,7 @@ const AddressForm: React.FC<props> = () => {
         <CheckBoxComponent
           style={styleCheckBox}
           checked={checked}
+          disabled={location?.state?.module?.module === 'user' ? true : false}
           onChange={onCheckBox}
           widthIcon={25}
         >

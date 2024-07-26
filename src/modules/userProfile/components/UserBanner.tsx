@@ -2,20 +2,24 @@ import { Box, Typography } from "@mui/material";
 import { displayFlex, displayFlexColumn } from "../../shared/recursiveStyles/RecursiveStyles";
 import { useSelector } from "react-redux";
 import { personalInfoActions, selectAllUser } from "../../../store/modules/users";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../store/store";
 import { selectAllPersonalInfo, selectIsWelcome } from "../../../store/modules/users/selectors/users.selector";
 import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import { getInfoThunk, getMe } from "../../../store/modules/users/actions/users.actions";
 import { useNavigate } from "react-router-dom";
+import { UserExchangeinterface } from "./types";
+import { getMeExchangeProductThunk } from "../../../store/modules/exchangeProducts/actions/exchange.actions";
 
-const UserBanner = () => {
+const UserBanner = (props: UserExchangeinterface) => {
+
+    const { exchangeOpen, setExchangeOpen } = props;
 
     const user = useSelector(selectAllUser);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const isWelcome = useSelector(selectIsWelcome);
-    const personalInfo: any = useSelector(selectAllPersonalInfo);
+    // const personalInfo: any = useSelector(selectAllPersonalInfo);
     const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const handleShowAlert = () => {
@@ -26,8 +30,6 @@ const UserBanner = () => {
 
     const logout = () =>{
         dispatch(personalInfoActions.clearUserState(isWelcome));
-        // await dispatch(getMe(personalInfo.token)).unwrap();
-        // await dispatch(getInfoThunk()).unwrap();
         setShowAlert(false);
         navigate('/');
     }
@@ -35,6 +37,18 @@ const UserBanner = () => {
     const goToRecentOrder = ()=>{
         navigate('/recentOrder')
     }
+
+    const handleExchange = async () => {
+        await dispatch(getMeExchangeProductThunk(1)).unwrap().then((response) => {
+            if (response.response.data.data.length > 0) {
+                setExchangeOpen(true);
+            }
+        });
+    }
+
+    // useEffect(() => {
+        
+    // }, []);
 
     return(
         <Box sx={styles.bannerContainer}>
@@ -61,11 +75,11 @@ const UserBanner = () => {
             </Box>
             <Box sx={styles.bannerContainer.boxRight}>
                 <img style={{cursor: 'pointer'}} src="/icons/logout-icon.png" width={30} alt="" onClick={handleShowAlert}/>
-                <Box sx={styles.bannerContainer.boxRight.circle}>
+                <Box sx={styles.bannerContainer.boxRight.circle} onClick={goToRecentOrder}>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.order_quantity}</Typography>
-                    <Typography sx={styles.bannerContainer.boxRight.circle.text} onClick={goToRecentOrder}>Pedidos</Typography>
+                    <Typography sx={styles.bannerContainer.boxRight.circle.text}>Pedidos</Typography>
                 </Box>
-                <Box sx={styles.bannerContainer.boxRight.circle}>
+                <Box sx={styles.bannerContainer.boxRight.circle} onClick={handleExchange}>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>{user?.exchanges_quantity}</Typography>
                     <Typography sx={styles.bannerContainer.boxRight.circle.text}>Canjes</Typography>
                 </Box>
@@ -132,10 +146,10 @@ const styles = {
                 border: '3px solid black',
                 borderRadius: '50%',
                 ...displayFlexColumn,
+                cursor:'pointer',
                 background: 'white',
                 text: {
                     fontFamily: 'weblysleekuisb',
-                    cursor:'pointer'
                 }
             }
         }
