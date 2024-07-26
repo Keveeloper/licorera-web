@@ -71,7 +71,7 @@ const SearchedResult = (props: SearchInterface) => {
                             <Box sx={styles.searchCard.imageSide}>
                                 <figure>
                                     <img src={item.product.image} alt={`Imagen de la cerveza: ${item.product.name}`} />
-                                    {item.discount && (
+                                    {item.discount > 0 && (
                                         <figure>
                                             <img style={styles.searchCard.imageSide.figure.figure.discountImage} src="/icons/discount-icon.png" alt="" />
                                             <Typography sx={styles.searchCard.imageSide.figure.figure.text1}>{item.discount}</Typography>
