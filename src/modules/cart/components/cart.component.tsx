@@ -189,7 +189,7 @@ const CartComponent: React.FC<customProps> = ({
       setTotal(newtotal[0]);
       updateTotal(newtotal[0]);
     }
-    setPoints(newtotal[0] / Info?.data?.minimumAmountForPoints || 0);
+    setPoints(Math.floor(newtotal[0] / Info?.data?.minimumAmountForPoints || 0));
    
   };
 
@@ -261,21 +261,28 @@ const CartComponent: React.FC<customProps> = ({
                     {item.presentation && <span>Presentación: </span>}
                     {item.presentation}
                   </Typography>
+                  <Typography style={style.cards.currentOrderQuantity}>
+                    {isCurrentOrder && <>Cantidad:  {item.quantity} </>}
+                  </Typography>
+                  
                 </Grid>
                 <Grid item xs={3} sx={{ mt: 0, mb: 0 }}>
+                  {!isCurrentOrder &&
                   <img
                     style={style.cards.close}
                     src="/icons/vector_close.png"
                     onClick={() => !cartStore.order && handleDeleteOpen(item)}
                   />
+                  }
                   <Typography
-                    style={style.cards.price}
-                    sx={{ mt: 5, mb: -1, pb: 2 }}
+                    style={isCurrentOrder ?  style.cards.CurrentOrderPrice : style.cards.price}
+                    sx={{ pb: 2 }}
                   >
                     {item.points
                       ? JotaFormat(item.points)
                       : CurrencyFormat(item.price)}
                   </Typography>
+                  {!isCurrentOrder &&
                   <div className="contentIcons">
                     <FaMinusCircle
                       onClick={() => !cartStore.order && onMinus(item)}
@@ -301,6 +308,7 @@ const CartComponent: React.FC<customProps> = ({
                       }}
                     />
                   </div>
+                  }
                 </Grid>
               </Grid>
             </CardComponent>
@@ -564,13 +572,23 @@ const style: React.CSSProperties | any = {
       top: "10px",
       fontSize: "15px",
       textAlign: "left",
+      lineHeight: '1.2',
+      paddingBottom: '15px',
     },
     subtitle: {
       ...weblysleekFontStyle,
       fontWeight: "300",
+      lineHeight: '1.2',
     },
     quantity: {
       ...weblysleekFontStyle,
+      marginBottom: "10px",
+      fontWeight: "600",
+      fontSize: "14px",
+      textAlign: "left",
+    },
+    currentOrderQuantity:{
+      ...weblysleekBoltFontStyle,
       marginBottom: "10px",
       fontWeight: "600",
       fontSize: "14px",
@@ -584,7 +602,14 @@ const style: React.CSSProperties | any = {
     price: {
       ...hudsonNYFontStyle,
       fontSize: "15px",
+      marginTop: "40px",
+      marginBottom: "-8px",
     },
+    CurrentOrderPrice:{
+      ...hudsonNYFontStyle,
+      fontSize: "15px",
+      marginTop: "10px",
+    }
   },
   footer: {
     title: {

@@ -54,7 +54,7 @@ const HighlightedCampaignContainer = (props: CampaignInterface) => {
         }
         }
         dispatch(storeActions.setProductDetail(mappedProduct))
-        navigate("/product-detail")
+        navigate(`/product-detail/${mappedProduct.id}`)
     }
 
     const goToStore = () => {

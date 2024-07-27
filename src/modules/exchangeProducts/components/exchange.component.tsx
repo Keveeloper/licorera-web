@@ -41,7 +41,7 @@ const ExchangeComponent = () => {
     const cardHandle = (product:productExchange) => {
         const updatedProduct = { ...product, isExchange: true };
         dispatch(storeActions.setProductDetail(updatedProduct))
-        navigate("/product-detail")
+        navigate(`/product-detail/${updatedProduct.id}`)
     }
 
     React.useEffect(() => {

@@ -38,11 +38,12 @@ const PromotionDetailScreen = () => {
           points: 0,
           price: productDetail?.price.replace(".",""),
           name: productDetail?.name || "",
-          id: productDetail?.id || 0,
+          id: productDetail?.store_product_id || 0,
           image: productDetail?.image || "",
           description: productDetail?.description || "",
           category_id: 0,
           presentation: "",
+          discount:0
         };
         if (productDetail) {
           addToCart(newProduct);

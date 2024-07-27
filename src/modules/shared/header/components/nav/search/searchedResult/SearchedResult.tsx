@@ -58,7 +58,7 @@ const SearchedResult = (props: SearchInterface) => {
           }
         }
         dispatch(storeActions.setProductDetail(mappedProduct))
-        navigate("/product-detail")
+        navigate(`/product-detail/${mappedProduct.id}`)
     }
     
     return (
@@ -71,13 +71,13 @@ const SearchedResult = (props: SearchInterface) => {
                             <Box sx={styles.searchCard.imageSide}>
                                 <figure>
                                     <img src={item.product.image} alt={`Imagen de la cerveza: ${item.product.name}`} />
-                                    {item.discount && (
+                                    {item.discount ? (
                                         <figure>
                                             <img style={styles.searchCard.imageSide.figure.figure.discountImage} src="/icons/discount-icon.png" alt="" />
                                             <Typography sx={styles.searchCard.imageSide.figure.figure.text1}>{item.discount}</Typography>
                                             <Typography sx={styles.searchCard.imageSide.figure.figure.text2}>%Off</Typography>
                                         </figure>
-                                    )}
+                                    ): <></>}
                                 </figure>
                             </Box>
                             <Box sx={styles.searchCard.infoSide}>

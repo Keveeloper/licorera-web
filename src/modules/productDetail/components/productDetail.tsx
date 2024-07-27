@@ -69,6 +69,7 @@ const ProductDetail = () => {
       description: product?.product.description || "",
       category_id: product?.product.category_id || 0,
       presentation: product?.product.presentation,
+      discount: product?.product.discount
     };
     if (product) {
       addToCart(newProduct);
@@ -109,10 +110,11 @@ const ProductDetail = () => {
         (item: { id: any }) => item.id === product?.product.category_id
       );
       setCategoryName(categoryName.name);
-      if(product?.product.discount && product?.price){
-        const discountValue = product?.price - (product?.price * product?.product.discount / 100)  ;
-        setDiscount(discountValue)
-      }
+    }
+    if(product?.product.discount && product?.price){
+      console.log(product);
+      const discountValue = product?.price - (product?.price * product?.product.discount / 100)  ;
+      setDiscount(discountValue)
     }
   }, [product]);
 
@@ -152,9 +154,11 @@ const ProductDetail = () => {
           updated_at: product.product.updated_at,
           deleted_at: product.product.deleted_at,
           presentation: product.presentation,
-          discount: product.discount
+          discount: product.discount,
+          price: product.price,
         }
       }
+      
       dispatch(storeActions.setProductDetail(mappedProduct))
     })
     .catch((err) => console.log(err));
@@ -172,7 +176,7 @@ const ProductDetail = () => {
     >
       <Grid item xs={4} style={displayFlex}>
         <div style={{ position: "relative" }}>
-          {product?.product.discount ? (
+          {product?.product?.discount ? (
             <div className="promotion">
               <p style={{ fontSize: "33px", marginTop: "3px" }}>
                 {product.product.discount}

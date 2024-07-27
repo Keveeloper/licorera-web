@@ -6,10 +6,15 @@ const useHelperHook = () => {
     const { getAddress } = useAddressHook();
 
     const calculateTotal = async (products:any) => {
+      console.log(products);
         let newtotal = 0;
         products?.forEach((item:any) => {
+          let newPrice = item.price;
+            if(item.discount > 0){
+              newPrice = item.price - (item.price * item.discount / 100) 
+            }
             if (item.price) {
-                newtotal += item.quantity * item.price;
+                newtotal += item.quantity * newPrice;
             }
         });
         const delivery = await calculateDelivery(newtotal)

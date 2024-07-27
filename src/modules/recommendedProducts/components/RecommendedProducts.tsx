@@ -63,7 +63,7 @@ const RecommendedProducts = () => {
           }
         }
           dispatch(storeActions.setProductDetail(mappedProduct))
-          navigate("/product-detail")
+          navigate(`/product-detail/${mappedProduct.id}`)
     }
 
     const handleChangePagination = (

@@ -139,7 +139,7 @@ const ContainerStore = () => {
       }
     }
       dispatch(storeActions.setProductDetail(mappedProduct))
-      navigate("/product-detail")
+      navigate(`/product-detail/${mappedProduct.product.id}`)
   }
 
   React.useEffect(() => {

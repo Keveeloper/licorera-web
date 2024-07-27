@@ -57,7 +57,7 @@ const SwiperNewProducts = (props: swiperType) => {
             }
           }
           dispatch(storeActions.setProductDetail(mappedProduct))
-          navigate("/product-detail")
+          navigate(`/product-detail/${mappedProduct.id}`)
     }
 
     return(
