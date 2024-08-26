@@ -64,7 +64,7 @@ const ProductDetail = () => {
       points: product?.points,
       price: product?.price,
       name: product?.product.name || "",
-      id: product?.product.id || 0,
+      id: product?.id || 0,
       image: product?.product.image || "",
       description: product?.product.description || "",
       category_id: product?.product.category_id || 0,
