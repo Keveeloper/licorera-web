@@ -25,7 +25,7 @@ import usePaymentHook, { PaymentSelected } from "../../shared/hooks/paymentHook/
 import Loader from "../../shared/Loader/components/Loader";
 
 const UserPaymentMethods = (props: AddPaymentInterface) => {
-  const { setPaymentMethodsOpen, isChekout } = props;
+  const { setPaymentMethodsOpen, isChekout, updateOrder } = props;
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -162,7 +162,9 @@ const UserPaymentMethods = (props: AddPaymentInterface) => {
   };
 
   const goToCheckOut = () => {
-    navigate("/checkout");
+    if(updateOrder){
+      updateOrder()
+    } 
   };
 
   if (loading) {

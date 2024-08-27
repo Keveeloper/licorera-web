@@ -506,8 +506,37 @@ const CheckoutComponent = () => {
               {errors.phone ? errors.phone.message?.toString() : ""}
             </Typography>
           </Grid>
-          {/* payment method */}
+          {/* discount section */}
           <Grid item xs={12} sx={{}}>
+            <Typography
+              style={{ ...style.form.subtitle, textAlign: "left" }}
+              sx={{ mt: 2 }}
+            >
+              Código de descuento
+            </Typography>
+            <Grid container spacing={0}>
+              <Grid item xs={9} sx={{}}>
+                <TextField
+                  sx={{ minWidth: "100%" }}
+                  id="standard-basic"
+                  label="Ej: DESCTRESJOTAS"
+                  variant="standard"
+                  {...register("disccount", {})}
+                />
+              </Grid>
+              <Grid item xs={3} sx={{ mt: 0 }}>
+                <ButtonComponent
+                  disabled={false}
+                  style={style.form.button}
+                  onClick={getDisccount}
+                >
+                  APLICAR
+                </ButtonComponent>
+              </Grid>
+            </Grid>
+          </Grid>
+          {/* payment method */}
+          {/* <Grid item xs={12} sx={{}}>
             <Typography
               style={{
                 ...style.form.subtitle,
@@ -554,36 +583,7 @@ const CheckoutComponent = () => {
                 )}
               />
             </FormControl>
-          </Grid>
-          {/* discount section */}
-          <Grid item xs={12} sx={{}}>
-            <Typography
-              style={{ ...style.form.subtitle, textAlign: "left" }}
-              sx={{ mt: 2 }}
-            >
-              Código de descuento
-            </Typography>
-            <Grid container spacing={0}>
-              <Grid item xs={9} sx={{}}>
-                <TextField
-                  sx={{ minWidth: "100%" }}
-                  id="standard-basic"
-                  label="Ej: DESCTRESJOTAS"
-                  variant="standard"
-                  {...register("disccount", {})}
-                />
-              </Grid>
-              <Grid item xs={3} sx={{ mt: 0 }}>
-                <ButtonComponent
-                  disabled={false}
-                  style={style.form.button}
-                  onClick={getDisccount}
-                >
-                  APLICAR
-                </ButtonComponent>
-              </Grid>
-            </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid
           item
@@ -593,7 +593,7 @@ const CheckoutComponent = () => {
         >
           <CartComponent
             isCheckout
-            onClick={handleSubmit}
+            onClick={postOrder}
             isFormValid={isValid}
             products={products}
           />

@@ -24,7 +24,7 @@ import DuesModal from "./DuesModal";
 import CheckBoxComponent from "../../shared/checkBox/Checkbox.component";
 
 const UserAddPayment = (props: AddPaymentInterface) => {
-  const { setPaymentMethodsOpen, isChekout } = props;
+  const { setPaymentMethodsOpen, isChekout, updateOrder } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [showAlertWarning, setShowAlertWarning] = useState<boolean>(false);
@@ -174,7 +174,9 @@ const UserAddPayment = (props: AddPaymentInterface) => {
   };
 
   const goToCheckOut = () => {
-    navigate("/checkout");
+    if(updateOrder){
+      updateOrder()
+    }
   };
 
   const onCheckBox = () => {

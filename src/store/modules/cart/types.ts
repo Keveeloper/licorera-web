@@ -14,6 +14,7 @@ export interface Data {
     order:number;
     total:number;
     phone?:string;
+    disccount?:string;
 }
 
 export interface Products {

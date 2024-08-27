@@ -5,7 +5,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import usePaymentHook, { PaymentSelected } from "../../shared/hooks/paymentHook/usePaymentHook";
 
-const HomePaymentMethod = () => {
+interface Props{
+  updateOrder: () => void;
+}
+
+const HomePaymentMethod:React.FC<Props> = ({updateOrder}) => {
     const [buttonSelect, setButtonSelect] = useState<number>(0)
     const [isValid, setIsValid] = useState<boolean>(false)
     const navigate = useNavigate();
@@ -22,7 +26,7 @@ const HomePaymentMethod = () => {
         setButtonSelect(id)
     }
     const goToCheckout = () => {
-        navigate('/checkout')
+      updateOrder()
     }
   return (
     <>

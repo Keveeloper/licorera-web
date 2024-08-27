@@ -10,18 +10,28 @@ import HomePaymentMethod from "./components/homePaymentMethod";
 import UserAddPayment from "../userProfile/components/UserAddPayment";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectAllCart } from "../../store/modules/cart";
+import { cartActions, selectAllCart } from "../../store/modules/cart";
 import { useAppDispatch } from "../../store/store";
-import { getOrderByIdThunk } from "../../store/modules/cart/actions/cart.actions";
+import { getOrderByIdThunk, updateOrderThunk } from "../../store/modules/cart/actions/cart.actions";
 import ModalAlertComponent from "../shared/modal/modalAlert.component";
 import usePaymentHook, {
   PaymentSelected,
 } from "../shared/hooks/paymentHook/usePaymentHook";
+import useAddressHook from "../shared/hooks/addressHook/useAddressHook";
+import { requestUpdateOrder } from "../../service/modules/orders/order";
+import NumberFormat from "../shared/hooks/numberFormater/NumberFormat";
+import { addressActions } from "../../store/modules/address";
+import { paymentMethodsActions } from "../../store/modules/paymentMethods";
+
 
 const PaymentMethodsScreen = () => {
   const { id } = useParams();
   const cartStore = useSelector(selectAllCart);
+  const { getAddress, updateAddressItem } = useAddressHook();
+  const { getPayment } = usePaymentHook();
 
+  const [successData, setSuccessData] = useState<any>();
+  const [successAlert, setSuccessAlert] = useState(false);
   const [value, setValue] = useState("1");
   const [disabled, setDisabled] = useState<boolean>(false);
   const [warningAlert, setWarningAlert] = useState<boolean>(false);
@@ -52,8 +62,8 @@ const PaymentMethodsScreen = () => {
     navigate("/home");
   };
 
-  const goToCheckout = () => {
-    navigate("/checkout");
+  const successClose = () => {
+    setSuccessAlert(false);
   };
 
   const getOrderById = async () => {
@@ -63,7 +73,7 @@ const PaymentMethodsScreen = () => {
     if (currentOrders.response.success) {
       if (currentOrders.response.data.status_id === 3) {
         setAlertArray({
-          save: goToCheckout,
+          save: updateOrder,
           img: "/icons/checkIcon.png",
           text: "Tu pago fue procesado exitosamente. Procederemos con tu pedido.",
         });
@@ -91,11 +101,50 @@ const PaymentMethodsScreen = () => {
     }
   };
 
+  const updateOrder = async () => {
+    const addressHook = getAddress();
+    const payment = getPayment();
+
+    const requestUpdate: requestUpdateOrder = {
+      latitude: addressHook.coords.latitude,
+      longitude: addressHook.coords.longitude,
+      address: addressHook.address,
+      addressDetails: addressHook.detail,
+      paymentMethod: payment.type,
+      pay_method: payment.type,
+      amount: cartStore.total,
+      phone: cartStore.phone || "",
+      discountCode: cartStore?.disccount || "",
+      instructions: "",
+      description: "",
+      transactionId: "",
+    };
+    const updateOrder = await dispatch(
+      updateOrderThunk({ id: cartStore.order, reqData: requestUpdate })
+    ).unwrap();
+    if (updateOrder.success) {
+      console.log(updateOrder);
+      if (updateOrder.response && updateOrder.response.success) {
+        const data = updateOrder.response.data;
+        const total = parseInt(data.value);
+        setSuccessData({
+          time: data.time,
+          value: NumberFormat(total),
+        });
+        setSuccessAlert(true);
+        dispatch(cartActions.clearState());
+        dispatch(addressActions.clearAddressSelected())
+        dispatch(paymentMethodsActions.clearPaymentSelected())
+      }
+    }
+  };
+
   useEffect(() => {
     if (id === "response") {
       getOrderById();
     }
   }, [id]);
+  
 
   return (
     <>
@@ -147,6 +196,7 @@ const PaymentMethodsScreen = () => {
             <UserPaymentMethods
               setPaymentMethodsOpen={setPaymentMethodsOpen}
               isChekout
+              updateOrder={updateOrder}
             />
           )}
         </TabPanel>
@@ -155,7 +205,7 @@ const PaymentMethodsScreen = () => {
           value="3"
           className="columnContainer mt-20"
         >
-          <HomePaymentMethod />
+          <HomePaymentMethod updateOrder={updateOrder}/>
         </TabPanel>
       </TabComponent>
       <FooterScreen />
@@ -167,6 +217,17 @@ const PaymentMethodsScreen = () => {
           title: "INFORMACIÓN",
           content: alertArray?.text || "",
           img: alertArray?.img || "",
+        }}
+      />
+      {/* modal already submit done */}
+      <ModalAlertComponent
+        handleClose={successClose}
+        handleSave={goToHome}
+        open={successAlert}
+        data={{
+          title: `PEDIDO RECIBIDO`,
+          content: `Gracias por tu pedido lo recibiras en <b>${successData?.time} min aprox <br/><br/> Total: $${successData?.value}</b>`,
+          img: `icons/SuccessCheckout.png`,
         }}
       />
     </>
