@@ -172,7 +172,7 @@ const CheckoutComponent = () => {
       detail: addressFind.detail,
     };
     updateAddressItem(newAddress);
-    setValue("address", addressFind.name, { shouldValidate: true });
+    setValue("address", addressFind.address, { shouldValidate: true });
     setValue("detail", addressFind.detail, { shouldValidate: true });
   };
 
@@ -515,7 +515,7 @@ const CheckoutComponent = () => {
               Código de descuento
             </Typography>
             <Grid container spacing={0}>
-              <Grid item xs={9} sx={{}}>
+              <Grid item xs={8} sx={{}}>
                 <TextField
                   sx={{ minWidth: "100%" }}
                   id="standard-basic"
@@ -524,7 +524,7 @@ const CheckoutComponent = () => {
                   {...register("disccount", {})}
                 />
               </Grid>
-              <Grid item xs={3} sx={{ mt: 0 }}>
+              <Grid item xs={4} sx={{ mt: 0 }}>
                 <ButtonComponent
                   disabled={false}
                   style={style.form.button}
@@ -669,15 +669,14 @@ const style = {
       color: "#BBBBBB",
     },
     button: {
-      background: "#99791C",
-      color: "white",
+      background:"white",
       padding: "10px 0 15px",
       fontFamily: "HudsonNYSerif",
       width: "100%",
       borderRadius: "5px",
       fontSize: "20px",
-      margin: "0 0 2px 2px",
-      border: "none",
+      margin: "0 0 2px 5px",
+      border: "2px solid #000001",
       cursor: "pointer",
     },
   },
