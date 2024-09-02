@@ -34,7 +34,11 @@ export const getUser = async (token: string): Promise<ApiResponse<ResponseAuth>>
   try {
     const { data } = await base.get<any>(
       '/v2/me',
-      { }
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
       );
     return { response: data?.data, status: data.status, success: !!Object.keys(data).length };
   } catch (error) {

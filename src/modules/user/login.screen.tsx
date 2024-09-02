@@ -14,6 +14,12 @@ import { useAppDispatch } from "../../store/store";
 import { LoginRequest } from "../../service/modules/users/types";
 import ModalAlertComponent from "../shared/modal/modalAlert.component";
 import ForgotPassword from "./ForgotPassword.screen";
+import { FacebookAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth, facebookProvider, googleProvider } from "../../service/firebase/firebaseConfig";
+import { personalInfoActions } from "../../store/modules/users";
+import { PersonalInfoState, ResponsePersonalInfo } from "../../store/modules/store/types";
+import { useSelector } from "react-redux";
+import { selectIsWelcome } from "../../store/modules/users/selectors/users.selector";
 
 interface LoginScreenInterface {
   handleClose: () => void;
@@ -26,6 +32,7 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
   const dispatch = useAppDispatch();
   const [showAlert, setShowAlert] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const isWelcome = useSelector(selectIsWelcome);
 
   const {
     register,
@@ -35,6 +42,67 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
   } = useForm({
     mode: "onChange",
   });
+
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const token = await result.user.getIdToken();
+
+      if (token) {
+        console.log("User:", result.user);
+        const googleUser:ResponsePersonalInfo={
+            firstName: result.user.displayName || '',
+            lastName: '',
+            phone: '',
+            email: result.user.email || '',
+            token: token
+        }
+        await dispatch(personalInfoActions.setPersonalInfo(googleUser));
+        dispatch(getMe(token)).unwrap();
+        modalOpen = false;
+        handleClose();
+      } else {
+        console.error("No se pudo obtener el accessToken.");
+      }
+      const user = result.user;
+      console.log("Usuario logueado:", user);
+    } catch (error) {
+      console.error("Error durante el login:", error);
+    }
+  };
+
+  const signInWithFacebook = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+
+      // Obtener el accessToken de Facebook
+      // const credential = FacebookAuthProvider.credentialFromResult(result);
+      // const accessToken = credential?.accessToken;
+      const token = await result.user.getIdToken();
+    
+      if (token) {
+        console.log("AccessToken:", token);
+        const facebookUser:ResponsePersonalInfo={
+          firstName: result.user.displayName || '',
+          lastName: '',
+          phone: '',
+          email: result.user.email || '',
+          token: token
+        }
+        await dispatch(personalInfoActions.setPersonalInfo(facebookUser));
+        dispatch(getMe(token)).unwrap();
+        modalOpen = false;
+        handleClose();
+      } else {
+        console.error("No se pudo obtener el accessToken.");
+      }
+
+      const user = result.user;
+      console.log("Usuario logueado:", user);
+    } catch (error) {
+      console.error("Error durante el login:", error);
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,7 +114,7 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
     try {
       const postLogin = await dispatch(userLogin(loginRequest)).unwrap();
       if (postLogin.success) {
-        dispatch(getMe(postLogin?.response?.token)).unwrap();
+        await dispatch(getMe(postLogin?.response?.token)).unwrap();
         modalOpen = false;
         handleClose();
       } else {
@@ -163,12 +231,12 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
                 spacing={2}
                 style={{ padding: "20px", textAlign: "center" }}
               >
-                <Grid item xs={6} style={displayFlex}>
-                  <div className="circleImg">
+                <Grid item xs={6} style={{cursor:'pointer',...displayFlex}}>
+                  <div className="circleImg" onClick={signInWithGoogle}>
                     <img src="icons/google.png" alt="" />
                   </div>
                 </Grid>
-                <Grid item xs={6} style={displayFlex}>
+                <Grid item xs={6} style={displayFlex} onClick={signInWithFacebook}>
                   <div className="circleImg">
                     <img src="icons/facebook.png" alt="" />
                   </div>

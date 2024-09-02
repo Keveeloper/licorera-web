@@ -1,30 +1,29 @@
 import { FC, useEffect } from "react";
 import { useSelector } from "react-redux";
 
-import { selectRefreshToken, selectToken } from "../../store/modules/users/selectors/users.selector";
+import { selectIsWelcome, selectRefreshToken, selectToken } from "../../store/modules/users/selectors/users.selector";
 import { base } from "./base";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { error } from "console";
 import { refreshUserLogin } from "../modules/users/users";
-import { useAppDispatch } from "../../store/store";
+import { store, useAppDispatch } from "../../store/store";
 import { refreshToken } from "../../store/modules/users/actions/users.actions";
+import { personalInfoActions } from "../../store/modules/users";
 
 interface RequestInterceptorProps {
   children: JSX.Element;
 }
+
 const RequestInterceptor: FC<RequestInterceptorProps> = ({ children }) => {
-  const token = useSelector(selectToken);
-  const refresh = useSelector(selectRefreshToken); 
   const dispatch = useAppDispatch();
   let isRefreshing = false;
-  
+
   const getNewToken = async (): Promise<string> => {
-    
-    const newToken = await dispatch(refreshToken(refresh || '')).unwrap()
-    if(newToken?.response?.token){
+    const refresh = store.getState().auth.refreshToken; // Obtén el token más reciente
+    const newToken = await dispatch(refreshToken(refresh || '')).unwrap();
+    if (newToken?.response?.token) {
       return Promise.resolve(newToken.response.token);
-    }
-    else{
+    } else {
       return Promise.reject("error");
     }
   };
@@ -32,7 +31,8 @@ const RequestInterceptor: FC<RequestInterceptorProps> = ({ children }) => {
   const requestInterceptor = (
     config: AxiosRequestConfig
   ): AxiosRequestConfig | any => {
-    if (token && config.url?.includes("/v2/")) {
+    const token = store.getState().auth.token;
+    if (token && config.url?.includes("/v2/") && !config.url?.includes("/v2/me")) {
       config.headers = config.headers || {};
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -45,10 +45,10 @@ const RequestInterceptor: FC<RequestInterceptorProps> = ({ children }) => {
 
   const errorInterceptor = async (error: AxiosError<any>) => {
     const status = error.response ? error.response.status : 0;
-  
+
     if (status === 401) {
       if (!isRefreshing) {
-        isRefreshing = true; 
+        isRefreshing = true;
         try {
           const newToken = await getNewToken();
           if (error.config && newToken) {
@@ -67,16 +67,16 @@ const RequestInterceptor: FC<RequestInterceptorProps> = ({ children }) => {
           isRefreshing = false;
         }
       } else {
-        await new Promise(resolve => setTimeout(resolve, 500)); 
-        if(error.config){
-          return axios(error.config); 
+        await new Promise(resolve => setTimeout(resolve, 500));
+        if (error.config) {
+          return axios(error.config);
         }
       }
     }
   };
 
   base.interceptors.request.use(requestInterceptor);
-  base.interceptors.response.use(responseInterceptor, errorInterceptor)
+  base.interceptors.response.use(responseInterceptor, errorInterceptor);
 
   return <>{children}</>;
 };

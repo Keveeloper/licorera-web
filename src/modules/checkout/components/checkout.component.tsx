@@ -509,10 +509,16 @@ const CheckoutComponent = () => {
           {/* discount section */}
           <Grid item xs={12} sx={{}}>
             <Typography
-              style={{ ...style.form.subtitle, textAlign: "left" }}
+              style={{
+                ...style.form.subtitle,
+                textAlign: "center",
+                fontSize: "20px",
+                marginBottom:"25px",
+                marginTop:"25px",
+              }}
               sx={{ mt: 2 }}
             >
-              Código de descuento
+              ¿Tienes un código de descuento?
             </Typography>
             <Grid container spacing={0}>
               <Grid item xs={8} sx={{}}>
