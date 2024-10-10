@@ -10,6 +10,7 @@ export const initialState: PersonalInfoState = {
   loadingStatus: "loading",
   error: null,
   isWelcome: false,
+  isUserInfoComplete:false,
   data: {
     id: "",
     firstName: "",
@@ -36,6 +37,12 @@ export const personalInfoSlice = createSlice({
       action: PayloadAction<any>
     ) => {
       state.isWelcome = action.payload;
+    },
+    setIsUserInfoComplete: (
+      state: PersonalInfoState,
+      action: PayloadAction<any>
+    ) => {
+      state.isUserInfoComplete = action.payload;
     },
     clearUserState: (status:PersonalInfoState, action: PayloadAction<any> ) => {
       status.data = {}

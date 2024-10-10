@@ -8,6 +8,7 @@ export interface PersonalInfoState {
     user?:any;
     info?:any;
     isWelcome?:boolean;
+    isUserInfoComplete?:boolean;
     error: string | null | undefined;
     loadingStatus: LoadingStatus;
 }

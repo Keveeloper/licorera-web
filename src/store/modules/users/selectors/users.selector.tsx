@@ -35,6 +35,11 @@ export const selectIsWelcome = createSelector(
   (personalInfo) => personalInfo.isWelcome
 );
 
+export const selectIsUserInfoComplete = createSelector(
+  getPersonalInfoState,
+  (personalInfo) => personalInfo.isUserInfoComplete
+);
+
 export const selectAllInfo = createSelector(
   getPersonalInfoState,
   (personalInfo) => personalInfo.info

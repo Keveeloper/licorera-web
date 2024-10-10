@@ -20,6 +20,7 @@ import { personalInfoActions } from "../../store/modules/users";
 import { PersonalInfoState, ResponsePersonalInfo } from "../../store/modules/store/types";
 import { useSelector } from "react-redux";
 import { selectIsWelcome } from "../../store/modules/users/selectors/users.selector";
+import UserInfoScreen from "./userInfo.screen";
 
 interface LoginScreenInterface {
   handleClose: () => void;
@@ -58,7 +59,7 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
             token: token
         }
         await dispatch(personalInfoActions.setPersonalInfo(googleUser));
-        dispatch(getMe(token)).unwrap();
+        checkDataInfoComplete(token)
         modalOpen = false;
         handleClose();
       } else {
@@ -90,7 +91,7 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
           token: token
         }
         await dispatch(personalInfoActions.setPersonalInfo(facebookUser));
-        dispatch(getMe(token)).unwrap();
+        checkDataInfoComplete(token)
         modalOpen = false;
         handleClose();
       } else {
@@ -114,7 +115,7 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
     try {
       const postLogin = await dispatch(userLogin(loginRequest)).unwrap();
       if (postLogin.success) {
-        await dispatch(getMe(postLogin?.response?.token)).unwrap();
+        checkDataInfoComplete(postLogin?.response?.token)
         modalOpen = false;
         handleClose();
       } else {
@@ -133,6 +134,14 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
   const handleCloseForgotPassword = (isOpen: boolean) => {
     setOpenModal(isOpen);
   };
+
+  const checkDataInfoComplete = async (token:string) =>{
+    const userData = await dispatch(getMe(token)).unwrap();
+    if(userData?.response?.docNumber === ""){
+      dispatch(personalInfoActions.setIsUserInfoComplete(true))
+    }
+    console.log("response me:",userData.response.docNumber);
+  }
 
   return (
     <>

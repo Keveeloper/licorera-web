@@ -12,11 +12,12 @@ export type LoginRequest = {
 };
 
 export type putUserRequest = {
-    name: string | undefined,
-    last_name: string | undefined,
+    name?: string | undefined,
+    last_name?: string | undefined,
     birthday: string | undefined,
-    email: string | undefined,
+    email?: string | undefined,
     cellphone: string | undefined,
+    docNumber?: string | undefined,
 }
 
 export type postUserRequest = {
