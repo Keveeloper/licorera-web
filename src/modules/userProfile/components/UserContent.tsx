@@ -47,9 +47,10 @@ const UserContent = (props: UserExchangeinterface) => {
     useEffect(()  => {
         setLoading(true);
         const fetchData = async () => {
-            if (value === "1") await dispatch(getMe(personalInfo.token)).unwrap();
-            if (value === "2") await dispatch(getPaymentMethodsThunk()).unwrap();
-
+            if(personalInfo?.token){
+                if (value === "1") await dispatch(getMe(personalInfo.token)).unwrap();
+                if (value === "2") await dispatch(getPaymentMethodsThunk()).unwrap();
+            }
             await setLoading(false);
         }
         fetchData();

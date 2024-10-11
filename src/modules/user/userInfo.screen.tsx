@@ -80,12 +80,22 @@ const UserInfoScreen = () => {
   const [modalOpen, setModalOpen] = useState(true);
   const [errorFields, setErrorFields] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isDate, setIsDate] = useState(false);
+  const [dateValue, setDateValue] = useState("");
 
   const dispatch = useAppDispatch();
   const user = useSelector(selectAllUser);
   
   const handleOpen = (isOpen: boolean) => {
     setModalOpen(false);
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDateValue(e.target.value);
+  };
+
+  const handleClick = () => {
+    setIsDate(true);
   };
 
   const {
@@ -101,10 +111,10 @@ const UserInfoScreen = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { docNumber, birthday, cellphone } = getValues();
-    const reqData: putUserRequest = {
-      docNumber,
-      birthday,
-      cellphone
+    const reqData = {
+      ...(docNumber && { docNumber }),
+      ...(birthday && { birthday }),
+      ...(cellphone && { cellphone })
     };
     try {
       const postLogin = await dispatch(updateUserInfo({reqData,userId:user.id})).unwrap();
@@ -121,6 +131,7 @@ const UserInfoScreen = () => {
   };
 
   const styles = stylesAddPayment(errors, isValid);
+  const isEmptyOrNull = (value: any) => value === "" || value === null;
 
   return (
       <ModalComponent
@@ -163,74 +174,85 @@ const UserInfoScreen = () => {
               </Typography>
 
               <Grid container spacing={0} style={{ textAlign: "center" }}>
-                <Grid item xs={12}>
-                  <TextField
-                    error={!!errors.docNumber}
-                    helperText={errors.docNumber ? errors.docNumber.message?.toString() : ""}
-                    {...register("docNumber", {
-                      required: "Este campo es obligatorio",
-                      pattern: {
-                        value: /^[0-9]*$/,
-                        message: "Solo se permiten números",
-                      },
-                    })}
-                    style={{ minWidth: "100%" }}
-                    sx={{ mt: 3 }}
-                    id="standard-basic"
-                    label="Número de documento"
-                    variant="standard"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    error={!!errors.birthday}
-                    helperText={errors.birthday ? errors.birthday.message?.toString() : ""}
-                    {...register("birthday", {
-                      required: "Este campo es obligatorio"
-                    })}
-                    style={{ minWidth: "100%" }}
-                    sx={{ mt: 3 }}
-                    id="standard-basic"
-                    label="Fecha de nacimiento"
-                    variant="standard"
-                    type="date"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <InputMask
-                    style={styles.cardInput}
-                    mask="999 999 99 99"
-                    maskChar=" "
-                    placeholder="Número de celular"
-                    className="card-input-payment"
-                    {...register("cellphone", {
-                      required: "Este campo es obligatorio",
-                      minLength: {
-                        value: 13,
-                        message: "El número de tarjeta debe tener 10 caracteres",
-                      },
-                      maxLength: {
-                        value: 13,
-                        message: "El número de tarjeta no debe exceder los 10 caracteres",
-                      },
-                      validate: (value) =>
-                        value.replace(/\s/g, "").length === 10 ||
-                        "El número de celular debe tener 10 dígitos",
-                    })}
-                    name="cellphone"
-                    type="text"
-                  ></InputMask>
-                   <Typography color={"#d32f2f"} fontSize={"0.75rem"}>
-                      {errors.cellphone ? errors.cellphone.message?.toString() : ""}
-                    </Typography>
-                </Grid>
-                {errorFields && (
+                {isEmptyOrNull(user.docNumber) && 
+                  <Grid item xs={12}>
+                    <TextField
+                      error={!!errors.docNumber}
+                      helperText={errors.docNumber ? errors.docNumber.message?.toString() : ""}
+                      {...register("docNumber", {
+                        required: "Este campo es obligatorio",
+                        pattern: {
+                          value: /^[0-9]*$/,
+                          message: "Solo se permiten números",
+                        },
+                      })}
+                      style={{ minWidth: "100%" }}
+                      sx={{ mt: 3 }}
+                      id="standard-basic"
+                      label="Número de documento"
+                      variant="standard"
+                    />
+                  </Grid>
+                }
+                {isEmptyOrNull(user.birthday) && 
+                  <Grid item xs={12}>
+                    <TextField
+                      error={!!errors.birthday}
+                      type={isDate ? "date" : "text"}
+                      helperText={errors.birthday ? errors.birthday.message?.toString() : ""}
+                      {...register("birthday", {
+                        required: "Este campo es obligatorio",
+                      })}
+                      value={dateValue}
+                      onChange={handleDateChange}
+                      onClick={handleClick}
+                      style={{ minWidth: "100%" }}
+                      sx={{ mt: 5 }}
+                      placeholder={isDate ? "" : "Fecha de nacimiento DD/MM/AAAA"}
+                      variant="standard"
+                    />
+                  </Grid>
+                }
+                {isEmptyOrNull(user.cellphone) && (
+                  <>
                     <Grid item xs={12}>
-                    <Typography style={{ color: "rgb(211, 47, 47)" }}>
-                        {errorMessage}
-                    </Typography>
+                      <InputMask
+                        style={styles.cardInput}
+                        mask="999 999 99 99"
+                        maskChar=" "
+                        placeholder="Número de celular"
+                        className="card-input-payment"
+                        {...register("cellphone", {
+                          required: "Este campo es obligatorio",
+                          minLength: {
+                            value: 13,
+                            message: "El número de tarjeta debe tener 10 caracteres",
+                          },
+                          maxLength: {
+                            value: 13,
+                            message: "El número de tarjeta no debe exceder los 10 caracteres",
+                          },
+                          validate: (value) =>
+                            value.replace(/\s/g, "").length === 10 ||
+                            "El número de celular debe tener 10 dígitos",
+                        })}
+                        name="cellphone"
+                        type="text"
+                      ></InputMask>
+                      <Typography color={"#d32f2f"} fontSize={"0.75rem"}>
+                          {errors.cellphone ? errors.cellphone.message?.toString() : ""}
+                        </Typography>
                     </Grid>
-                )}
+                    {errorFields && (
+                        <Grid item xs={12}>
+                        <Typography style={{ color: "rgb(211, 47, 47)" }}>
+                            {errorMessage}
+                        </Typography>
+                        </Grid>
+                    )}
+                  </>
+                  )
+                }
               </Grid>
 
               <ButtonComponent style={!isValid ? styleButton : styleButtonChecked} disabled={!isValid} >

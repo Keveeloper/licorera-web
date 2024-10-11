@@ -24,7 +24,6 @@ const UserProfileScreen = () => {
             />
             <FooterScreen />
         </Box>
-        
     );
 
 }

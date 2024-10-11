@@ -135,9 +135,13 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
     setOpenModal(isOpen);
   };
 
+  const isEmptyOrNull = (value: any) => value === "" || value === null;
+
   const checkDataInfoComplete = async (token:string) =>{
     const userData = await dispatch(getMe(token)).unwrap();
-    if(userData?.response?.docNumber === ""){
+    if( isEmptyOrNull(userData?.response?.docNumber) ||
+        isEmptyOrNull(userData?.response?.birthday) ||
+        isEmptyOrNull(userData?.response?.cellphone)){
       dispatch(personalInfoActions.setIsUserInfoComplete(true))
     }
     console.log("response me:",userData.response.docNumber);

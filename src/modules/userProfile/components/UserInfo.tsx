@@ -63,7 +63,9 @@ const UserInfo = () => {
             const updateResponse = await dispatch(updateUserInfo(parameterComplete)).unwrap();
             if (updateResponse.success) {
                 setShowAlert(true);
-                dispatch(getMe(updateResponse.response.api_token)).unwrap();
+                if(updateResponse?.response?.api_token){
+                    dispatch(getMe(updateResponse.response.api_token)).unwrap();
+                }
             }
             
         }
