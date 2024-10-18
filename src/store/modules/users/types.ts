@@ -20,6 +20,6 @@ export interface ResponsePersonalInfo {
     phone?: string;
     email?: string
     birthday?: string;
-    token?:string;
     refresh_token?:string;
+    token?:string;
 }

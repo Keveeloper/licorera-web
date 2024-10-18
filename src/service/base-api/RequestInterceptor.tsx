@@ -33,9 +33,10 @@ const RequestInterceptor: FC<RequestInterceptorProps> = ({ children }) => {
     config: AxiosRequestConfig
   ): AxiosRequestConfig | any => {
     const token = store.getState().user?.data?.token;
+    const cleanedToken = token?.replace(/^Bearer\s+/i, '');
     if (token && config.url?.includes("/v2/")) {
       config.headers = config.headers || {};
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers["Authorization"] = `Bearer ${cleanedToken}`;
     }
     return config;
   };

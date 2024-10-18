@@ -17,7 +17,6 @@ export const initialState: PersonalInfoState = {
     lastName: "",
     email: "",
     phone: "",
-    token: "",
   },
   user:{}
 };

@@ -57,7 +57,7 @@ export const updateUserInfoFulfilled = (
   state: PersonalInfoState,
   action: PayloadAction<any>
 ) => {
-  state.data = action.payload.response;
+  state.user = action.payload.response;
   state.loadingStatus = 'loaded';
 };
 
