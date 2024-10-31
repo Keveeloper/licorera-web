@@ -16,7 +16,7 @@ import {
   weblysleekBoltFontStyle,
   weblysleekFontStyle,
 } from "../../shared/recursiveStyles/RecursiveStyles";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ButtonComponent from "../../shared/button/button.component";
 import useAddressHook, {
   AddressSelected,
@@ -46,6 +46,7 @@ import CustomModal from "../../shared/modal/customModal";
 import WarningAlertScreen from "../../cart/alert.screens/warningAlertScreen";
 import useHelperHook from "../../shared/hooks/helper/useHelper";
 import Loader from "../../shared/Loader/components/Loader";
+import { AnyARecord } from "dns";
 
 type disccount = {
   title?: string;
@@ -86,6 +87,8 @@ const CheckoutComponent = () => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const debounceRef = useRef<any>(null);
 
   const {
     register,
@@ -336,6 +339,22 @@ const CheckoutComponent = () => {
     }
   }, []);
 
+  const onchangeDetail = (event:any) => {
+    setValue("detail", event.target.value)
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+  
+    debounceRef.current = setTimeout(() => {
+      const { detail } = getValues();
+      const newAddress: any = {
+        detail
+      };
+      updateAddressItem(newAddress);
+    }, 500);
+  }
+
   const styles = stylesAddPayment(errors, isValid);
   if (loading) {
         return <Loader screenLoader={true}/>;
@@ -419,9 +438,10 @@ const CheckoutComponent = () => {
               control={control}
               defaultValue=""
               rules={{ required: "Este campo es obligatorio" }}
-              render={({ field }) => (
+              render={({ field: { value } }) => (
                 <TextField
-                  {...field}
+                  value={value}
+                  onChange={(e) => onchangeDetail(e)}
                   error={!!errors.detail}
                   helperText={
                     errors.detail ? errors.detail.message?.toString() : ""
