@@ -26,10 +26,15 @@ import ModalAlertComponent from "../../shared/modal/modalAlert.component";
 import { paletteColors } from "../../../paletteColors/paletteColors";
 import { useSelector } from "react-redux";
 import { selectAllCart } from "../../../store/modules/cart";
+import usePaymentHook, { PaymentSelected } from "../../shared/hooks/paymentHook/usePaymentHook";
+import Loader from "../../shared/Loader/components/Loader";
 
 const PsePaymentMethod = () => {
   const [bankList, setBankList] = useState([]);
   const [warningAlert, setwarningAlert] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const { addToPayment } = usePaymentHook()
   const dispatch = useAppDispatch();
   const cartStore = useSelector(selectAllCart);
   
@@ -55,6 +60,12 @@ const PsePaymentMethod = () => {
   };
 
   const postPaymentPse = async () => {
+    setLoading(true)
+    const payment :PaymentSelected = {
+      type:"PSE",
+      payment:"",
+    }
+    addToPayment(payment)
     const {
       bankSelect,
       documentType,
@@ -82,6 +93,7 @@ const PsePaymentMethod = () => {
       posPaymentPseThunk({ reqData: request })
     ).unwrap();
     if (Payment.success) {
+      setLoading(false)
       console.log(Payment);
       if (Payment.response.success) {
         const urlBank = Payment.response.data.urlbanco;
@@ -91,6 +103,8 @@ const PsePaymentMethod = () => {
         setwarningAlert(true);
         console.log(Payment.response.text_response);
       }
+    }else{
+      setLoading(false)
     }
   };
 
@@ -100,6 +114,14 @@ const PsePaymentMethod = () => {
 
   const styles = stylesAddPayment(errors, isValid);
 
+  if (loading) {
+    return (
+      <div style={{ height: "100%"}}>
+        <Loader screenLoader={false}/>
+      </div>
+      );
+  }
+  
   return (
     <Grid item xs={12} sx={{}}>
       <FormControl variant="standard" sx={{ mt: 2, minWidth: "100%" }}>

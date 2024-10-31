@@ -22,6 +22,7 @@ import { requestUpdateOrder } from "../../service/modules/orders/order";
 import NumberFormat from "../shared/hooks/numberFormater/NumberFormat";
 import { addressActions } from "../../store/modules/address";
 import { paymentMethodsActions } from "../../store/modules/paymentMethods";
+import Loader from "../shared/Loader/components/Loader";
 
 
 const PaymentMethodsScreen = () => {
@@ -71,7 +72,7 @@ const PaymentMethodsScreen = () => {
       getOrderByIdThunk(cartStore.order)
     ).unwrap();
     if (currentOrders.response.success) {
-      if (currentOrders.response.data.status_id === 3) {
+      if (currentOrders.response.data.status_id === 1) {
         setAlertArray({
           save: updateOrder,
           img: "/icons/checkIcon.png",
@@ -108,34 +109,38 @@ const PaymentMethodsScreen = () => {
     const requestUpdate: requestUpdateOrder = {
       latitude: addressHook.coords.latitude,
       longitude: addressHook.coords.longitude,
-      address: addressHook.address,
+      address: addressHook.addressInput,
       addressDetails: addressHook.detail,
       paymentMethod: payment.type,
       pay_method: payment.type,
       amount: cartStore.total,
       phone: cartStore.phone || "",
       discountCode: cartStore?.disccount || "",
-      instructions: "",
+      instructions: addressHook.detail,
       description: "",
       transactionId: "",
     };
     const updateOrder = await dispatch(
       updateOrderThunk({ id: cartStore.order, reqData: requestUpdate })
     ).unwrap();
-    if (updateOrder.success) {
-      console.log(updateOrder);
-      if (updateOrder.response && updateOrder.response.success) {
-        const data = updateOrder.response.data;
-        const total = parseInt(data.value);
-        setSuccessData({
-          time: data.time,
-          value: NumberFormat(total),
-        });
-        setSuccessAlert(true);
-        dispatch(cartActions.clearState());
-        dispatch(addressActions.clearAddressSelected())
-        dispatch(paymentMethodsActions.clearPaymentSelected())
-      }
+    if (updateOrder.response.success) {
+      const data = updateOrder.response.data;
+      const total = parseInt(data.value);
+      setSuccessData({
+        time: data.time,
+        value: NumberFormat(total),
+      });
+      setSuccessAlert(true);
+      dispatch(cartActions.clearState());
+      dispatch(addressActions.clearAddressSelected())
+      dispatch(paymentMethodsActions.clearPaymentSelected())
+    }else{
+      setAlertArray({
+        save: handleClose,
+        img: "/icons/alert.png",
+        text: "Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.",
+      });
+      setWarningAlert(true);
     }
   };
 
@@ -144,7 +149,6 @@ const PaymentMethodsScreen = () => {
       getOrderById();
     }
   }, [id]);
-  
 
   return (
     <>
