@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Loader from "../modules/shared/Loader/components/Loader";
 import ProductDetailScreen from "../modules/productDetail/productDetail.screen";
 import AboutUs from "../modules/aboutUs/aboutUs.screen";

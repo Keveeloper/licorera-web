@@ -197,10 +197,11 @@ const HomeScreen = () => {
           slidesPerView={7}
           loadingStatus={loadingStatus}
         />
-        <Experience />
+        {/* <Experience /> */}
         <SuggestedProducts/>
         <Sponsors/>
         <FooterScreen />
+       
       </Box>
       <ModalAlertComponent
         handleClose={alertClose}

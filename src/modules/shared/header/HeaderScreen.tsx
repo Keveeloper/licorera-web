@@ -9,7 +9,7 @@ const HeaderScreen = () => {
 
     return (
         <>
-            <AnnouncementBar text={'Envío gratis por compras superiores a $ 50.000'}/>
+            <AnnouncementBar text={'Envío gratis por compras superiores a $ 100.000'}/>
             <Nav>
                 <Logo/>
                 <SearchBar/>

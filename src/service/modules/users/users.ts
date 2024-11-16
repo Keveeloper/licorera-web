@@ -76,7 +76,7 @@ export const postRememberPassword = async ( email: string): Promise<ApiResponse<
   try {
     const { data } = await base.post<any>(
       '/mobile/clients/rememberPassword',
-      email,
+      {email:email},
       {}
       );
     return { response: data?.data, status: data.status, success: data.success};
