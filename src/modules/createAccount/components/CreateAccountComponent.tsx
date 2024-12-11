@@ -60,7 +60,7 @@ const CreateAccountComponent: React.FC<props> = () => {
       last_name:lastName,
       email:email,
       password:password,
-      uuid:email,
+      uuid:'',
       birthday:date,
       cellphone: phone,
       social_id:3

@@ -269,7 +269,8 @@ const LoginScreen: React.FC<LoginScreenInterface> = ({
           </Grid>
         </Grid>
         <ModalAlertComponent
-          handleClose={() => handleAlertClose(false)}
+          handleClose={() => setShowAlert(false)}
+          handleSave={() => setShowAlert(false)}
           open={showAlert}
           data={{
             title: "INFORMACIÓN",

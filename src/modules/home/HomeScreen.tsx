@@ -49,6 +49,9 @@ const HomeScreen = () => {
   const [tabs, setTabs] = useState<string[]>([]);
   const [schedule, setSchedule] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [valuePromotion, setValuePromotion] = useState("1");
+  const [valueNewProduct, setValueNewProduct] = useState("3");
+  const [valueDestacados, setValueDestacados] = useState("2");
 
   const getAsynPromotion = useCallback(async () => {
     dispatch(getPromotionsThunk()).unwrap();
@@ -99,22 +102,30 @@ const HomeScreen = () => {
       getInfo();
     }
   }, []);
+  
 
   useEffect(() => {
-    switch (value) {
-      case "1":
-        getAsynPromotion();
-        break;
-      case "2":
-        getCampaigns();
-        break;
-      case "3":
-        getNewProducts();
-        break;
-      default:
-        break;
+    if(tabs.length > 0){
+
+      setValuePromotion(String(tabs.findIndex(tab => tab === 'PROMOCIONES') + 1));
+      setValueDestacados(String(tabs.findIndex(tab => tab === 'DESTACADOS')+ 1));
+      setValueNewProduct(String(tabs.findIndex(tab => tab === 'PRODUCTOS NUEVOS')+1));
+      
+      switch (value) {
+        case valuePromotion :
+          getAsynPromotion();
+          break;
+        case valueDestacados:
+          getCampaigns();
+          break;
+        case valueNewProduct:
+          getNewProducts();
+          break;
+        default:
+          break;
+      }
     }
-  }, [value]);
+  }, [value, tabs]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -166,7 +177,7 @@ const HomeScreen = () => {
           handleChange={handleChange}
           disabled={disabled}
         >
-          <TabPanel sx={{padding: '0', height: '600px' }} value="1" className="columnContainer">
+          <TabPanel sx={{padding: '0', height: '600px' }} value={valuePromotion} className="columnContainer">
             <SwiperComponent
               modules={[Navigation, Pagination]}
               slidesPerView={1}
@@ -174,7 +185,7 @@ const HomeScreen = () => {
               bannerType="Promotions"
             />
           </TabPanel>
-          <TabPanel sx={{padding: '0', height: '600px' }} value="2" className="columnContainer" >
+          <TabPanel sx={{padding: '0', height: '600px' }} value={valueDestacados} className="columnContainer" >
             <SwiperComponent
               modules={[Navigation, Pagination]}
               slidesPerView={1}
@@ -182,14 +193,13 @@ const HomeScreen = () => {
               bannerType="Campaigns"
             />
           </TabPanel>
-          <TabPanel sx={{padding: '0', height: '600px' }} value="3" className="columnContainer" >
+          <TabPanel sx={{padding: '0', height: '600px' }} value={valueNewProduct} className="columnContainer" >
             <SwiperNewProducts
               modules={[Navigation, Pagination]}
               slidesPerView={1}
               loadingStatus={loadingNewProducts}
               bannerType="Promotions"
             />
-
           </TabPanel>
         </TabComponent>
         <SwiperCategories

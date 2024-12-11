@@ -9,7 +9,7 @@ import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Promotion } from '../../store/modules/newProducts/types';
 import NumberFormat from '../shared/hooks/numberFormater/NumberFormat';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { selectAllNewProducts } from '../../store/modules/newProducts';
 import { productExchange } from '../exchangeProducts/types';
 import { useAppDispatch } from '../../store/store';
@@ -17,7 +17,6 @@ import { useNavigate } from 'react-router-dom';
 import { storeActions } from '../../store/modules/store';
 
 const SwiperNewProducts = (props: swiperType) => { 
-    
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { modules, slidesPerView, loadingStatus, bannerType } = props;
@@ -27,6 +26,9 @@ const SwiperNewProducts = (props: swiperType) => {
         () => newProductsDataredux?.map((item: Promotion) => NumberFormat(item.price)),
         [newProductsDataredux]
     );
+
+  
+    
 
     const handleClick = (item: Promotion) => {
         const mappedProduct: productExchange = {
@@ -69,7 +71,7 @@ const SwiperNewProducts = (props: swiperType) => {
             pagination={{
                 clickable: true,
             }}
-            loop={true}
+            loop={false}
             spaceBetween={10}
             slidesPerView={slidesPerView}
             // onSlideChange={() => console.log('slide change')}
