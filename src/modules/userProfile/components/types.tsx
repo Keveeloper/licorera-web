@@ -4,6 +4,10 @@ export interface AddPaymentInterface {
     updateOrder?: () => void;
 }
 
+export interface AddPaymentPSEInterface {
+    updateOrder?: () => void;
+}
+
 export interface UserExchangeinterface {
     exchangeOpen: boolean;
     setExchangeOpen: React.Dispatch<React.SetStateAction<boolean>>;

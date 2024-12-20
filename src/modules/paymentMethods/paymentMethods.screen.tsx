@@ -74,7 +74,7 @@ const PaymentMethodsScreen = () => {
     if (currentOrders.response.success) {
       if (currentOrders.response.data.status_id === 1) {
         setAlertArray({
-          save: updateOrder,
+          save: ()=>{},
           img: "/icons/checkIcon.png",
           text: "Tu pago fue procesado exitosamente. Procederemos con tu pedido.",
         });
@@ -86,17 +86,17 @@ const PaymentMethodsScreen = () => {
         setWarningAlert(true);
       } else {
         setAlertArray({
-          save: handleClose,
-          img: "/icons/alert.png",
-          text: "Transaccion en progreso",
+          save: goToHome,
+          img: "/icons/SuccessCheckout.png",
+          text: "Procesaremos tu orden y en breves minutos confirmaremos tu pedido por medio de un mensaje al correo electrónico registrado.",
         });
         setWarningAlert(true);
       }
     } else {
       setAlertArray({
-        save: handleClose,
-        img: "/icons/alert.png",
-        text: "Ha ocurrido un problema y no pudimos procesar tu solicitud. Intenta de nuevo más tarde o contáctanos.",
+        save: goToHome,
+        img: "/icons/SuccessCheckout.png",
+        text: "Procesaremos tu orden y en breves minutos confirmaremos tu pedido por medio de un mensaje al correo electrónico registrado.",
       });
       setWarningAlert(true);
     }
@@ -105,7 +105,7 @@ const PaymentMethodsScreen = () => {
   const updateOrder = async () => {
     const addressHook = getAddress();
     const payment = getPayment();
-
+   
     const requestUpdate: requestUpdateOrder = {
       latitude: addressHook.coords.latitude,
       longitude: addressHook.coords.longitude,
@@ -119,7 +119,9 @@ const PaymentMethodsScreen = () => {
       instructions: addressHook.detail,
       description: "",
       transactionId: "",
+      os:6
     };
+    console.log('payment', payment.type, requestUpdate)
     const updateOrder = await dispatch(
       updateOrderThunk({ id: cartStore.order, reqData: requestUpdate })
     ).unwrap();
@@ -130,7 +132,9 @@ const PaymentMethodsScreen = () => {
         time: data.time,
         value: NumberFormat(total),
       });
-      setSuccessAlert(true);
+      if(payment.type !== "PSE"){
+        setSuccessAlert(true);
+      }
       dispatch(cartActions.clearState());
       dispatch(addressActions.clearAddressSelected())
       dispatch(paymentMethodsActions.clearPaymentSelected())
@@ -184,7 +188,7 @@ const PaymentMethodsScreen = () => {
           value="1"
           className="columnContainer"
         >
-          <PsePaymentMethod />
+          <PsePaymentMethod updateOrder={updateOrder}/>
         </TabPanel>
         <TabPanel
           sx={{ padding: "0", height: "600px", width: "650px !important" }}

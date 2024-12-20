@@ -28,15 +28,19 @@ import { useSelector } from "react-redux";
 import { selectAllCart } from "../../../store/modules/cart";
 import usePaymentHook, { PaymentSelected } from "../../shared/hooks/paymentHook/usePaymentHook";
 import Loader from "../../shared/Loader/components/Loader";
+import { AddPaymentPSEInterface } from "../../userProfile/components/types";
 
-const PsePaymentMethod = () => {
+const PsePaymentMethod = (props: AddPaymentPSEInterface) => {
+  const { updateOrder } = props;
   const [bankList, setBankList] = useState([]);
   const [warningAlert, setwarningAlert] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { addToPayment } = usePaymentHook()
+  const { addToPayment , getPayment } = usePaymentHook()
   const dispatch = useAppDispatch();
   const cartStore = useSelector(selectAllCart);
+
+  
   
   const {
     register,
@@ -61,11 +65,6 @@ const PsePaymentMethod = () => {
 
   const postPaymentPse = async () => {
     setLoading(true)
-    const payment :PaymentSelected = {
-      type:"PSE",
-      payment:"",
-    }
-    addToPayment(payment)
     const {
       bankSelect,
       documentType,
@@ -93,9 +92,14 @@ const PsePaymentMethod = () => {
       posPaymentPseThunk({ reqData: request })
     ).unwrap();
     if (Payment.success) {
+      const payment = getPayment();
       setLoading(false)
       console.log(Payment);
+      console.log(payment);
       if (Payment.response.success) {
+        if(updateOrder && payment.type){
+          updateOrder()
+        } 
         const urlBank = Payment.response.data.urlbanco;
         const ref = Payment.response.data.ref_payco;
         window.open(urlBank, "_blank");
@@ -106,10 +110,16 @@ const PsePaymentMethod = () => {
     }else{
       setLoading(false)
     }
+
   };
 
   useEffect(() => {
     getBanks();
+    const payment :PaymentSelected = {
+      type:"PSE",
+      payment:"",
+    }
+    addToPayment(payment)
   }, []);
 
   const styles = stylesAddPayment(errors, isValid);

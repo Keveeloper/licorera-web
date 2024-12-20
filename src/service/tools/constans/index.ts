@@ -8,7 +8,7 @@
 //   ? ''
 //   : process.env.NX_BASE_URL_DEV;
 
-  export const BASE_URL = 'https://licorera3jjjs.com/api';
+  export const BASE_URL = 'https://dev.licorera3jjjs.com/api';
   export const EMAIL = 'admin@admin.com';
   export const PASSWORD = 'admin';
 

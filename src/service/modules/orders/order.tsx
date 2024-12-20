@@ -20,7 +20,8 @@ export type requestUpdateOrder = {
     discountCode:string,
     instructions:string,
     description:string,
-    transactionId:string
+    transactionId:string,
+    os:number
 }
 
 export const getCurrentOrder= async (): Promise<ApiResponse<any>> => {

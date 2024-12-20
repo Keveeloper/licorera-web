@@ -121,6 +121,7 @@ const CheckoutComponent = () => {
       instructions: "",
       description: "",
       transactionId: "",
+      os:6
     };
     const updateOrder = await dispatch(
       updateOrderThunk({ id: cartStore.order, reqData: requestUpdate })
