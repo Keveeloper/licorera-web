@@ -85,7 +85,7 @@ const AddressMap: React.FC<props> = () => {
           </Typography>
         </div>
 
-        <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY}>
+        <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY || ''}>
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={coordinates}
